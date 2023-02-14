@@ -13,7 +13,7 @@
 
 ## Components
 
-- Redis CLI
+- [Redis CLI](https://github.com/upstash/react-ui/blob/main/packages/react-cli/README.md)
 
 
 <br/>
