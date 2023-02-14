@@ -1,0 +1,25 @@
+
+> @upstash/react-cli@0.0.0-canary.1 build /Users/andreasthomas/github/upstash/react-cli/packages/react-cli
+> tsup
+
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v6.6.2
+CLI Using tsup config: /Users/andreasthomas/github/upstash/react-cli/packages/react-cli/tsup.config.js
+CLI Target: esnext
+CLI Cleaning output folder
+CJS Build start
+ESM Build start
+DTS Build start
+ESM dist/index.css     7.01 KB
+ESM dist/index.mjs     6.97 KB
+ESM dist/index.css.map 13.98 KB
+ESM dist/index.mjs.map 15.40 KB
+ESM ⚡️ Build success in 279ms
+CJS dist/index.css     7.01 KB
+CJS dist/index.js      8.14 KB
+CJS dist/index.css.map 13.98 KB
+CJS dist/index.js.map  15.49 KB
+CJS ⚡️ Build success in 279ms
+DTS ⚡️ Build success in 579ms
+DTS dist/index.d.ts 161.00 B

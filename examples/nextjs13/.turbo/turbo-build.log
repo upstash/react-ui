@@ -1,0 +1,35 @@
+
+> nextjs13@0.1.0 build /Users/andreasthomas/github/upstash/react-cli/examples/nextjs13
+> next build
+
+info  - Loaded env from /Users/andreasthomas/github/upstash/react-cli/examples/nextjs13/.env.local
+warn  - You have enabled experimental feature (appDir) in next.config.js.
+warn  - Experimental features are not covered by semver, and may cause unexpected or broken application behavior. Use at your own risk.
+
+info  - Thank you for testing `appDir` please leave your feedback at https://nextjs.link/app-feedback
+info  - Creating an optimized production build...
+info  - Compiled successfully
+info  - Linting and checking validity of types...
+info  - Collecting page data...
+info  - Generating static pages (0/3)
+info  - Generating static pages (3/3)
+info  - Finalizing page optimization...
+
+Route (app)                                Size     First Load JS
+─ ○ /                                      0 B                0 B
++ First Load JS shared by all              82.3 kB
+  ├ chunks/475-b7a8a46cdb238b22.js         80.4 kB
+  ├ chunks/main-app-efcc02b0ff449e0c.js    218 B
+  └ chunks/webpack-496f7a630f42b8b9.js     1.68 kB
+
+Route (pages)                              Size     First Load JS
+┌ ○ /404                                   179 B          80.8 kB
+└ λ /api/hello                             0 B            80.6 kB
++ First Load JS shared by all              80.6 kB
+  ├ chunks/main-90a601d699c2843d.js        78.8 kB
+  ├ chunks/pages/_app-f8920616ab31aec1.js  191 B
+  └ chunks/webpack-496f7a630f42b8b9.js     1.68 kB
+
+λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+
