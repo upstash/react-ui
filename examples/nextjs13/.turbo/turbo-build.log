@@ -19,7 +19,7 @@ Route (app)                                Size     First Load JS
 ─ ○ /                                      0 B                0 B
 + First Load JS shared by all              82.3 kB
   ├ chunks/475-b7a8a46cdb238b22.js         80.4 kB
-  ├ chunks/main-app-efcc02b0ff449e0c.js    218 B
+  ├ chunks/main-app-9a51d73a1b3c272e.js    218 B
   └ chunks/webpack-496f7a630f42b8b9.js     1.68 kB
 
 Route (pages)                              Size     First Load JS
