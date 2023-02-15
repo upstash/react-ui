@@ -291,7 +291,7 @@ const Result: React.FC<{ command: Command }> = ({ command }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
   }, [ref]);
 
   return (

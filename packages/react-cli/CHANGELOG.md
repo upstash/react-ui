@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 0.4.0
+
+### Minor Changes
+
+- Fix scrolling
+
 ## 0.3.0
 
 ### Minor Changes
