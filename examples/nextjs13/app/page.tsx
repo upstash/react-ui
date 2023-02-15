@@ -25,7 +25,6 @@ export default function Home() {
           height: "100%",
           maxWidth: "48rem",
           maxHeight: "32rem",
-          margin: "auto",
         }}
       >
         <Cli url={upstashRedisRestUrl} token={upstashRedisRestToken} />
