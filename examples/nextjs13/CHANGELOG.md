@@ -1,5 +1,13 @@
 # nextjs13
 
+## 0.1.4
+
+### Patch Changes
+
+- Fixed scrolling #2
+- Updated dependencies
+  - @upstash/react-cli@0.5.0
+
 ## 0.1.3
 
 ### Patch Changes

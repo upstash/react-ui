@@ -108,16 +108,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
     setStdin(cmd);
   }, [historyIndex, history]);
 
-  const ref = useRef<HTMLTextAreaElement>(null);
-
-  /**
-   * Automatically update the height of the textarea to fit the content
-   * Without this, the textarea would only be 1 line tall and the user would have to scroll
-   */
-  const [height, setHeight] = useState("100%");
-  useEffect(() => {
-    setHeight(`${ref.current?.scrollHeight ?? 0}px`);
-  }, [ref, stdin]);
+  const ref = useRef<HTMLInputElement>(null);
 
   /**
    * When the user presses enter, we first check if the command is a special command
@@ -160,6 +151,12 @@ export const RedisCli: React.FC<CliProps> = (props) => {
       setHistoryIndex(null);
       setLoading(false);
       setStdin("");
+      /**
+       * We need a timeout here because react needs to update the dom before we can scroll to the
+       * bottom of the cli. If we don't wait, scrollIntoView will scroll to the same place as
+       * before
+       */
+      setTimeout(() => ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 10);
     }
   };
 
@@ -183,53 +180,52 @@ export const RedisCli: React.FC<CliProps> = (props) => {
         {commands.map((r) => (
           <Result key={r.time} command={r} />
         ))}
-        <div>
-          <Line className={loading ? "animate-pulse" : ""} prefix={<span>➜</span>}>
-            <textarea
-              spellCheck={false}
-              key="stdin"
-              style={{
-                resize: "none",
-                height,
-              }}
-              ref={ref}
-              // rows={Math.max(stdin.split("\n").length, Math.ceil(stdin.length / 80), 1)}
-              value={stdin}
-              onChange={(e) => setStdin(e.currentTarget.value)}
-              onKeyDown={async (e) => {
-                if (e.ctrlKey && e.key === "c") {
-                  e.preventDefault();
-                  addCommand({ command: `${stdin}^C`, time: Date.now() });
-                  setStdin("");
-                  return;
-                }
 
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  await onEnter();
+        <Line className={loading ? "animate-pulse" : ""} prefix={<span>➜</span>}>
+          <input
+            type="text"
+            spellCheck={false}
+            key="stdin"
+            style={{
+              resize: "none",
+            }}
+            ref={ref}
+            // rows={Math.max(stdin.split("\n").length, Math.ceil(stdin.length / 80), 1)}
+            value={stdin}
+            onChange={(e) => setStdin(e.currentTarget.value)}
+            onKeyDown={async (e) => {
+              if (e.ctrlKey && e.key === "c") {
+                e.preventDefault();
+                addCommand({ command: `${stdin}^C`, time: Date.now() });
+                setStdin("");
+                return;
+              }
+
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                await onEnter();
+                return;
+              }
+              if (e.key === "ArrowUp") {
+                if (history.length === 0) {
+                  setHistoryIndex(null);
                   return;
                 }
-                if (e.key === "ArrowUp") {
-                  if (history.length === 0) {
-                    setHistoryIndex(null);
-                    return;
-                  }
-                  setHistoryIndex(Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1));
+                setHistoryIndex(Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1));
+                return;
+              }
+              if (e.key === "ArrowDown") {
+                if (history.length === 0) {
+                  setHistoryIndex(null);
                   return;
                 }
-                if (e.key === "ArrowDown") {
-                  if (history.length === 0) {
-                    setHistoryIndex(null);
-                    return;
-                  }
-                  setHistoryIndex(Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1));
-                  return;
-                }
-              }}
-              className="w-full h-full break-all placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
-            />
-          </Line>
-        </div>
+                setHistoryIndex(Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1));
+                return;
+              }
+            }}
+            className="w-full break-words placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
+          />
+        </Line>
       </div>
     </div>
   );
@@ -241,7 +237,7 @@ const Line: React.FC<PropsWithChildren<{ prefix?: React.ReactNode; className?: s
   children,
 }) => (
   <div className={`relative flex items-center my-2 w-full ${className}`}>
-    <div className="absolute inset-y-0 w-4">{prefix ?? <span> </span>}</div>
+    <div className="absolute inset-y-0 w-4 h-full">{prefix ?? <span> </span>}</div>
     <div className="flex flex-col items-start w-full ml-4">{children}</div>
   </div>
 );
@@ -288,14 +284,8 @@ function splitArgs(input: string): string[] {
 }
 
 const Result: React.FC<{ command: Command }> = ({ command }) => {
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-  }, [ref]);
-
   return (
-    <div ref={ref} className="mb-2">
+    <div className="mb-2">
       <Line prefix={command.error ? <span className="text-red-500">✗</span> : <span>➜</span>}>
         <span>{command.command}</span>
       </Line>
