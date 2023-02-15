@@ -19,11 +19,8 @@ export default function Home() {
         justifyContent: "center",
         flexDirection: "column",
         background: "rgb(250,250,250)",
-
-
       }}
     >
-
       <div
         style={{
           height: "100%",
@@ -31,12 +28,11 @@ export default function Home() {
           maxHeight: "32rem",
           maxWidth: "48rem",
           borderRadius: "0.5rem",
-          overflow: "hidden"
+          overflow: "hidden",
         }}
       >
         <Cli url={upstashRedisRestUrl} token={upstashRedisRestToken} />
       </div>
-
     </main>
   );
 }

@@ -223,7 +223,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
                 return;
               }
             }}
-            className="w-full break-words placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
+            className="w-full  placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
           />
         </Line>
       </div>
@@ -291,7 +291,9 @@ const Result: React.FC<{ command: Command }> = ({ command }) => {
       </Line>
       {typeof command.result !== "undefined" ? (
         <Line>
-          <span className={command.error ? "text-red-500" : ""}>{formatResult(command.result)}</span>
+          <div className={`font-mono whitespace-pre-wrap break-words ${command.error ? "text-red-500" : ""}`}>
+            {formatResult(command.result)}
+          </div>
         </Line>
       ) : null}
     </div>
