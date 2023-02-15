@@ -25,6 +25,7 @@ $ npm install @upstash/react-cli
 
 "use client"
 import { RedisCli } from "@upstash/react-cli";
+
 import "@upstash/react-cli/dist/index.css";
 
 
@@ -38,5 +39,22 @@ import "@upstash/react-cli/dist/index.css";
       >
   <RedisCli url="UPSTASH_REDIS_REST_URL" token="UPSTASH_REDIS_REST_TOKEN" />;
 </div>
+
+```
+
+## With Tailwind CSS
+
+If you already have a tailwindcss toolchain, you can omit the css import and add the library to your tailwind config file:
+
+```js
+// tailwind.config.js
+
+module.exports = {
+  content: [
+    // ...
+    "./node_modules/@upstash/react-cli/**/*.js", // <--  add this line
+  ],
+  //...
+}
 
 ```
