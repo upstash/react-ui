@@ -4,7 +4,7 @@
 </div>
 
 <div align="center">
-  <a href="https://console.upstash.com/redis">console.upstash.com/redis</a>
+  <a href="https://upstash-react-cli.vercel.app/">upstash-react-cli.vercel.app</a>
 </div>
 <br/>
 
