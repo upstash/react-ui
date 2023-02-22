@@ -4,6 +4,11 @@ import "./tailwind.css";
 export type CliProps = {
   url: string;
   token: string;
+
+  /**
+   * The className prop is used to add custom styles to the cli and applied to the root element
+   */
+  className?: string;
 };
 type Command = {
   time: number;
@@ -162,7 +167,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
 
   return (
     <div
-      className="relative flex flex-col w-full h-full p-4 font-mono text-gray-200 bg-black"
+      className={`relative flex flex-col w-full h-full p-4 font-mono text-gray-100 bg-black ${props.className}`}
       onMouseUp={() => {
         /**
          * The behaviour should be:

@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 0.7.0
+
+### Minor Changes
+
+- Add className
+
 ## 0.6.0
 
 ### Minor Changes
