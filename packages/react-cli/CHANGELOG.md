@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 0.7.2
+
+### Patch Changes
+
+- fix scrollbar
+
 ## 0.7.1
 
 ### Patch Changes
