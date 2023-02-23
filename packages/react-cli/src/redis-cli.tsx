@@ -181,8 +181,8 @@ export const RedisCli: React.FC<CliProps> = (props) => {
         }
       }}
     >
-      <ScrollArea.Root className="flex flex-col flex-grow h-full overflow-hidden break-all">
-        <ScrollArea.Viewport className="w-full h-full">
+      <ScrollArea.Root className="overflow-hidden">
+        <ScrollArea.Viewport className="flex flex-col flex-grow break-all w-full h-full">
           <span className="text-[#00e9a3]">Welcome to Upstash CLI</span>
           {commands.map((r) => (
             <Result key={r.time} command={r} />
@@ -234,6 +234,13 @@ export const RedisCli: React.FC<CliProps> = (props) => {
             />
           </Line>
         </ScrollArea.Viewport>
+        <ScrollArea.Scrollbar
+          className="flex select-none touch-none p-0.5 bg-black transition-colors duration-150 ease-out hover:bg-black data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
+          orientation="vertical"
+        >
+          <ScrollArea.Thumb className="flex-1 bg-gray-600 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+        </ScrollArea.Scrollbar>
+        <ScrollArea.Corner className="bg-black" />
       </ScrollArea.Root>
     </div>
   );
