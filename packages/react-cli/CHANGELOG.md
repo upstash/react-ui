@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 0.7.1
+
+### Patch Changes
+
+- add tailwind example
+
 ## 0.7.0
 
 ### Minor Changes
