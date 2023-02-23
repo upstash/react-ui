@@ -1,5 +1,6 @@
-import { spawn } from "child_process";
 import React, { PropsWithChildren, ReactNode, useEffect, useRef, useState } from "react";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
+
 import "./tailwind.css";
 export type CliProps = {
   url: string;
@@ -180,58 +181,60 @@ export const RedisCli: React.FC<CliProps> = (props) => {
         }
       }}
     >
-      <div className="flex flex-col flex-grow h-full overflow-y-scroll break-all">
-        <span className="text-[#00e9a3]">Welcome to Upstash CLI</span>
-        {commands.map((r) => (
-          <Result key={r.time} command={r} />
-        ))}
+      <ScrollArea.Root className="flex flex-col flex-grow h-full overflow-hidden break-all">
+        <ScrollArea.Viewport className="w-full h-full">
+          <span className="text-[#00e9a3]">Welcome to Upstash CLI</span>
+          {commands.map((r) => (
+            <Result key={r.time} command={r} />
+          ))}
 
-        <Line className={loading ? "animate-pulse" : ""} prefix={<span>➜</span>}>
-          <input
-            type="text"
-            spellCheck={false}
-            key="stdin"
-            style={{
-              resize: "none",
-            }}
-            ref={ref}
-            // rows={Math.max(stdin.split("\n").length, Math.ceil(stdin.length / 80), 1)}
-            value={stdin}
-            onChange={(e) => setStdin(e.currentTarget.value)}
-            onKeyDown={async (e) => {
-              if (e.ctrlKey && e.key === "c") {
-                e.preventDefault();
-                addCommand({ command: `${stdin}^C`, time: Date.now() });
-                setStdin("");
-                return;
-              }
-
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                await onEnter();
-                return;
-              }
-              if (e.key === "ArrowUp") {
-                if (history.length === 0) {
-                  setHistoryIndex(null);
+          <Line className={loading ? "animate-pulse" : ""} prefix={<span>➜</span>}>
+            <input
+              type="text"
+              spellCheck={false}
+              key="stdin"
+              style={{
+                resize: "none",
+              }}
+              ref={ref}
+              // rows={Math.max(stdin.split("\n").length, Math.ceil(stdin.length / 80), 1)}
+              value={stdin}
+              onChange={(e) => setStdin(e.currentTarget.value)}
+              onKeyDown={async (e) => {
+                if (e.ctrlKey && e.key === "c") {
+                  e.preventDefault();
+                  addCommand({ command: `${stdin}^C`, time: Date.now() });
+                  setStdin("");
                   return;
                 }
-                setHistoryIndex(Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1));
-                return;
-              }
-              if (e.key === "ArrowDown") {
-                if (history.length === 0) {
-                  setHistoryIndex(null);
+
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  await onEnter();
                   return;
                 }
-                setHistoryIndex(Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1));
-                return;
-              }
-            }}
-            className="w-full  placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
-          />
-        </Line>
-      </div>
+                if (e.key === "ArrowUp") {
+                  if (history.length === 0) {
+                    setHistoryIndex(null);
+                    return;
+                  }
+                  setHistoryIndex(Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1));
+                  return;
+                }
+                if (e.key === "ArrowDown") {
+                  if (history.length === 0) {
+                    setHistoryIndex(null);
+                    return;
+                  }
+                  setHistoryIndex(Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1));
+                  return;
+                }
+              }}
+              className="w-full placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
+            />
+          </Line>
+        </ScrollArea.Viewport>
+      </ScrollArea.Root>
     </div>
   );
 };
