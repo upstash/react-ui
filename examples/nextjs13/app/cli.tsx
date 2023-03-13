@@ -7,5 +7,15 @@ export const Cli: React.FC<{
   url: string;
   token: string;
 }> = (props) => {
-  return <RedisCli {...props} />;
+  return (
+    <RedisCli
+      {...props}
+      welcome={
+        <div>
+          <span>Hello</span>
+          <span>World</span>
+        </div>
+      }
+    />
+  );
 };

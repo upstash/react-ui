@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 0.8.0
+
+### Minor Changes
+
+- Add optional "welcome" parameter
+
 ## 0.7.3
 
 ### Patch Changes

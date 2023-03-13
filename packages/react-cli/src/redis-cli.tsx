@@ -5,6 +5,7 @@ import "./tailwind.css";
 export type CliProps = {
   url: string;
   token: string;
+  welcome?: ReactNode;
 
   /**
    * The className prop is used to add custom styles to the cli and applied to the root element
@@ -183,7 +184,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
     >
       <ScrollArea.Root className="overflow-hidden">
         <ScrollArea.Viewport className="flex flex-col flex-grow break-all w-full h-full">
-          <span className="text-[#00e9a3]">Welcome to Upstash CLI</span>
+          <span className="text-[#00e9a3]">{props.welcome ?? "Welcome to Upstash CLI"}</span>
           {commands.map((r) => (
             <Result key={r.time} command={r} />
           ))}

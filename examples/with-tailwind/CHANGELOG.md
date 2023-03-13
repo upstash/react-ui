@@ -1,5 +1,12 @@
 # nextjs13
 
+## 0.1.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @upstash/react-cli@0.8.0
+
 ## 0.1.9
 
 ### Patch Changes
