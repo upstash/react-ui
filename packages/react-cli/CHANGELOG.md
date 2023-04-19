@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.4
+
+### Patch Changes
+
+- x-overflow
+
 ## 1.0.3
 
 ### Patch Changes
