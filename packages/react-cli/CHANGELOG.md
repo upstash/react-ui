@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.1
+
+### Patch Changes
+
+- fix bg color
+
 ## 1.0.0
 
 ### Major Changes
