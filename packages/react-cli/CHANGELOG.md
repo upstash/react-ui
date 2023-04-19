@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.0
+
+### Major Changes
+
+- Rewrite in vanilla js
+
 ## 0.8.0
 
 ### Minor Changes

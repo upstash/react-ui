@@ -33,7 +33,29 @@ export default function Home() {
           overflow: "hidden",
         }}
       >
-        <RedisCli url={upstashRedisRestUrl} token={upstashRedisRestToken} init="help" />
+        <RedisCli
+          url={upstashRedisRestUrl}
+          token={upstashRedisRestToken}
+          welcome="Hello from Vercel"
+          commands={{
+            hello: (ctx) => {
+              ctx.addCommand({
+                command: "hello",
+                result: "world",
+              });
+            },
+            complex: async (ctx) => {
+              const res = await fetch("https://jsonplaceholder.typicode.com/todos/1").then((response) =>
+                response.text(),
+              );
+
+              ctx.addCommand({
+                command: "complex",
+                result: <div style={{ color: "yellow" }}>{res}</div>,
+              });
+            },
+          }}
+        />
       </div>
     </main>
   );

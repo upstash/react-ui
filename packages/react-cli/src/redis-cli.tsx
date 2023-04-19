@@ -1,19 +1,43 @@
 import React, { PropsWithChildren, ReactNode, useEffect, useRef, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 
-import "./tailwind.css";
+import "./cli.css";
+
+type CommandContext = {
+  setStdin: (s: string) => void;
+  /**
+   * Adds a new command to stdin and pushes it to the history
+   */
+  addCommand: (command: CommandResult) => void;
+};
+
+type Command = (ctx: CommandContext) => void | Promise<void>;
+
 export type CliProps = {
   url: string;
   token: string;
   welcome?: ReactNode;
 
   /**
+   * trigger one or multiple commands to run on start
+   *
+   * For example `init: "help"` shows the help
+   */
+  init?: string | string[];
+
+  /**
    * The className prop is used to add custom styles to the cli and applied to the root element
    */
   className?: string;
+
+  commands?: Record<string, Command>;
 };
-type Command = {
-  time: number;
+
+type CommandResult = {
+  /**
+   * @default Date.now()
+   */
+  time?: number;
   command: string;
   result?: string | null | number | boolean | string[] | React.ReactNode;
   error?: boolean;
@@ -33,19 +57,20 @@ export const RedisCli: React.FC<CliProps> = (props) => {
   /**
    * Holds all commands that have been executed and their results
    */
-  const [commands, setCommands] = useState<Command[]>([]);
+  const [results, setResults] = useState<CommandResult[]>([]);
 
   /**
-   * Adds a command to the
+   * Adds a command to the history
    */
-  function addCommand(command: Command) {
+  function addCommand(command: CommandResult) {
+    command.time ??= Date.now();
     setHistory((prev) => {
       if (prev.length === 0 || prev[0] !== command.command) {
         return [command.command, ...prev];
       }
       return prev;
     });
-    setCommands((prev) => [...prev, command]);
+    setResults((prev) => [...prev, command]);
   }
   /**
    * Used to show a loading indicator when querying redis
@@ -57,21 +82,21 @@ export const RedisCli: React.FC<CliProps> = (props) => {
    */
   const [stdin, setStdin] = useState("");
 
-  const specialCommands: Record<string, () => void> = {
-    clear: () => {
-      setCommands([]);
+  const specialCommands: Record<string, Command> = {
+    clear: (ctx) => {
+      setResults([]);
       setHistoryIndex(null);
       setStdin("");
     },
-    help: () => {
-      addCommand({
+    help: (ctx) => {
+      ctx.addCommand({
         time: Date.now(),
         command: "help",
         result: (
           <div>
             <p>You can execute Redis commands in the terminal:</p>
             <a
-              className="text-[#00e9a3] hover:underline"
+              className="upstash-cli-link"
               href="https://upstash.com/redis-api-compatibility"
               target="_blank"
               rel="noreferrer"
@@ -79,30 +104,49 @@ export const RedisCli: React.FC<CliProps> = (props) => {
               https://upstash.com/redis-api-compatibility
             </a>
             <br />
-            <div className="flex flex-col items-start p-2 mt-2 border">
+            <div className="upstash-cli-help-command">
               <span>Try</span>
-              <button onClick={() => setStdin("GET key")}>
-                <pre>&gt; GET key</pre>
+              <button className="upstash-cli-code" onClick={() => ctx.setStdin("GET key")}>
+                &gt; GET key
               </button>
-              <button onClick={() => setStdin("LPUSH list e1 e2")}>
-                <pre>&gt; LPUSH list e1 e2</pre>
+              <button className="upstash-cli-code" onClick={() => ctx.setStdin("LPUSH list e1 e2")}>
+                &gt; LPUSH list
               </button>
             </div>
 
-            <div className="flex flex-col items-start p-2 mt-2 border">
+            <div className="upstash-cli-help-command">
               <span>Special commands</span>
-              <button onClick={() => setStdin("clear")}>
-                <pre>&gt; clear</pre>
+              <button className="upstash-cli-code" onClick={() => ctx.setStdin("clear")}>
+                &gt; clear{" "}
               </button>
-              <button onClick={() => setStdin("help")}>
-                <pre>&gt; help</pre>
+              <button className="upstash-cli-code" onClick={() => ctx.setStdin("help")}>
+                &gt; help{" "}
               </button>
             </div>
           </div>
         ),
       });
     },
+    ...props.commands,
   };
+
+  /**
+   * Run a command against redis and write the command to history
+   */
+  async function runRedisCommand(command: string): Promise<void> {
+    const args = splitArgs(command);
+
+    const res = await fetch(props.url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${props.token}`,
+      },
+      body: JSON.stringify(args),
+    });
+    const json = (await res.json()) as { result?: string; error?: string };
+    addCommand({ command, result: json.error ?? json.result, error: !!json.error, time: Date.now() });
+  }
 
   /**
    * When the user cycles through the history with the up and down arrow keys,
@@ -129,28 +173,20 @@ export const RedisCli: React.FC<CliProps> = (props) => {
 
       const command = stdin.trim();
       if (!command) {
-        addCommand({ command, result: "", time: Date.now() });
+        addCommand({ command, time: Date.now() });
         return;
       }
       if (specialCommands[command]) {
-        specialCommands[command]();
+        specialCommands[command]({
+          setStdin,
+          addCommand,
+        });
         return;
       }
 
-      await new Promise((r) => setTimeout(r, 1000));
+      // await new Promise((r) => setTimeout(r, 1000));
 
-      const args = splitArgs(command);
-
-      const res = await fetch(props.url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${props.token}`,
-        },
-        body: JSON.stringify(args),
-      });
-      const json = (await res.json()) as { result?: string; error?: string };
-      addCommand({ command, result: json.error ?? json.result, error: !!json.error, time: Date.now() });
+      await runRedisCommand(command);
     } catch (e) {
       const err = e as Error;
       console.error(err.message);
@@ -167,9 +203,35 @@ export const RedisCli: React.FC<CliProps> = (props) => {
     }
   };
 
+  useEffect(() => {
+    async function run() {
+      if (!props.init) {
+        return;
+      }
+      try {
+        const commands = Array.isArray(props.init) ? props.init : [props.init];
+        for (const command of commands) {
+          const cmd = specialCommands[command];
+          if (cmd) {
+            cmd({
+              setStdin,
+              addCommand,
+            });
+          } else {
+            await runRedisCommand(command);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    run();
+  }, [props.init]);
+
   return (
     <div
-      className={`relative flex flex-col w-full h-full p-4 font-mono text-gray-100 bg-black ${props.className}`}
+      className={`upstash-cli ${props.className}`}
       onMouseUp={() => {
         /**
          * The behaviour should be:
@@ -182,14 +244,14 @@ export const RedisCli: React.FC<CliProps> = (props) => {
         }
       }}
     >
-      <ScrollArea.Root className="overflow-hidden">
-        <ScrollArea.Viewport className="flex flex-col flex-grow break-all w-full h-full">
-          <span className="text-[#00e9a3]">{props.welcome ?? "Welcome to Upstash CLI"}</span>
-          {commands.map((r) => (
-            <Result key={r.time} command={r} />
+      <ScrollArea.Root style={{ overflow: "hidden" }}>
+        <ScrollArea.Viewport className="upstash-cli-viewport">
+          <span style={{ color: "#00e9a3" }}>{props.welcome ?? "Welcome to Upstash CLI"}</span>
+          {results.map((r) => (
+            <Result key={r.time} result={r} />
           ))}
 
-          <Line className={loading ? "animate-pulse" : ""} prefix={<span>➜</span>}>
+          <Line className={loading ? "upstash-cli-loading" : ""} prefix={<span>➜</span>}>
             <input
               type="text"
               spellCheck={false}
@@ -231,17 +293,14 @@ export const RedisCli: React.FC<CliProps> = (props) => {
                   return;
                 }
               }}
-              className="w-full placeholder-gray-600 bg-transparent border-none outline-none caret-[#00e9a3] focus:outline-none"
+              className="upstash-cli-stdin"
             />
           </Line>
         </ScrollArea.Viewport>
-        <ScrollArea.Scrollbar
-          className="flex select-none touch-none p-0.5 bg-black transition-colors duration-150 ease-out hover:bg-black data-[orientation=vertical]:w-2.5 data-[orientation=horizontal]:flex-col data-[orientation=horizontal]:h-2.5"
-          orientation="vertical"
-        >
-          <ScrollArea.Thumb className="flex-1 bg-gray-600 rounded-[10px] relative before:content-[''] before:absolute before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:w-full before:h-full before:min-w-[44px] before:min-h-[44px]" />
+        <ScrollArea.Scrollbar className="upstash-cli-scrollbar" orientation="vertical">
+          <ScrollArea.Thumb className="upstash-cli-scrollbar-thumb" />
         </ScrollArea.Scrollbar>
-        <ScrollArea.Corner className="bg-black" />
+        <ScrollArea.Corner style={{ background: "black" }} />
       </ScrollArea.Root>
     </div>
   );
@@ -252,9 +311,9 @@ const Line: React.FC<PropsWithChildren<{ prefix?: React.ReactNode; className?: s
   prefix,
   children,
 }) => (
-  <div className={`relative flex items-center my-2 w-full ${className}`}>
-    <div className="absolute inset-y-0 w-4 h-full">{prefix ?? <span> </span>}</div>
-    <div className="flex flex-col items-start w-full ml-4">{children}</div>
+  <div className={["upstash-cli-line", className].join(" ")}>
+    <div className="upstash-cli-line-prefix">{prefix ?? <span> </span>}</div>
+    <div className="upstash-cli-line-content">{children}</div>
   </div>
 );
 /**
@@ -269,9 +328,9 @@ function splitArgs(input: string): string[] {
   const ret = [];
 
   const arr = input.split("");
-  for (var i = 0; i < arr.length; ++i) {
-    var element = arr[i];
-    var matches = element.match(separator);
+  for (let i = 0; i < arr.length; ++i) {
+    const element = arr[i];
+    const matches = element.match(separator);
     if (element === "'" && !doubleQuoteOpen) {
       singleQuoteOpen = !singleQuoteOpen;
       continue;
@@ -299,26 +358,43 @@ function splitArgs(input: string): string[] {
   return ret;
 }
 
-const Result: React.FC<{ command: Command }> = ({ command }) => {
+const Result: React.FC<{ result: CommandResult }> = ({ result }) => {
   return (
-    <div className="mb-2">
-      <Line prefix={command.error ? <span className="text-red-500">✗</span> : <span>➜</span>}>
-        <span>{command.command}</span>
+    <>
+      <Line
+        prefix={
+          result.error ? (
+            <span
+              style={{
+                color: "#EF4444",
+              }}
+            >
+              ✗
+            </span>
+          ) : (
+            <span>➜</span>
+          )
+        }
+      >
+        <span>{result.command}</span>
       </Line>
-      {typeof command.result !== "undefined" ? (
+      {typeof result.result !== "undefined" ? (
         <Line>
-          <div className={`font-mono whitespace-pre-wrap break-words ${command.error ? "text-red-500" : ""}`}>
-            {formatResult(command.result)}
+          <div
+            className="upstash-cli-result"
+            style={{
+              color: result.error ? "#EF4444" : undefined,
+            }}
+          >
+            {formatResult(result.result)}
           </div>
         </Line>
       ) : null}
-    </div>
+    </>
   );
 };
 
-function formatResult(result: Command["result"]): string | ReactNode {
-  console.log({ result });
-
+function formatResult(result: CommandResult["result"]): string | ReactNode {
   switch (typeof result) {
     case "undefined":
       return "";

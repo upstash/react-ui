@@ -33,7 +33,7 @@ export default function Home() {
           overflow: "hidden",
         }}
       >
-        <RedisCli url={upstashRedisRestUrl} token={upstashRedisRestToken} init="help" />
+        <RedisCli url={upstashRedisRestUrl} token={upstashRedisRestToken} welcome={<div>Custom</div>} />
       </div>
     </main>
   );

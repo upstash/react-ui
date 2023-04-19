@@ -1,10 +1,12 @@
-import { Cli } from "./cli";
+"use client";
+import { RedisCli } from "@upstash/react-cli";
+
 export default function Home() {
-  const upstashRedisRestUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const upstashRedisRestUrl = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL;
   if (!upstashRedisRestUrl) {
     return <div>UPSTASH_REDIS_REST_URL not set </div>;
   }
-  const upstashRedisRestToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const upstashRedisRestToken = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
   if (!upstashRedisRestToken) {
     return <div>UPSTASH_REDIS_REST_TOKEN not set </div>;
   }
@@ -31,7 +33,16 @@ export default function Home() {
           overflow: "hidden",
         }}
       >
-        <Cli url={upstashRedisRestUrl} token={upstashRedisRestToken} />
+        <RedisCli
+          url={upstashRedisRestUrl}
+          token={upstashRedisRestToken}
+          init={[
+            "clear",
+            "set x y",
+            "get x",
+            "help", // this handles both redis commands and special commands like `help`
+          ]}
+        />
       </div>
     </main>
   );
