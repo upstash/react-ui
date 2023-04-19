@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.2
+
+### Patch Changes
+
+- remove padding
+
 ## 1.0.1
 
 ### Patch Changes
