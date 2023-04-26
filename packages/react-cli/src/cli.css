@@ -47,7 +47,7 @@
 }
 
 .upstash-cli-stdin {
-    /* width: 100%; */
+    width: 100%; 
     font-family: monospace;
     background-color: transparent;
     border: none;
@@ -57,10 +57,9 @@
     overflow-x: scroll;
     scroll-margin: 1rem;
     padding: 0;
-    margin:0
+    margin:0;
 
-    /* border: 1px dashed #00e9a3; */
-
+    /* border: 1px dashed white;   */
 
 }
 
@@ -154,7 +153,7 @@
     margin-right: 2rem;
     /* width: 100%; */
     /* min-height: 1rem; */
-     /* border: 1px dashed red;  */
+     /* border: 1px dashed red;   */
 
 }
 
@@ -162,16 +161,16 @@
     /* position: absolute; */
     width: 1rem;
     height: 100%;
-     /* border: 1px dashed yellow;  */
+      /* border: 1px dashed yellow;   */
 
 }
 
 .upstash-cli-line-content {
 
     width: 100%;
-    padding-right: 1rem;
+    /* padding-right: 1rem; */
     margin-right: 1rem;
-     /* border: 1px dashed green; */
+    /* border: 1px dashed green;  */
 
 }
 
