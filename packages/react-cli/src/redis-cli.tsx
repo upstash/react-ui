@@ -134,18 +134,23 @@ export const RedisCli: React.FC<CliProps> = (props) => {
    * Run a command against redis and write the command to history
    */
   async function runRedisCommand(command: string): Promise<void> {
-    const args = splitArgs(command);
+    try {
+      const args = splitArgs(command);
 
-    const res = await fetch(props.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${props.token}`,
-      },
-      body: JSON.stringify(args),
-    });
-    const json = (await res.json()) as { result?: string; error?: string };
-    addCommand({ command, result: json.error ?? json.result, error: !!json.error, time: Date.now() });
+      const res = await fetch(props.url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${props.token}`,
+        },
+        body: JSON.stringify(args),
+      });
+      const json = (await res.json()) as { result?: string; error?: string };
+      addCommand({ command, result: json.error ?? json.result, error: !!json.error, time: Date.now() });
+    } catch (e) {
+      console.error(e);
+      addCommand({ command, error: true, result: (e as Error).message, time: Date.now() });
+    }
   }
 
   /**

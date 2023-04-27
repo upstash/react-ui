@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.7
+
+### Patch Changes
+
+- display error
+
 ## 1.0.6
 
 ### Patch Changes
