@@ -1,17 +1,23 @@
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
-import { DataTypeSelector } from "./databrowser/DataTypeSelector";
+import {
+  MagnifyingGlassIcon,
+  ResetIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+} from "@radix-ui/react-icons";
+import { DataTypeSelector } from "./databrowser/data-type-selector";
+import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Separator } from "./ui/separator";
+
 export function Sidebar({ className }: React.HTMLAttributes<{}>) {
   return (
-    <div className={cn("pb-12", className)}>
-      <div className="py-4 space-y-4">
+    <div className={cn(className, "flex flex-col")}>
+      <div className="flex-1 py-4 space-y-4 overflow-y-auto">
         <div className="px-3 py-2">
           <div className="flex items-center mb-3 space-x-1">
             <div className="relative">
-              <MagnifyingGlassIcon className="absolute top-0 bottom-0 w-6 h-6 my-auto text-gray-500 left-3 " />
+              <MagnifyingGlassIcon className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-500 left-3 " />
               <Input
                 type="text"
                 placeholder="Search"
@@ -21,7 +27,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
             <DataTypeSelector />
           </div>
           <div className="space-y-1">
-            {Array.from({ length: 7 }, (_, index) => index).map((item) => (
+            {Array.from({ length: 10 }, (_, index) => index).map((item) => (
               <Button
                 variant={item === 0 ? "default" : "ghost"}
                 className="justify-start w-full"
@@ -31,6 +37,20 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
               </Button>
             ))}
           </div>
+        </div>
+      </div>
+      <Separator />
+      <div className="px-3 py-4">
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" className="w-8 h-8">
+            <ResetIcon />
+          </Button>
+          <Button variant="outline" size="icon" className="w-8 h-8 ml-auto">
+            <ArrowLeftIcon />
+          </Button>
+          <Button variant="outline" size="icon" className="w-8 h-8">
+            <ArrowRightIcon />
+          </Button>
         </div>
       </div>
     </div>

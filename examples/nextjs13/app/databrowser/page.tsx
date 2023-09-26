@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PodcastEmptyPlaceholder } from "@/components/podcast-empty-placeholder";
 import { Sidebar } from "@/components/sidebar";
 import { Badge } from "@/components/ui/badge";
+import { TTLDialog } from "@/components/databrowser/ttl-dialog";
 
 export default function Databrowser() {
   return (
@@ -42,9 +43,11 @@ export default function Databrowser() {
                     <div className="h-full px-4 py-6 lg:px-8">
                       <div className="h-full space-y-6">
                         <div className="flex items-center space-between">
-                          <Button variant="outline" className="text-sm border-dashed">
-                            TTL: 81764974s
-                          </Button>
+                          <TTLDialog>
+                            <Button variant="outline" className="text-sm border-dashed">
+                              TTL: 81764974s
+                            </Button>
+                          </TTLDialog>
                           <div className="ml-auto mr-4">
                             <Button>
                               <MinusCircledIcon className="w-4 h-4 mr-2" />
