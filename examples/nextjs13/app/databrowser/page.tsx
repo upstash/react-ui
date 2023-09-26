@@ -1,5 +1,5 @@
 "use client";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { MinusCircledIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { PodcastEmptyPlaceholder } from "@/components/podcast-empty-placeholder";
 import { Sidebar } from "@/components/sidebar";
-import { playlists } from "@/data/playlists";
+import { Badge } from "@/components/ui/badge";
 
-export default function MusicPage() {
+export default function Databrowser() {
   return (
     <main
       style={{
@@ -36,44 +36,43 @@ export default function MusicPage() {
           <div className="hidden md:block">
             <div className="border-t">
               <div className="bg-background">
-                <div className="grid lg:grid-cols-5">
-                  <Sidebar playlists={playlists} className="hidden lg:block" />
-                  <div className="col-span-3 lg:col-span-4 lg:border-l">
+                <div className="grid lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
+                  <Sidebar />
+                  <div className="col-span-4 lg:border-l">
                     <div className="h-full px-4 py-6 lg:px-8">
-                      <Tabs defaultValue="podcasts" className="h-full space-y-6">
+                      <div className="h-full space-y-6">
                         <div className="flex items-center space-between">
-                          <TabsList>
-                            <TabsTrigger value="podcasts">Podcasts</TabsTrigger>
-                            <TabsTrigger value="live" disabled>
-                              Live
-                            </TabsTrigger>
-                          </TabsList>
+                          <Button variant="outline" className="text-sm border-dashed">
+                            TTL: 81764974s
+                          </Button>
                           <div className="ml-auto mr-4">
                             <Button>
-                              <PlusCircledIcon className="w-4 h-4 mr-2" />
-                              Add music
+                              <MinusCircledIcon className="w-4 h-4 mr-2" />
+                              Delete
                             </Button>
                           </div>
                         </div>
-
-                        <TabsContent
-                          value="podcasts"
-                          className="h-full flex-col border-none p-0 data-[state=active]:flex"
-                        >
+                        <div className="h-full flex-col border-none p-0 data-[state=active]:flex">
                           <div className="flex items-center justify-between">
                             <div className="space-y-1">
-                              <h2 className="text-2xl font-semibold tracking-tight">
-                                New Episodes
-                              </h2>
-                              <p className="text-sm text-muted-foreground">
-                                Your favorite podcasts. Updated daily.
-                              </p>
+                              <div className="flex gap-3">
+                                <h2 className="text-2xl font-semibold tracking-tight">
+                                  0pVPr:55TKNa
+                                </h2>
+                                <Badge
+                                  variant="secondary"
+                                  className="text-white bg-green-500 rounded pointer-events-none"
+                                >
+                                  String
+                                </Badge>
+                              </div>
+                              <p className="text-lg font-medium text-muted-foreground">Content</p>
                             </div>
                           </div>
                           <Separator className="my-4" />
                           <PodcastEmptyPlaceholder />
-                        </TabsContent>
-                      </Tabs>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
