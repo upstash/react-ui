@@ -9,6 +9,7 @@ import { DataTypeSelector } from "./databrowser/data-type-selector";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
+import { RedisTypeTag } from "./databrowser/type-tag";
 
 export function Sidebar({ className }: React.HTMLAttributes<{}>) {
   return (
@@ -21,7 +22,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
               <Input
                 type="text"
                 placeholder="Search"
-                className="pl-10 pr-4 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none"
+                className="pl-10 pr-4 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none "
               />
             </div>
             <DataTypeSelector />
@@ -33,7 +34,8 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
                 className="justify-start w-full"
                 key={item}
               >
-                {crypto.randomUUID().slice(0, 6)}:{crypto.randomUUID().slice(0, 6)}
+                {crypto.randomUUID().slice(0, 6)}:{crypto.randomUUID().slice(0, 6)}{" "}
+                <RedisTypeTag value="string" size="short" className="ml-auto" />
               </Button>
             ))}
           </div>

@@ -3,12 +3,16 @@ import { MinusCircledIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import { TTLDialog } from "@/components/databrowser/ttl-dialog";
 import { PodcastEmptyPlaceholder } from "@/components/podcast-empty-placeholder";
 import { Sidebar } from "@/components/sidebar";
 import { Badge } from "@/components/ui/badge";
-import { TTLDialog } from "@/components/databrowser/ttl-dialog";
+
+export const RedisDataTypes = ["string", "list", "hash", "set", "zset", "json"] as const;
+export type RedisDataTypeUnion = (typeof RedisDataTypes)[number];
+
+export type ActionVariants = "reset" | "filter" | "search" | "next" | "prev";
 
 export default function Databrowser() {
   return (

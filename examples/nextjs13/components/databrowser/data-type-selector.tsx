@@ -1,3 +1,4 @@
+import { RedisDataTypes } from "@/app/databrowser/page";
 import {
   Select,
   SelectContent,
@@ -17,11 +18,11 @@ export function DataTypeSelector() {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Data Type</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
+          {RedisDataTypes.map((dataType) => (
+            <SelectItem value={dataType} key={dataType} className="capitalize">
+              {dataType}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>
