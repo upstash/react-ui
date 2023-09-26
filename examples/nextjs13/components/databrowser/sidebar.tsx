@@ -3,7 +3,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   MagnifyingGlassIcon,
-  ResetIcon,
+  ReloadIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -35,7 +35,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
                 key={item}
               >
                 0pVPr:55TKNa
-                <RedisTypeTag value="string" size="short" className="ml-auto" />
+                <RedisTypeTag value="string" size="short" className="ml-auto pointer-events-none" />
               </Button>
             ))}
           </div>
@@ -45,7 +45,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
       <div className="px-3 py-4">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" className="w-8 h-8">
-            <ResetIcon />
+            <ReloadIcon />
           </Button>
           <Button variant="outline" size="icon" className="w-8 h-8 ml-auto">
             <ArrowLeftIcon />

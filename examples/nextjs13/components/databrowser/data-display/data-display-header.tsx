@@ -10,7 +10,7 @@ export const DataDisplayHeader = () => {
           TTL: 81764974s
         </Button>
       </TTLDialog>
-      <div className="ml-auto mr-4">
+      <div className="ml-auto">
         <Button>
           <MinusCircledIcon className="w-4 h-4 mr-2" />
           Delete
