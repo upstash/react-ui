@@ -1,11 +1,6 @@
 "use client";
 import { DataDisplayContainer } from "@/components/databrowser/data-display/data-display-container";
-import { Sidebar } from "@/components/sidebar";
-
-export const RedisDataTypes = ["string", "list", "hash", "set", "zset", "json"] as const;
-export type RedisDataTypeUnion = (typeof RedisDataTypes)[number];
-
-export type ActionVariants = "reset" | "filter" | "search" | "next" | "prev";
+import { Sidebar } from "@/components/databrowser/sidebar";
 
 export default function Databrowser() {
   return (

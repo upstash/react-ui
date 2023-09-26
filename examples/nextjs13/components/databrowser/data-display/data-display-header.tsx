@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { MinusCircledIcon } from "@radix-ui/react-icons";
-import React from "react";
 import { TTLDialog } from "../ttl-dialog";
 
 export const DataDisplayHeader = () => {

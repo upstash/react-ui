@@ -1,15 +1,15 @@
 import { cn } from "@/lib/utils";
 import {
-  MagnifyingGlassIcon,
-  ResetIcon,
   ArrowLeftIcon,
   ArrowRightIcon,
+  MagnifyingGlassIcon,
+  ResetIcon,
 } from "@radix-ui/react-icons";
-import { DataTypeSelector } from "./databrowser/data-type-selector";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Separator } from "./ui/separator";
-import { RedisTypeTag } from "./databrowser/type-tag";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Separator } from "../ui/separator";
+import { DataTypeSelector } from "./data-type-selector";
+import { RedisTypeTag } from "./type-tag";
 
 export function Sidebar({ className }: React.HTMLAttributes<{}>) {
   return (
@@ -34,7 +34,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
                 className="justify-start w-full"
                 key={item}
               >
-                {crypto.randomUUID().slice(0, 6)}:{crypto.randomUUID().slice(0, 6)}{" "}
+                0pVPr:55TKNa
                 <RedisTypeTag value="string" size="short" className="ml-auto" />
               </Button>
             ))}

@@ -1,5 +1,5 @@
-import { ScrollArea } from "../../ui/scroll-area";
 import { Badge } from "../../ui/badge";
+import { ScrollArea } from "../../ui/scroll-area";
 import { Separator } from "../../ui/separator";
 
 export function DataDisplay() {

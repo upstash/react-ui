@@ -1,4 +1,3 @@
-import { RedisDataTypes } from "@/app/databrowser/page";
 import {
   Select,
   SelectContent,
@@ -8,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { RedisDataTypes } from "@/types";
 
 export function DataTypeSelector() {
   return (
