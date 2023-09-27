@@ -9,9 +9,8 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { DataTypeSelector } from "./data-type-selector";
-import { RedisTypeTag } from "./type-tag";
 import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
-import { useState } from "react";
+import { RedisTypeTag } from "./type-tag";
 
 export function Sidebar({ className }: React.HTMLAttributes<{}>) {
   const { data, isLoading, error } = useFetchPaginatedKeys({});
@@ -36,11 +35,7 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
               return (
                 <Button variant="ghost" className="justify-start w-full" key={dataKey}>
                   {dataKey}
-                  <RedisTypeTag
-                    value={dataType}
-                    size="short"
-                    className="ml-auto pointer-events-none"
-                  />
+                  <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
                 </Button>
               );
             })}
