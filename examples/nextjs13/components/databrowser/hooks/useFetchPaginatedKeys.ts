@@ -66,8 +66,8 @@ export const useFetchPaginatedKeys = ({
       return keyTypePairs;
     },
     retry: 3,
-    staleTime: 2500,
-    refetchInterval: 2500,
+    staleTime: 10000,
+    refetchInterval: 10000,
   });
   return { isLoading, error, data };
 };

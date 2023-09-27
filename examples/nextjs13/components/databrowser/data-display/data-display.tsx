@@ -1,30 +1,41 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "../../ui/badge";
 import { ScrollArea } from "../../ui/scroll-area";
+import { useFetchSingleDataByKey } from "../hooks/useFetchSingleDataByKey";
+import { RedisDataTypeUnion } from "@/types";
+import { RedisTypeTag } from "../type-tag";
 
-export function DataDisplay() {
+type Props = {
+  selectedDataKeyTypePair: [string, RedisDataTypeUnion];
+};
+export function DataDisplay({ selectedDataKeyTypePair }: Props) {
+  const [key, keyType] = selectedDataKeyTypePair;
+  const { data, isLoading } = useFetchSingleDataByKey(key);
+
   return (
-    <div className="h-full flex-col border-none p-0 data-[state=active]:flex">
+    <div className="flex-col h-full p-0 border-none">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-semibold tracking-tight">0pVPr:55TKNa</h2>
-            <Badge
-              variant="secondary"
-              className="text-white bg-green-500 rounded pointer-events-none"
+            <h2 className="text-2xl font-semibold tracking-tight">{key}</h2>
+            <RedisTypeTag
+              isFull
+              value={keyType}
+              //   className="text-white bg-green-500 rounded pointer-events-none"
             >
               String
-            </Badge>
+            </RedisTypeTag>
           </div>
           <p className="text-lg font-medium text-muted-foreground">Content</p>
         </div>
       </div>
-      <ScrollArea className="my-4 p-4 flex h-[350px] shrink-0 items-center justify-center rounded-md border border-dashed">
-        Jokester began sneaking into the castle in the middle of the night and leaving jokes all
-        over the place: under the king's pillow, in his soup, even in the royal toilet. The king was
-        furious, but he couldn't seem to stop Jokester. And then, one day, the people of the kingdom
-        discovered that the jokes left by Jokester were so funny that they couldn't help but laugh.
-        And once they started laughing, they couldn't stop.
-      </ScrollArea>
+      {isLoading ? (
+        <Skeleton className="transition-all rounded  my-4 p-4 flex h-[350px] shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]" />
+      ) : (
+        <ScrollArea className="my-4 p-4 flex h-[350px] shrink-0 items-center justify-center rounded-md border border-dashed">
+          {data}
+        </ScrollArea>
+      )}
     </div>
   );
 }

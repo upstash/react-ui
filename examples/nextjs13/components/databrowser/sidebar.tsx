@@ -12,9 +12,10 @@ import { Skeleton } from "../ui/skeleton";
 import { DataTypeSelector } from "./data-type-selector";
 import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "./type-tag";
+import { RedisDataTypeUnion } from "@/types";
 
 type Props = {
-  onDataKeyChange: (dataKey: string) => void;
+  onDataKeyChange: (dataKey: [string, RedisDataTypeUnion]) => void;
   selectedDataKey?: string;
 };
 
@@ -55,7 +56,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                     variant={selectedDataKey === dataKey ? "default" : "ghost"}
                     className="justify-start w-full"
                     key={dataKey}
-                    onClick={() => onDataKeyChange(dataKey)}
+                    onClick={() => onDataKeyChange([dataKey, dataType])}
                   >
                     {dataKey}
                     <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
