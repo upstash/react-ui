@@ -5,7 +5,7 @@ export const MissingDataDisplay = () => {
     <div className="col-span-4 lg:border-l">
       <div className="h-full px-4 py-6 lg:px-8">
         <div className="h-full space-y-6">
-          <div className="flex flex-col items-center justify-center h-full gap-5 p-4 my-4 border border-dashed rounded-md shrink-0">
+          <div className="flex flex-col items-center justify-center h-full gap-5 p-4 border border-dashed rounded-md shrink-0">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="120px"

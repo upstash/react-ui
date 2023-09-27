@@ -11,7 +11,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { PropsWithChildren } from "react";
 
-export function DeleteAlertDialog({ children }: PropsWithChildren) {
+export function DeleteAlertDialog({
+  children,
+  onDeleteConfirm,
+}: PropsWithChildren<{ onDeleteConfirm: () => void }>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -25,7 +28,9 @@ export function DeleteAlertDialog({ children }: PropsWithChildren) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500 hover:bg-red-600">Delete</AlertDialogAction>
+          <AlertDialogAction className="bg-red-500 hover:bg-red-600" onClick={onDeleteConfirm}>
+            Delete
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

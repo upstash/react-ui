@@ -1,8 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "../../ui/badge";
+import { RedisDataTypeUnion } from "@/types";
 import { ScrollArea } from "../../ui/scroll-area";
 import { useFetchSingleDataByKey } from "../hooks/useFetchSingleDataByKey";
-import { RedisDataTypeUnion } from "@/types";
 import { RedisTypeTag } from "../type-tag";
 
 type Props = {
@@ -18,11 +17,7 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             <h2 className="text-2xl font-semibold tracking-tight">{key}</h2>
-            <RedisTypeTag
-              isFull
-              value={keyType}
-              //   className="text-white bg-green-500 rounded pointer-events-none"
-            >
+            <RedisTypeTag isFull value={keyType}>
               String
             </RedisTypeTag>
           </div>

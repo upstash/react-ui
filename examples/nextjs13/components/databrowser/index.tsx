@@ -8,7 +8,7 @@ export const Databrowser = () => {
     [string, RedisDataTypeUnion] | undefined
   >();
 
-  const handleDataKeySelect = (dataKey: [string, RedisDataTypeUnion]) => {
+  const handleDataKeySelect = (dataKey?: [string, RedisDataTypeUnion]) => {
     setSelectedDataKey(dataKey);
   };
 
@@ -16,7 +16,10 @@ export const Databrowser = () => {
     <div className="overflow-hidden rounded-[0.5rem] border shadow">
       <div className="grid lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
         <Sidebar selectedDataKey={selectedDataKey?.[0]} onDataKeyChange={handleDataKeySelect} />
-        <DataDisplayContainer selectedDataKeyTypePair={selectedDataKey} />
+        <DataDisplayContainer
+          selectedDataKeyTypePair={selectedDataKey}
+          onDataKeyChange={handleDataKeySelect}
+        />
       </div>
     </div>
   );

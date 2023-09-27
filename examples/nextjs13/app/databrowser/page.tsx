@@ -2,7 +2,8 @@
 import { Databrowser } from "@/components/databrowser";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-const queryClient = new QueryClient();
+export const queryClient = new QueryClient();
+
 export default function DatabrowserDemo() {
   return (
     <main

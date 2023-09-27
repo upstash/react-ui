@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { RedisDataTypeUnion } from "@/types";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -12,7 +12,7 @@ import { Skeleton } from "../ui/skeleton";
 import { DataTypeSelector } from "./data-type-selector";
 import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "./type-tag";
-import { RedisDataTypeUnion } from "@/types";
+import { MissingDataDisplay } from "./missing-data-display";
 
 type Props = {
   onDataKeyChange: (dataKey: [string, RedisDataTypeUnion]) => void;
@@ -21,9 +21,6 @@ type Props = {
 
 export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   const { data: dataKeys, isLoading, error } = useFetchPaginatedKeys({});
-
-  //Will be handled soon.
-  if (error) return <div>"Error../"</div>;
 
   return (
     <div className="flex flex-col">
@@ -41,7 +38,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             <DataTypeSelector />
           </div>
           <div className="space-y-1">
-            {isLoading ? (
+            {isLoading || error ? (
               <div className="space-y-1">
                 {Array(10)
                   .fill(0)

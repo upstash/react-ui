@@ -1,19 +1,28 @@
 import { Button } from "@/components/ui/button";
-import { MinusCircledIcon } from "@radix-ui/react-icons";
-import { TTLDialog } from "../ttl-dialog";
-import { DeleteAlertDialog } from "../delete-alert-dialog";
-import { useFetchTTLByKey } from "../hooks/useFetchTTLBy";
 import { Skeleton } from "@/components/ui/skeleton";
+import { RedisDataTypeUnion } from "@/types";
+import { MinusCircledIcon } from "@radix-ui/react-icons";
+import { DeleteAlertDialog } from "../delete-alert-dialog";
+import { useDeleteKey } from "../hooks/useDeleteKey";
+import { useFetchTTLByKey } from "../hooks/useFetchTTLBy";
+import { TTLDialog } from "../ttl-dialog";
 
 type Props = {
   selectedDataKey?: string;
+  onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
 };
-export const DataDisplayHeader = ({ selectedDataKey }: Props) => {
+export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) => {
+  const deleteKey = useDeleteKey();
   const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(selectedDataKey);
 
   const handleDisplayTTL = () => {
     if (TTLData === -1) return "None";
-    return `${TTLData?.toString()}s`;
+    return `${TTLData?.toString()}secs`;
+  };
+
+  const handleDeleteKey = async () => {
+    const result = await deleteKey.mutateAsync(selectedDataKey);
+    if (result) onDataKeyChange(undefined);
   };
 
   return (
@@ -29,7 +38,7 @@ export const DataDisplayHeader = ({ selectedDataKey }: Props) => {
         </Button>
       </TTLDialog>
       <div className="ml-auto">
-        <DeleteAlertDialog>
+        <DeleteAlertDialog onDeleteConfirm={handleDeleteKey}>
           <Button>
             <MinusCircledIcon className="w-4 h-4 mr-2" />
             Delete

@@ -37,7 +37,7 @@ export const useFetchPaginatedKeys = ({
   const selectedDataKeyRef = useRef<[string, RedisDataTypeUnion] | undefined>();
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["redisData", query],
+    queryKey: ["useFetchPaginatedKeys", query],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
       const [nextCursor, keys] = await redis.scan(INITIAL_CURSOR_NUM, {
