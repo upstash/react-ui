@@ -9,9 +9,6 @@ export const useFetchTTLByKey = (dataKey?: string) => {
       const stringValue = await redis.ttl(dataKey);
       return stringValue;
     },
-    retry: 3,
-    staleTime: 3500,
-    refetchInterval: 3500,
   });
   return { isLoading, error, data };
 };

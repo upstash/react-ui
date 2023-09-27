@@ -55,9 +55,6 @@ export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Para
 
       return keyTypePairs;
     },
-    retry: 3,
-    staleTime: 10000,
-    refetchInterval: 10000,
   });
   return { isLoading, error, data };
 };

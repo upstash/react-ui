@@ -9,9 +9,6 @@ export const useFetchSingleDataByKey = (dataKey?: string) => {
       const stringValue = redis.get<string>(dataKey);
       return stringValue;
     },
-    retry: 1,
-    staleTime: 3500,
-    refetchInterval: 3500,
   });
   return { isLoading, error, data };
 };
