@@ -13,7 +13,7 @@ export const Databrowser = () => {
     <div className="overflow-hidden rounded-[0.5rem] border shadow">
       <div className="grid lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
         <Sidebar selectedDataKey={selectedDataKey} onDataKeyChange={handleDataKeySelect} />
-        <DataDisplayContainer />
+        <DataDisplayContainer selectedDataKey={selectedDataKey} />
       </div>
     </div>
   );

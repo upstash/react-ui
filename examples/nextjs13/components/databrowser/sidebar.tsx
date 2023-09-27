@@ -43,9 +43,9 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             {isLoading ? (
               <div className="space-y-1">
                 {Array(10)
-                  .fill(1)
-                  .map((x) => (
-                    <Skeleton className="w-full h-[40px] rounded" key={x} />
+                  .fill(0)
+                  .map((_, idx) => (
+                    <Skeleton className="w-full h-[40px] rounded" key={idx} />
                   ))}
               </div>
             ) : (
