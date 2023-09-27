@@ -1,6 +1,8 @@
 "use client";
 import { Databrowser } from "@/components/databrowser";
+import { QueryClient, QueryClientProvider } from "react-query";
 
+const queryClient = new QueryClient();
 export default function DatabrowserDemo() {
   return (
     <main
@@ -24,7 +26,9 @@ export default function DatabrowserDemo() {
           overflow: "hidden",
         }}
       >
-        <Databrowser />
+        <QueryClientProvider client={queryClient}>
+          <Databrowser />
+        </QueryClientProvider>
       </div>
     </main>
   );

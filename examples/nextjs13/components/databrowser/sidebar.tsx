@@ -10,8 +10,12 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { DataTypeSelector } from "./data-type-selector";
 import { RedisTypeTag } from "./type-tag";
+import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
+import { useState } from "react";
 
 export function Sidebar({ className }: React.HTMLAttributes<{}>) {
+  const { data, isLoading, error } = useFetchPaginatedKeys({});
+
   return (
     <div className={cn(className, "flex flex-col")}>
       <div className="flex-1 py-4 space-y-4 overflow-y-auto">
@@ -22,22 +26,24 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
               <Input
                 type="text"
                 placeholder="Search"
-                className="pl-10 pr-4 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none "
+                className="pl-10 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none "
               />
             </div>
             <DataTypeSelector />
           </div>
           <div className="space-y-1">
-            {Array.from({ length: 10 }, (_, index) => index).map((item) => (
-              <Button
-                variant={item === 0 ? "default" : "ghost"}
-                className="justify-start w-full"
-                key={item}
-              >
-                0pVPr:55TKNa
-                <RedisTypeTag value="string" size="short" className="ml-auto pointer-events-none" />
-              </Button>
-            ))}
+            {data?.map(([dataKey, dataType]) => {
+              return (
+                <Button variant="ghost" className="justify-start w-full" key={dataKey}>
+                  {dataKey}
+                  <RedisTypeTag
+                    value={dataType}
+                    size="short"
+                    className="ml-auto pointer-events-none"
+                  />
+                </Button>
+              );
+            })}
           </div>
         </div>
       </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { DataDisplayContainer } from "./data-display/data-display-container";
 import { Sidebar } from "./sidebar";
 
