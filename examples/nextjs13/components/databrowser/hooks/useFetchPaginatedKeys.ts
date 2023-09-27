@@ -1,17 +1,17 @@
 import { RedisDataTypeUnion } from "@/types";
+import { useRef } from "react";
 import { useQuery } from "react-query";
 import { redis } from "../lib/client";
 import { zip } from "../utils";
-import { useRef, useState } from "react";
 
 /*
 [] Should allow fetching next - prev pages probably using storing cursor for the next page and current cursor
     - Probably should have state for that storing or maybe useRef to avoid rerender
 [] Should allow fetching only one data type - string, json, hset -
-[] Should reset everything when reload clicked
 [] Should have a state somewhere to hold selected key so we can keep fetching details in data display
-    - Should have its own useQuery to fetch details
-[] Reset query: Using query.remove() and query.refetch() together
+- Should have its own useQuery to fetch details
+[] Should reset everything when reload clicked
+[] Reset query: Using query.remove() and query.refetch() together or invalidate
 */
 
 const DEFAULT_FETCH_COUNT = 10;
@@ -21,20 +21,14 @@ const SCAN_MATCH_ALL = "*";
 type Params = {
   dataType?: RedisDataTypeUnion;
   //   moveDirection?: "next" | "prev";
-  shouldReset?: boolean;
   query?: string;
 };
 
-export const useFetchPaginatedKeys = ({
-  dataType,
-  query = SCAN_MATCH_ALL,
-  shouldReset,
-}: Params) => {
+export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Params) => {
   const { current: cursorWatcher } = useRef({
     prevCursor: INITIAL_CURSOR_NUM,
     nextCursor: INITIAL_CURSOR_NUM,
   });
-  const selectedDataKeyRef = useRef<[string, RedisDataTypeUnion] | undefined>();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["useFetchPaginatedKeys", query],
@@ -56,12 +50,8 @@ export const useFetchPaginatedKeys = ({
 
       //Required to transform hashes into actual keys
       const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
-      //["foo", "string"]
+      //Example value: [["foo", "string"],["bar", "json"]]
       const keyTypePairs: [string, RedisDataTypeUnion][] = zip(keys, types);
-
-      if (!selectedDataKeyRef.current && keyTypePairs.length > 0) {
-        selectedDataKeyRef.current = keyTypePairs[0];
-      }
 
       return keyTypePairs;
     },
