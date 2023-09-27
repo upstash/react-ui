@@ -8,15 +8,24 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
+import { Skeleton } from "../ui/skeleton";
 import { DataTypeSelector } from "./data-type-selector";
 import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "./type-tag";
 
-export function Sidebar({ className }: React.HTMLAttributes<{}>) {
-  const { data, isLoading, error } = useFetchPaginatedKeys({});
+type Props = {
+  onDataKeyChange: (dataKey: string) => void;
+  selectedDataKey?: string;
+};
+
+export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
+  const { data: dataKeys, isLoading, error } = useFetchPaginatedKeys({});
+
+  //Will be handled soon.
+  if (error) return <div>"Error../"</div>;
 
   return (
-    <div className={cn(className, "flex flex-col")}>
+    <div className="flex flex-col">
       <div className="flex-1 py-4 space-y-4 overflow-y-auto">
         <div className="px-3 py-2">
           <div className="flex items-center mb-3 space-x-1">
@@ -31,14 +40,29 @@ export function Sidebar({ className }: React.HTMLAttributes<{}>) {
             <DataTypeSelector />
           </div>
           <div className="space-y-1">
-            {data?.map(([dataKey, dataType]) => {
-              return (
-                <Button variant="ghost" className="justify-start w-full" key={dataKey}>
-                  {dataKey}
-                  <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
-                </Button>
-              );
-            })}
+            {isLoading ? (
+              <div className="space-y-1">
+                {Array(10)
+                  .fill(1)
+                  .map((x) => (
+                    <Skeleton className="w-full h-[40px] rounded" key={x} />
+                  ))}
+              </div>
+            ) : (
+              dataKeys?.map(([dataKey, dataType]) => {
+                return (
+                  <Button
+                    variant={selectedDataKey === dataKey ? "default" : "ghost"}
+                    className="justify-start w-full"
+                    key={dataKey}
+                    onClick={() => onDataKeyChange(dataKey)}
+                  >
+                    {dataKey}
+                    <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
+                  </Button>
+                );
+              })
+            )}
           </div>
         </div>
       </div>

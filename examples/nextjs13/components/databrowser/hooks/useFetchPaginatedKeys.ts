@@ -2,7 +2,7 @@ import { RedisDataTypeUnion } from "@/types";
 import { useQuery } from "react-query";
 import { redis } from "../lib/client";
 import { zip } from "../utils";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 /*
 [] Should allow fetching next - prev pages probably using storing cursor for the next page and current cursor
@@ -34,6 +34,7 @@ export const useFetchPaginatedKeys = ({
     prevCursor: INITIAL_CURSOR_NUM,
     nextCursor: INITIAL_CURSOR_NUM,
   });
+  const selectedDataKeyRef = useRef<[string, RedisDataTypeUnion] | undefined>();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["redisData", query],
@@ -44,7 +45,7 @@ export const useFetchPaginatedKeys = ({
         match: query,
         type: dataType,
       });
-      //   //Change cursor before looping through keys
+      //   Change cursor before looping through keys
       //   cursorWatcher.prevCursor = cursorWatcher.nextCursor;
       //   cursorWatcher.nextCursor = nextCursor;
 
@@ -55,9 +56,18 @@ export const useFetchPaginatedKeys = ({
 
       //Required to transform hashes into actual keys
       const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
-      const data: [string, RedisDataTypeUnion][] = zip(keys, types);
-      return data;
+      //["foo", "string"]
+      const keyTypePairs: [string, RedisDataTypeUnion][] = zip(keys, types);
+
+      if (!selectedDataKeyRef.current && keyTypePairs.length > 0) {
+        selectedDataKeyRef.current = keyTypePairs[0];
+      }
+
+      return keyTypePairs;
     },
+    retry: 3,
+    staleTime: 2500,
+    refetchInterval: 2500,
   });
-  return { isLoading, error, data } as const;
+  return { isLoading, error, data };
 };
