@@ -50,8 +50,8 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={idx}>
-              <TableCell className="font-medium">{item.value}</TableCell>
-              <TableCell className="font-medium">{item.content}</TableCell>
+              <TableCell className="font-medium text-[12px]">{item.value}</TableCell>
+              <TableCell className="font-medium text-[12px]">{item.content}</TableCell>
             </TableRow>
           ))}
         </TableBody>
