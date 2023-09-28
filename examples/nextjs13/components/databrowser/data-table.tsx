@@ -7,21 +7,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Navigation, ScoredContent } from "./hooks/useFetchSingleDataByKey";
+import { Navigation, ContentValue } from "./hooks/useFetchSingleDataByKey";
 import { Button } from "../ui/button";
 
 type Props = {
-  data: ScoredContent[];
+  data: ContentValue[];
   navigation: Navigation;
   tableHeaders: [string, string];
 };
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
-      <Table className="my-4 p-4 min-h-[325px]  rounded-md border border-dashed">
+      <Table className="p-4 my-4 border border-dashed rounded-md">
         <TableCaption>
-          <div className="flex items-center justify-between">
-            <span>A list of your sorted sets</span>
+          <div className="flex items-center justify-end">
             <div className="space-x-2">
               <Button
                 variant="outline"
@@ -51,7 +50,7 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={idx}>
-              <TableCell className="font-medium">{item.score}</TableCell>
+              <TableCell className="font-medium">{item.value}</TableCell>
               <TableCell className="font-medium">{item.content}</TableCell>
             </TableRow>
           ))}

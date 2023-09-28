@@ -38,6 +38,18 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
           navigation={navigation}
           tableHeaders={["Score", "Content"]}
         />
+      ) : keyType === "hash" && data?.type === "hash" ? (
+        <DataTable
+          data={data.content}
+          navigation={navigation}
+          tableHeaders={["Field", "Content"]}
+        />
+      ) : keyType === "list" && data?.type === "list" ? (
+        <DataTable
+          data={data.content}
+          navigation={navigation}
+          tableHeaders={["Index", "Content"]}
+        />
       ) : null}
     </div>
   );
