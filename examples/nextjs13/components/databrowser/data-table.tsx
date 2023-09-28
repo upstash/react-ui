@@ -13,8 +13,9 @@ import { Button } from "../ui/button";
 type Props = {
   data: ScoredContent[];
   navigation: Navigation;
+  tableHeaders: [string, string];
 };
-export const DataTable = ({ data, navigation }: Props) => {
+export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
       <Table className="my-4 p-4 min-h-[325px]  rounded-md border border-dashed">
@@ -43,8 +44,8 @@ export const DataTable = ({ data, navigation }: Props) => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Score</TableHead>
-            <TableHead className="w-[100px]">Content</TableHead>
+            <TableHead className="w-[100px]">{tableHeaders[0]}</TableHead>
+            <TableHead className="w-[100px]">{tableHeaders[1]}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

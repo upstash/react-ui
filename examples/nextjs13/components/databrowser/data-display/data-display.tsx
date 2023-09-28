@@ -33,7 +33,11 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
           {data.content}
         </ScrollArea>
       ) : keyType === "zset" && data?.type === "zset" ? (
-        <DataTable data={data.content} navigation={navigation} />
+        <DataTable
+          data={data.content}
+          navigation={navigation}
+          tableHeaders={["Score", "Content"]}
+        />
       ) : null}
     </div>
   );

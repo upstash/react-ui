@@ -32,9 +32,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
   };
 
-  // Accepts optional callback to reset states that lives in host component
-  const reset = (cb?: () => void) => {
-    cb?.();
+  const reset = () => {
     cursorStack.current = [INITIAL_CURSOR_NUM];
     setCurrentIndex(INITIAL_CURSOR_NUM);
     setSearchTerm(SCAN_MATCH_ALL);

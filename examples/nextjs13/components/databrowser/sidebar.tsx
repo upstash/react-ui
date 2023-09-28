@@ -15,7 +15,7 @@ import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "./type-tag";
 
 type Props = {
-  onDataKeyChange: (dataKey: [string, RedisDataTypeUnion]) => void;
+  onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
   selectedDataKey?: string;
 };
 
@@ -35,8 +35,6 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     reset();
     setSelectedDataType(dataType);
   };
-
-  const handleResetDataType = () => setSelectedDataType(undefined);
 
   return (
     <div className="flex flex-col">
@@ -92,7 +90,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             variant="outline"
             size="icon"
             className="w-8 h-8"
-            onClick={() => reset(handleResetDataType)}
+            onClick={() => handleDataTypeChange(undefined)}
           >
             <ReloadIcon />
           </Button>
