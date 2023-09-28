@@ -1,44 +1,51 @@
 import { RedisDataTypeUnion } from "@/types";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { redis } from "../lib/client";
 import { zip } from "../utils";
 import { useDebounce } from "./useDebounce";
 
-/*
-[] Should allow fetching next - prev pages probably using storing cursor for the next page and current cursor
-    - Probably should have state for that storing or maybe useRef to avoid rerender
-[] Should allow fetching only one data type - string, json, hset -
-[] Should have a state somewhere to hold selected key so we can keep fetching details in data display
-- Should have its own useQuery to fetch details
-[] Should reset everything when reload clicked
-[] Reset query: Using query.remove() and query.refetch() together or invalidate
-*/
-
 const DEFAULT_FETCH_COUNT = 10;
 const INITIAL_CURSOR_NUM = 0;
 const SCAN_MATCH_ALL = "*";
+const DEBOUNCE_TIME = 250;
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const cursorStack = useRef([INITIAL_CURSOR_NUM]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
-  const debouncedSearchTerm = useDebounce<string>(searchTerm, 250);
+  const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
 
-  const handlePageChange = (dir: "next" | "prev") => {
-    if (dir === "next") {
-      setCurrentIndex((prev) => prev + 1);
-    } else if (dir === "prev" && currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
+  const handlePageChange = useCallback(
+    (dir: "next" | "prev") => {
+      if (dir === "next") {
+        setCurrentIndex((prev) => prev + 1);
+      } else if (dir === "prev" && currentIndex > 0) {
+        setCurrentIndex((prev) => prev - 1);
+      }
+    },
+    [currentIndex]
+  );
 
   const handleSearch = (query: string) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
   };
 
+  // Accepts optional callback to reset states that lives in host component
+  const reset = (cb?: () => void) => {
+    cb?.();
+    cursorStack.current = [INITIAL_CURSOR_NUM];
+    setCurrentIndex(INITIAL_CURSOR_NUM);
+    setSearchTerm(SCAN_MATCH_ALL);
+  };
+
   const { isLoading, error, data } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, cursorStack.current[currentIndex]],
+    queryKey: [
+      "useFetchPaginatedKeys",
+      debouncedSearchTerm,
+      cursorStack.current[currentIndex],
+      dataType,
+    ],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
       const [nextCursor, keys] = await redis.scan(cursorStack.current[currentIndex], {
@@ -60,7 +67,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
       //Required to transform hashes into actual keys
       const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
       //Example value: [["foo", "string"],["bar", "json"]]
-      const keyTypePairs: [string, RedisDataTypeUnion][] = zip(keys, types);
+      const keyTypePairs = zip(keys, types);
 
       return keyTypePairs;
     },
@@ -71,6 +78,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     data,
     handlePageChange,
     handleSearch,
+    reset,
     direction: {
       prevNotAllowed: currentIndex === 0,
       nextNotAllowed: cursorStack.current[currentIndex + 1] === 0,

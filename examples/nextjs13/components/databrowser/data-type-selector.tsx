@@ -7,12 +7,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RedisDataTypes } from "@/types";
+import { RedisDataTypeUnion, RedisDataTypes } from "@/types";
 
-export function DataTypeSelector() {
+type Props = {
+  onDataTypeChange: (dataType?: RedisDataTypeUnion) => void;
+  dataType?: RedisDataTypeUnion;
+};
+
+export function DataTypeSelector({ onDataTypeChange, dataType }: Props) {
   return (
-    <Select>
-      <SelectTrigger className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px]">
+    <Select onValueChange={(data) => onDataTypeChange(data as RedisDataTypeUnion)} value={dataType}>
+      <SelectTrigger className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]">
         <SelectValue placeholder="Type" />
       </SelectTrigger>
       <SelectContent>

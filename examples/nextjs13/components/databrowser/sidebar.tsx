@@ -5,6 +5,7 @@ import {
   MagnifyingGlassIcon,
   ReloadIcon,
 } from "@radix-ui/react-icons";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
+  const [selectedDataType, setSelectedDataType] = useState<RedisDataTypeUnion>();
   const {
     data: dataKeys,
     isLoading,
@@ -26,7 +28,15 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     handlePageChange,
     direction,
     handleSearch,
-  } = useFetchPaginatedKeys();
+    reset,
+  } = useFetchPaginatedKeys(selectedDataType);
+
+  const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
+    reset();
+    setSelectedDataType(dataType);
+  };
+
+  const handleResetDataType = () => setSelectedDataType(undefined);
 
   return (
     <div className="flex flex-col">
@@ -42,7 +52,11 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                 onChange={(e) => handleSearch(e.target.value)}
               />
             </div>
-            <DataTypeSelector />
+            <DataTypeSelector
+              onDataTypeChange={handleDataTypeChange}
+              dataType={selectedDataType}
+              key={selectedDataType}
+            />
           </div>
           <div className="space-y-1">
             {isLoading || error ? (
@@ -74,7 +88,12 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
       <Separator />
       <div className="px-3 py-4">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="w-8 h-8">
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-8 h-8"
+            onClick={() => reset(handleResetDataType)}
+          >
             <ReloadIcon />
           </Button>
           <Button
