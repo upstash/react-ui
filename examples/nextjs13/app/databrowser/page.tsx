@@ -18,7 +18,7 @@ export default function DatabrowserDemo() {
         style={{
           height: "100%",
           width: "100%",
-          maxHeight: "40rem",
+          maxHeight: "45rem",
           maxWidth: "64rem",
           borderRadius: "0.5rem",
           overflow: "hidden",

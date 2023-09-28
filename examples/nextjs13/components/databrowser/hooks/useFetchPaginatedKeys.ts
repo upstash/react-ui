@@ -27,6 +27,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     [currentIndex]
   );
 
+  //If user doesn't pass any asterisk we add two of them to end and start
   const handleSearch = (query: string) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
   };
