@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { redis } from "../lib/client";
 import { zip } from "../utils";
+import { useDebounce } from "./useDebounce";
 
 /*
 [] Should allow fetching next - prev pages probably using storing cursor for the next page and current cursor
@@ -18,14 +19,11 @@ const DEFAULT_FETCH_COUNT = 10;
 const INITIAL_CURSOR_NUM = 0;
 const SCAN_MATCH_ALL = "*";
 
-type Params = {
-  dataType?: RedisDataTypeUnion;
-  query?: string;
-};
-
-export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Params) => {
+export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const cursorStack = useRef([INITIAL_CURSOR_NUM]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
+  const debouncedSearchTerm = useDebounce<string>(searchTerm, 250);
 
   const handlePageChange = (dir: "next" | "prev") => {
     if (dir === "next") {
@@ -35,13 +33,17 @@ export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Para
     }
   };
 
+  const handleSearch = (query: string) => {
+    setSearchTerm(!query.includes("*") ? `*${query}*` : query);
+  };
+
   const { isLoading, error, data } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", query, cursorStack.current[currentIndex]],
+    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, cursorStack.current[currentIndex]],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
       const [nextCursor, keys] = await redis.scan(cursorStack.current[currentIndex], {
         count: DEFAULT_FETCH_COUNT,
-        match: query,
+        match: debouncedSearchTerm,
         type: dataType,
       });
 
@@ -68,6 +70,7 @@ export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Para
     error,
     data,
     handlePageChange,
+    handleSearch,
     direction: {
       prevNotAllowed: currentIndex === 0,
       nextNotAllowed: cursorStack.current[currentIndex + 1] === 0,

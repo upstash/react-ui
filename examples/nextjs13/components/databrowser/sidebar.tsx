@@ -25,7 +25,8 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     error,
     handlePageChange,
     direction,
-  } = useFetchPaginatedKeys({});
+    handleSearch,
+  } = useFetchPaginatedKeys();
 
   return (
     <div className="flex flex-col">
@@ -37,7 +38,8 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
               <Input
                 type="text"
                 placeholder="Search"
-                className="pl-10 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none "
+                className="pl-10 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none"
+                onChange={(e) => handleSearch(e.target.value)}
               />
             </div>
             <DataTypeSelector />
