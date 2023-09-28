@@ -1,5 +1,5 @@
 import { RedisDataTypeUnion } from "@/types";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { redis } from "../lib/client";
 import { zip } from "../utils";
@@ -20,28 +20,34 @@ const SCAN_MATCH_ALL = "*";
 
 type Params = {
   dataType?: RedisDataTypeUnion;
-  //   moveDirection?: "next" | "prev";
   query?: string;
 };
 
 export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Params) => {
-  const { current: cursorWatcher } = useRef({
-    prevCursor: INITIAL_CURSOR_NUM,
-    nextCursor: INITIAL_CURSOR_NUM,
-  });
+  const cursorStack = useRef([INITIAL_CURSOR_NUM]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handlePageChange = (dir: "next" | "prev") => {
+    if (dir === "next") {
+      setCurrentIndex((prev) => prev + 1);
+    } else if (dir === "prev" && currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  };
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", query],
+    queryKey: ["useFetchPaginatedKeys", query, cursorStack.current[currentIndex]],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
-      const [nextCursor, keys] = await redis.scan(INITIAL_CURSOR_NUM, {
+      const [nextCursor, keys] = await redis.scan(cursorStack.current[currentIndex], {
         count: DEFAULT_FETCH_COUNT,
         match: query,
         type: dataType,
       });
-      //   Change cursor before looping through keys
-      //   cursorWatcher.prevCursor = cursorWatcher.nextCursor;
-      //   cursorWatcher.nextCursor = nextCursor;
+
+      if (currentIndex === cursorStack.current.length - 1) {
+        cursorStack.current.push(nextCursor);
+      }
 
       //Feed pipeline with keys
       for (const key in keys) {
@@ -56,5 +62,14 @@ export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Para
       return keyTypePairs;
     },
   });
-  return { isLoading, error, data };
+  return {
+    isLoading,
+    error,
+    data,
+    handlePageChange,
+    direction: {
+      prevNotAllowed: currentIndex === 0,
+      nextNotAllowed: cursorStack.current[currentIndex + 1] === 0,
+    },
+  };
 };

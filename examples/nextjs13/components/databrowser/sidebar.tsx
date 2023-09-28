@@ -12,7 +12,6 @@ import { Skeleton } from "../ui/skeleton";
 import { DataTypeSelector } from "./data-type-selector";
 import { useFetchPaginatedKeys } from "./hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "./type-tag";
-import { MissingDataDisplay } from "./missing-data-display";
 
 type Props = {
   onDataKeyChange: (dataKey: [string, RedisDataTypeUnion]) => void;
@@ -20,11 +19,17 @@ type Props = {
 };
 
 export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
-  const { data: dataKeys, isLoading, error } = useFetchPaginatedKeys({});
+  const {
+    data: dataKeys,
+    isLoading,
+    error,
+    handlePageChange,
+    direction,
+  } = useFetchPaginatedKeys({});
 
   return (
     <div className="flex flex-col">
-      <div className="flex-1 py-4 space-y-4 overflow-y-auto">
+      <div className="flex-1 py-4 space-y-4 overflow-y-auto  min-h-[540px]">
         <div className="px-3 py-2">
           <div className="flex items-center mb-3 space-x-1">
             <div className="relative">
@@ -70,10 +75,22 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           <Button variant="outline" size="icon" className="w-8 h-8">
             <ReloadIcon />
           </Button>
-          <Button variant="outline" size="icon" className="w-8 h-8 ml-auto">
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-8 h-8 ml-auto disabled:bg-[#8080803d]"
+            disabled={direction.prevNotAllowed}
+            onClick={() => handlePageChange("prev")}
+          >
             <ArrowLeftIcon />
           </Button>
-          <Button variant="outline" size="icon" className="w-8 h-8">
+          <Button
+            variant="outline"
+            size="icon"
+            className="w-8 h-8 disabled:bg-[#8080803d]"
+            disabled={direction.nextNotAllowed}
+            onClick={() => handlePageChange("next")}
+          >
             <ArrowRightIcon />
           </Button>
         </div>
