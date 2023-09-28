@@ -1,7 +1,6 @@
-import React from "react";
 import { useMutation } from "react-query";
+import { queryClient } from "..";
 import { redis } from "../lib/client";
-import { queryClient } from "@/app/databrowser/page";
 
 export const useDeleteKey = () => {
   const deleteKey = useMutation(
