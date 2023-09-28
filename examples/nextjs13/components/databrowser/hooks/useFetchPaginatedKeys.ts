@@ -45,6 +45,7 @@ export const useFetchPaginatedKeys = ({ dataType, query = SCAN_MATCH_ALL }: Para
         type: dataType,
       });
 
+      // nextCursor is only pushed onto the cursorStack when you are at the most recent cursor,
       if (currentIndex === cursorStack.current.length - 1) {
         cursorStack.current.push(nextCursor);
       }
