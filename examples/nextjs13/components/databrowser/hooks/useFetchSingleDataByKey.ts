@@ -97,7 +97,8 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       }
 
       if (dataType === "json") {
-        //todo
+        const result = await redis.eval("return redis.call('JSON.GET', KEYS[1])", [key], []);
+        return { content: result as JSON, type: dataType };
       }
     },
   });

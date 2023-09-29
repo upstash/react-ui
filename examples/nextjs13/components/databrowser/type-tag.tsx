@@ -12,7 +12,7 @@ export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagP
     <Badge
       className={clsx(
         className,
-        "!inline-flex items-center justify-center rounded drop-shadow-md",
+        "!inline-flex items-center justify-center rounded drop-shadow-sm",
         {
           "bg-green-500": value === "string",
           "bg-orange-500": value === "list",
