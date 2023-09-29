@@ -3,10 +3,11 @@ import { redis } from "../lib/client";
 import { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-// Should use redis.get if its a string data type
-//  should use scan for anything else except for string and json and maybe stream!?
-//  apply same cursoring logic from other hook
+//TODO: Address the issue of useEffect taking additional time to reset the cursor when switching between identical data types, which results in unnecessary,
+// erroneous calls to the database. This needs to be resolved.
+
 const INITIAL_CURSOR_NUM = 0;
+const DATA_PER_PAGE = 10;
 
 export type Navigation = {
   handlePageChange: (dir: "next" | "prev") => void;
@@ -56,7 +57,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           key,
           cursorStack.current[currentIndex],
           {
-            count: 10,
+            count: DATA_PER_PAGE,
           }
         );
         if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
@@ -65,7 +66,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
 
       if (dataType === "hash") {
         const [nextCursor, hashValues] = await redis.hscan(key, cursorStack.current[currentIndex], {
-          count: 10,
+          count: DATA_PER_PAGE,
         });
         if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
         return { content: transformArray(hashValues), type: dataType };
@@ -75,13 +76,28 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         if (listLength.current === 0) {
           listLength.current = await redis.llen(key);
         }
-        const start = currentIndex * 10;
-        const end = (currentIndex + 1) * 10 - 1;
+        const start = currentIndex * DATA_PER_PAGE;
+        const end = (currentIndex + 1) * DATA_PER_PAGE - 1;
         const list = await redis.lrange(key, start, end);
         return {
           content: list.map((item, idx) => ({ value: idx, content: item })),
           type: dataType,
-        };
+        } satisfies { content: ContentValue[]; type: "list" };
+      }
+
+      if (dataType === "set") {
+        const [nextCursor, setValues] = await redis.sscan(key, cursorStack.current[currentIndex], {
+          count: DATA_PER_PAGE,
+        });
+        if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
+        return {
+          content: setValues.map((item, _) => ({ value: null, content: item.toString() })),
+          type: dataType,
+        } satisfies { content: ContentValue[]; type: "set" };
+      }
+
+      if (dataType === "json") {
+        //todo
       }
     },
   });
@@ -103,7 +119,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
 
 export type ContentValue = {
   content: string;
-  value: string | number;
+  value: string | number | null;
 };
 
 function transformArray(inputArray: (string | number)[]): ContentValue[] {

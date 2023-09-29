@@ -13,7 +13,7 @@ import { Button } from "../ui/button";
 type Props = {
   data: ContentValue[];
   navigation: Navigation;
-  tableHeaders: [string, string];
+  tableHeaders: [string | null, string];
 };
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
@@ -43,15 +43,23 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">{tableHeaders[0]}</TableHead>
-            <TableHead className="w-[100px]">{tableHeaders[1]}</TableHead>
+            {tableHeaders[0] !== null ? (
+              <TableHead className="w-[100px]">{tableHeaders[0]}</TableHead>
+            ) : null}
+            {tableHeaders[1] !== null ? (
+              <TableHead className="w-[100px]">{tableHeaders[1]}</TableHead>
+            ) : null}
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={idx}>
-              <TableCell className="font-medium text-[12px]">{item.value}</TableCell>
-              <TableCell className="font-medium text-[12px]">{item.content}</TableCell>
+              {item.value !== null ? (
+                <TableCell className="font-medium text-[12px]">{item.value}</TableCell>
+              ) : null}
+              {item.content !== null ? (
+                <TableCell className="font-medium text-[12px]">{item.content}</TableCell>
+              ) : null}
             </TableRow>
           ))}
         </TableBody>

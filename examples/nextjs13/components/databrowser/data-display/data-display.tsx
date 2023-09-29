@@ -18,12 +18,10 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-3">
-            <h2 className="text-2xl font-semibold tracking-tight">{key}</h2>
-            <RedisTypeTag isFull value={keyType}>
-              String
-            </RedisTypeTag>
+            <h2 className="text-xl font-semibold tracking-tight">{key}</h2>
+            <RedisTypeTag isFull value={keyType} />
           </div>
-          <p className="text-lg font-medium text-muted-foreground">Content</p>
+          <p className="text-base font-medium text-muted-foreground">Content</p>
         </div>
       </div>
       {isLoading || error ? (
@@ -50,6 +48,8 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
           navigation={navigation}
           tableHeaders={["Index", "Content"]}
         />
+      ) : keyType === "set" && data?.type === "set" ? (
+        <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Content"]} />
       ) : null}
     </div>
   );
