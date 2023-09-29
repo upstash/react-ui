@@ -38,7 +38,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setSearchTerm(SCAN_MATCH_ALL);
   };
 
-  const { isLoading, error, data } = useQuery({
+  const { error, data, status } = useQuery({
     queryKey: [
       "useFetchPaginatedKeys",
       debouncedSearchTerm,
@@ -72,7 +72,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     },
   });
   return {
-    isLoading,
+    isLoading: status === "loading",
     error,
     data,
     handlePageChange,

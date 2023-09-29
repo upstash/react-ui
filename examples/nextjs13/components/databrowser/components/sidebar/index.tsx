@@ -6,13 +6,13 @@ import {
   ReloadIcon,
 } from "@radix-ui/react-icons";
 import { useState } from "react";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
-import { Separator } from "../../ui/separator";
-import { Skeleton } from "../../ui/skeleton";
+import { Button } from "../../../ui/button";
+import { Input } from "../../../ui/input";
+import { Separator } from "../../../ui/separator";
+import { Skeleton } from "../../../ui/skeleton";
 import { DataTypeSelector } from "./data-type-selector";
-import { useFetchPaginatedKeys } from "../hooks/useFetchPaginatedKeys";
-import { RedisTypeTag } from "../type-tag";
+import { useFetchPaginatedKeys } from "../../hooks/useFetchPaginatedKeys";
+import { RedisTypeTag } from "../../type-tag";
 
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;

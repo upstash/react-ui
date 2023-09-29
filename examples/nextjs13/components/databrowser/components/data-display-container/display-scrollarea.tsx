@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CopyToClipboardButton } from "../copy-to-clipboard-button";
+import { CopyToClipboardButton } from "../../copy-to-clipboard-button";
 
 export const DisplayScrollarea = ({ data }: { data: string | null }) => {
   const stringifiable = toJsonStringifiable(data);

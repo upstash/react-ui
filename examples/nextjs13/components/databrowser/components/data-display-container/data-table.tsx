@@ -7,8 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Navigation, ContentValue } from "../hooks/useFetchSingleDataByKey";
-import { Button } from "../../ui/button";
+import { Navigation, ContentValue } from "../../hooks/useFetchSingleDataByKey";
+import { Button } from "../../../ui/button";
 
 type Props = {
   data: ContentValue[];

@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { RedisDataTypeUnion } from "@/types";
-import { useFetchSingleDataByKey } from "../hooks/useFetchSingleDataByKey";
-import { RedisTypeTag } from "../type-tag";
+import { useFetchSingleDataByKey } from "../../hooks/useFetchSingleDataByKey";
+import { RedisTypeTag } from "../../type-tag";
 import { DataTable } from "./data-table";
 import { DisplayScrollarea } from "./display-scrollarea";
 
