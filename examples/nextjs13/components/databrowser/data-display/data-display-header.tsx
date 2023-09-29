@@ -5,10 +5,17 @@ import { MinusCircledIcon } from "@radix-ui/react-icons";
 import { DeleteAlertDialog } from "../delete-alert-dialog";
 import { useDeleteKey } from "../hooks/useDeleteKey";
 import { useFetchTTLByKey } from "../hooks/useFetchTTLBy";
-import { TTLDialog } from "../ttl-dialog";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
+import { PropsWithChildren, useState } from "react";
+import { useMutation } from "react-query";
+import { useUpdateTTL } from "../hooks/useUpdateTTL";
+import { useToast } from "@/components/ui/use-toast";
+import { TTLPopover } from "../ttl-popover";
 
 type Props = {
-  selectedDataKey?: string;
+  selectedDataKey: string;
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
 };
 export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) => {
@@ -17,7 +24,7 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
 
   const handleDisplayTTL = () => {
     if (TTLData === -1) return "None";
-    return `${TTLData?.toString()}secs`;
+    return `${TTLData?.toString()}s`;
   };
 
   const handleDeleteKey = async () => {
@@ -27,7 +34,7 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
 
   return (
     <div className="flex items-center space-between">
-      <TTLDialog>
+      <TTLPopover TTL={TTLData} dataKey={selectedDataKey}>
         <Button variant="outline" className="space-x-1 text-sm border-dashed">
           <span>TTL:</span>{" "}
           {isTTLLoading ? (
@@ -36,7 +43,7 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
             <span className="font-bold">{handleDisplayTTL()}</span>
           )}
         </Button>
-      </TTLDialog>
+      </TTLPopover>
       <div className="ml-auto">
         <DeleteAlertDialog onDeleteConfirm={handleDeleteKey}>
           <Button>

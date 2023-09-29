@@ -20,10 +20,13 @@ export function DeleteAlertDialog({
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently remove your data from our servers.
-            <span className="font-bold"> Both key and the value.</span>
+          <AlertDialogTitle>Irreversible Action!</AlertDialogTitle>
+          <AlertDialogDescription className="mt-5">
+            <span className="font-bold">This action CANNOT BE UNDONE.</span>
+            <br />
+            <br />
+            By proceeding, you will <span className="font-bold">PERMANENTLY REMOVE</span> your data
+            from our servers, resulting in complete and irreversible loss of your information.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

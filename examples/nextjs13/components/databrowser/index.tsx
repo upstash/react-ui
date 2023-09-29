@@ -3,6 +3,7 @@ import { DataDisplayContainer } from "./data-display/data-display-container";
 import { Sidebar } from "./sidebar";
 import { RedisDataTypeUnion } from "@/types";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "../ui/toaster";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,6 +33,7 @@ export const Databrowser = () => {
             selectedDataKeyTypePair={selectedDataKey}
             onDataKeyChange={handleDataKeySelect}
           />
+          <Toaster />
         </div>
       </div>
     </QueryClientProvider>
