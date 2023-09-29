@@ -1,10 +1,10 @@
 import { PropsWithChildren, useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
-import { usePersistTTL, useUpdateTTL } from "./hooks/useUpdateTTL";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Label } from "../ui/label";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { useToast } from "../../ui/use-toast";
+import { usePersistTTL, useUpdateTTL } from "../hooks/useUpdateTTL";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { Label } from "../../ui/label";
 
 // We show None when expiration we recieve from server is -1
 const PERSISTED_KEY = -1;

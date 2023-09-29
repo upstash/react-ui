@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DataDisplayContainer } from "./data-display/data-display-container";
+import { DataDisplayContainer } from "./data-display-container";
 import { Sidebar } from "./sidebar";
 import { RedisDataTypeUnion } from "@/types";
 import { QueryClient, QueryClientProvider } from "react-query";

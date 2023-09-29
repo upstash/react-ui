@@ -1,13 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { RedisDataTypeUnion } from "@/types";
-import { ScrollArea } from "../../ui/scroll-area";
-import {
-  ContentValue,
-  Navigation,
-  useFetchSingleDataByKey,
-} from "../hooks/useFetchSingleDataByKey";
+import { useFetchSingleDataByKey } from "../hooks/useFetchSingleDataByKey";
 import { RedisTypeTag } from "../type-tag";
-import { DataTable } from "../data-table";
+import { DataTable } from "./data-table";
+import { DisplayScrollarea } from "./display-scrollarea";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -32,11 +28,7 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
         <Skeleton className="transition-all rounded  my-4 p-4 flex h-[400px] shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]" />
       ) : (keyType === "string" && data?.type === "string") ||
         (keyType === "json" && data?.type === "json") ? (
-        <ScrollArea className="my-4 p-4 flex h-[400px] shrink-0 items-center justify-center rounded-md border border-dashed bg-slate-100/80 overflow-x-auto">
-          <pre className="text-[12px] text-blue-950 tracking-wider">
-            {JSON.stringify(data.content, null, 2)}
-          </pre>
-        </ScrollArea>
+        <DisplayScrollarea data={data.content} />
       ) : keyType === "zset" && data?.type === "zset" ? (
         <DataTable
           data={data.content}

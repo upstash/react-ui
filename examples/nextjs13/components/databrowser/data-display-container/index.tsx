@@ -1,5 +1,5 @@
 import { RedisDataTypeUnion } from "@/types";
-import { MissingDataDisplay } from "../missing-data-display";
+import { MissingDataDisplay } from "./missing-data-display";
 import { DataDisplay } from "./data-display";
 import { DataDisplayHeader } from "./data-display-header";
 

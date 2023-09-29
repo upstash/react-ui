@@ -1,7 +1,7 @@
-import { useQuery } from "react-query";
-import { redis } from "../lib/client";
 import { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery } from "react-query";
+import { redis } from "../lib/client";
 
 //TODO: Address the issue of useEffect taking additional time to reset the cursor when switching between identical data types, which results in unnecessary,
 // erroneous calls to the database. This needs to be resolved.
@@ -80,7 +80,11 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         const end = (currentIndex + 1) * DATA_PER_PAGE - 1;
         const list = await redis.lrange(key, start, end);
         return {
-          content: list.map((item, idx) => ({ value: idx, content: item })),
+          content: list.map((item, idx) => {
+            const overallIdx = start + idx + 1;
+            const displayIdx = String(overallIdx).padStart(2, "0"); // '01', '02', ..., '50'
+            return { value: displayIdx, content: item };
+          }),
           type: dataType,
         } satisfies { content: ContentValue[]; type: "list" };
       }
@@ -98,7 +102,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
 
       if (dataType === "json") {
         const result = await redis.eval("return redis.call('JSON.GET', KEYS[1])", [key], []);
-        return { content: result as JSON, type: dataType };
+        return { content: result as string, type: dataType };
       }
     },
   });
