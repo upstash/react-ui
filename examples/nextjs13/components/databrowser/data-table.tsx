@@ -18,7 +18,7 @@ type Props = {
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
-      <Table className="p-4 my-4 border border-dashed rounded-md">
+      <Table className="p-4 my-4 tracking-wide border border-dashed rounded-md">
         <TableCaption>
           <div className="flex items-center justify-end">
             <div className="space-x-2">

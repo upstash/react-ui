@@ -70,7 +70,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                 return (
                   <Button
                     variant={selectedDataKey === dataKey ? "default" : "ghost"}
-                    className="justify-start w-full"
+                    className="justify-start w-full tracking-wider"
                     key={dataKey}
                     onClick={() => onDataKeyChange([dataKey, dataType])}
                   >

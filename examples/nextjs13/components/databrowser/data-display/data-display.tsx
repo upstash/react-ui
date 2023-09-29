@@ -33,7 +33,9 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
       ) : (keyType === "string" && data?.type === "string") ||
         (keyType === "json" && data?.type === "json") ? (
         <ScrollArea className="my-4 p-4 flex h-[400px] shrink-0 items-center justify-center rounded-md border border-dashed bg-slate-100/80 overflow-x-auto">
-          <pre className="text-[12px] text-green-600">{JSON.stringify(data.content, null, 2)}</pre>
+          <pre className="text-[12px] text-blue-950 tracking-wider">
+            {JSON.stringify(data.content, null, 2)}
+          </pre>
         </ScrollArea>
       ) : keyType === "zset" && data?.type === "zset" ? (
         <DataTable
