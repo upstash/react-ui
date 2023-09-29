@@ -5,13 +5,15 @@ export const DisplayScrollarea = ({ data }: { data: string | null }) => {
   const stringifiable = toJsonStringifiable(data);
 
   return (
-    <ScrollArea className="my-4 p-4 flex h-[400px] shrink-0 items-center justify-center rounded-md border border-dashed bg-slate-100/80 overflow-x-auto">
+    <ScrollArea className="my-4 p-4 flex h-[400px] shrink-0 items-center justify-center rounded-md  bg-slate-950 overflow-x-auto">
       {stringifiable ? (
         <>
           <div className="absolute top-3 right-4">
             <CopyToClipboardButton onCopy={() => handleCopyClick(stringifiable)} />
           </div>
-          <pre className="text-[12px] text-blue-950 tracking-wider">{stringifiable}</pre>
+          <pre className="text-[12px]  tracking-wider">
+            <code className="text-white">{stringifiable}</code>
+          </pre>
         </>
       ) : null}
     </ScrollArea>
