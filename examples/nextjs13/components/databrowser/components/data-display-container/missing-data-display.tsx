@@ -16,7 +16,7 @@ export const MissingDataDisplay = () => {
             </svg>
             <p className="text-lg font-medium text-muted-foreground">No data found</p>
             {/*TODO: Add CLI link here to easy navigation */}
-            <p className="w-8/12 text-center text-muted-foreground">
+            <p className="w-8/12 text-center text-muted-foreground" data-testid="missing-data">
               "Oops! Data&apos;s playing hide and seek and it&apos;s winning! Try adding some data
               from CLI?"
             </p>
