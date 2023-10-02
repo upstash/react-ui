@@ -7,7 +7,7 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.getByRole("textbox").click();
   await page.getByRole("textbox").fill("DEL my_string");
   await page.getByRole("textbox").press("Enter");
-  await page.waitForTimeout(1000); //TODO: Dirty hack to wait after delete. Should be fixed later.
+  await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
 
   // Inputting the SET command to set a string
   const myString = "Hello, this is a string!";
@@ -19,6 +19,5 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.getByPlaceholder("Search").fill("my_string");
   await page.getByRole("button", { name: "my_string st" }).click();
 
-  // Expect the string data to be visible on the screen within a <pre><code>...</code></pre> block
   await expect(page.locator('pre > code:has-text("' + myString + '")')).toBeVisible();
 });

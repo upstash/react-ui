@@ -7,7 +7,7 @@ test("should add JSON data from cli then try to navigate on databrowser", async 
   await page.getByRole("textbox").click();
   await page.getByRole("textbox").fill("DEL my_json_object");
   await page.getByRole("textbox").press("Enter");
-  await page.waitForTimeout(1000); //TODO: Dirty hack to wait after delete. Should be fixed later.
+  await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
   // Inputting the JSON.SET command to set a JSON object
   const jsonObject = {
     name: "John Doe",

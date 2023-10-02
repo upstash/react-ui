@@ -7,7 +7,7 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   await page.getByRole("textbox").click();
   await page.getByRole("textbox").fill("DEL really_long_set");
   await page.getByRole("textbox").press("Enter");
-  await page.waitForTimeout(1000); //TODO: Dirty hack to wait after delete. Should be fixed later.
+  await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
 
   // Inputting the SADD command to add a set with 50 members
   await page

@@ -3,11 +3,12 @@ import { test, expect } from "@playwright/test";
 test("should add data from cli then try to navigate on databrowser", async ({ page }) => {
   await page.goto("http://localhost:3000/");
 
-  //   // Inputting the command to delete the hash, to ensure the test starts clean
+  // Inputting the command to delete the hash, to ensure the test starts clean
   await page.getByRole("textbox").click();
   await page.getByRole("textbox").fill("DEL really_long_hash");
   await page.getByRole("textbox").press("Enter");
-  await page.waitForTimeout(1000); //TODO: Dirty hack to wait after delete. Should be fixed later.
+  await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
+
   // Inputting the HSET command to add a hash with 50 fields
   await page
     .getByRole("textbox")
