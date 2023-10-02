@@ -66,8 +66,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/react-cli
       '@upstash/redis':
-        specifier: ^1.22.0
-        version: 1.22.0
+        specifier: ^1.22.1
+        version: 1.22.1
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -1581,8 +1581,8 @@ packages:
     resolution: {integrity: sha512-KQf+QAMWKMrtBMsB8/24w53tEsxllMj6TuA80TT/5igJalLI/zm0L3oXRbIAl4Ohfc85gyHX/jhMwsVkmhLU4A==}
     dev: true
 
-  /@upstash/redis@1.22.0:
-    resolution: {integrity: sha512-sXoJDoEqqik0HbrNE7yRWckOySEFsoBxfRdCgOqkc0w6py19ZZG50SpGkDDEUXSnBqP8VgGYXhWAiBpqxrt5oA==}
+  /@upstash/redis@1.22.1:
+    resolution: {integrity: sha512-7ec2eCMkVxZzuHNb+hPKonX4b/Pu0BdDeSBsEy+jKIqiweXzCs5Dpu9642vJgf57YnEsfwgXnQMVEataarvyeQ==}
     dependencies:
       isomorphic-fetch: 3.0.0
     transitivePeerDependencies:

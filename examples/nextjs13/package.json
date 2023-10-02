@@ -24,7 +24,7 @@
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
     "@upstash/react-cli": "workspace:*",
-    "@upstash/redis": "^1.22.0",
+    "@upstash/redis": "^1.22.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.279.0",

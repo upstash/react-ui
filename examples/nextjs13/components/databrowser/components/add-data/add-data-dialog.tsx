@@ -68,7 +68,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
           <DialogDescription asChild>
             <div>
               <span>Data will be added as a</span> <RedisTypeTag value="string" isFull />. But, you
-              can directly pass a <RedisTypeTag value="json" isFull /> object.
+              can directly pass a <RedisTypeTag value="json" isFull /> object to the value.
             </div>
           </DialogDescription>
         </DialogHeader>
