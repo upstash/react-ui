@@ -2,16 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { RedisDataTypeUnion } from "@/types";
 import { MinusCircledIcon } from "@radix-ui/react-icons";
-import { DeleteAlertDialog } from "./delete-alert-dialog";
 import { useDeleteKey } from "../../hooks/useDeleteKey";
 import { useFetchTTLByKey } from "../../hooks/useFetchTTLBy";
-import { Input } from "@/components/ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
-import { PropsWithChildren, useState } from "react";
-import { useMutation } from "react-query";
-import { useUpdateTTL } from "../../hooks/useUpdateTTL";
-import { useToast } from "@/components/ui/use-toast";
+import { DeleteAlertDialog } from "./delete-alert-dialog";
 import { TTLPopover } from "./ttl-popover";
 
 type Props = {

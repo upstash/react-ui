@@ -78,6 +78,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     handlePageChange,
     handleSearch,
     reset,
+    searchTerm,
     direction: {
       prevNotAllowed: currentIndex === 0,
       nextNotAllowed: cursorStack.current[currentIndex + 1] === 0,

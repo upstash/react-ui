@@ -1,6 +1,6 @@
+import { RedisDataTypeUnion } from "@/types";
 import clsx from "clsx";
 import { Badge } from "../ui/badge";
-import { RedisDataTypeUnion } from "@/types";
 
 export interface RedisTypeTagProps extends React.HTMLAttributes<HTMLDivElement> {
   value: RedisDataTypeUnion;
