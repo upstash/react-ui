@@ -13,6 +13,7 @@ import { Skeleton } from "../../../ui/skeleton";
 import { useFetchPaginatedKeys } from "../../hooks/useFetchPaginatedKeys";
 import { RedisTypeTag } from "../../type-tag";
 import { DataTypeSelector } from "./data-type-selector";
+import { queryClient } from "../..";
 
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -32,9 +33,11 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     reset,
   } = useFetchPaginatedKeys(selectedDataType);
 
+  /**Resets internal state of useFetchPaginatedKeys then invalidates query to start from scratch*/
   const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
     reset();
     setSelectedDataType(dataType);
+    queryClient.invalidateQueries(["useFetchPaginatedKeys"]);
   };
 
   return (
@@ -88,19 +91,12 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
       <Separator />
       <div className="px-3 py-4">
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-8 h-8"
-            onClick={() => handleDataTypeChange(undefined)}
-          >
-            <ReloadIcon />
-          </Button>
+          <ReloadButton onDataTypeChange={handleDataTypeChange} />
           <Button
             variant="outline"
             size="icon"
             className="w-8 h-8 ml-auto disabled:bg-[#8080803d]"
-            disabled={direction.prevNotAllowed}
+            disabled={direction.prevNotAllowed || isLoading}
             onClick={() => handlePageChange("prev")}
           >
             <ArrowLeftIcon />
@@ -109,7 +105,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             variant="outline"
             size="icon"
             className="w-8 h-8 disabled:bg-[#8080803d]"
-            disabled={direction.nextNotAllowed}
+            disabled={direction.nextNotAllowed || isLoading}
             onClick={() => handlePageChange("next")}
           >
             <ArrowRightIcon />
@@ -119,3 +115,31 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     </div>
   );
 }
+
+const ReloadButton = ({
+  onDataTypeChange,
+}: {
+  onDataTypeChange: (dataType?: RedisDataTypeUnion) => void;
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      onDataTypeChange(undefined);
+    }, 500);
+  };
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      className="w-8 h-8"
+      onClick={handleClick}
+      disabled={isLoading}
+    >
+      <ReloadIcon className={isLoading ? "animate-spin" : ""} />
+    </Button>
+  );
+};

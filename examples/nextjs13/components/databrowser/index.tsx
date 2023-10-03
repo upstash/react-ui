@@ -26,14 +26,12 @@ import { AddDataDialog } from "./components/add-data/add-data-dialog";
  * 3. Reassess whether retries are needed in this configuration, as the SDK already has retry mechanisms.
  *
  * @defaultOptions
- * - retry: 3 (Consider whether this is needed as the SDK already retries.)
  * - staleTime: 120000 ms (2 minutes) (Potential adjustment to 3-4 minutes if edge case reported.)
  * - refetchOnWindowFocus: true (Kept true to ensure data is not stale when user switches back to this window.)
  */
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 3,
       staleTime: 60 * 1000 * 2,
       refetchOnWindowFocus: true,
     },
