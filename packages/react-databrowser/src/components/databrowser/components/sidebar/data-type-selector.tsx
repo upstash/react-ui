@@ -8,7 +8,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { RedisDataTypeUnion, RedisDataTypes } from "@/types";
-import { queryClient } from "@/lib/clients";
 
 type Props = {
   onDataTypeChange: (dataType?: RedisDataTypeUnion) => void;
@@ -18,7 +17,6 @@ type Props = {
 export function DataTypeSelector({ onDataTypeChange, dataType }: Props) {
   const handleValueChange = (data: string) => {
     onDataTypeChange(data as RedisDataTypeUnion);
-    queryClient.invalidateQueries(["useFetchPaginatedKeys"]);
   };
 
   return (

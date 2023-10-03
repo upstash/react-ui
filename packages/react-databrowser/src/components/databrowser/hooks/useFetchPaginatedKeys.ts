@@ -11,6 +11,7 @@ const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
+  const [timestamp, setTimestamp] = useState(Date.now());
   const cursorStack = useRef([INITIAL_CURSOR_NUM]);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
@@ -36,6 +37,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     cursorStack.current = [INITIAL_CURSOR_NUM];
     setCurrentIndex(INITIAL_CURSOR_NUM);
     setSearchTerm(SCAN_MATCH_ALL);
+    setTimestamp(Date.now());
   };
 
   const { error, data, status } = useQuery({
@@ -44,6 +46,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
       debouncedSearchTerm,
       cursorStack.current[currentIndex],
       dataType,
+      timestamp,
     ],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
@@ -59,8 +62,8 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
       }
 
       //Feed pipeline with keys
-      for (const key in keys) {
-        rePipeline.type(keys[key]);
+      for (const key of keys) {
+        rePipeline.type(key);
       }
 
       //Required to transform hashes into actual keys

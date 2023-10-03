@@ -1,19 +1,15 @@
-import { RedisDataTypeUnion } from "@/types";
-import {
-  ArrowLeftIcon,
-  ArrowRightIcon,
-  MagnifyingGlassIcon,
-  ReloadIcon,
-} from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useFetchPaginatedKeys } from "@/components/databrowser/hooks/useFetchPaginatedKeys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useFetchPaginatedKeys } from "@/components/databrowser/hooks/useFetchPaginatedKeys";
-import { RedisTypeTag } from "@/components/databrowser/type-tag";
+import { RedisDataTypeUnion } from "@/types";
+import { ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
+import { DataKeyButtons } from "./data-key-buttons";
 import { DataTypeSelector } from "./data-type-selector";
-import { queryClient } from "@/lib/clients";
+import { ReloadButton } from "./reload-button";
+import { SidebarMissingData } from "./sidebar-missing-data";
+import { LoadingSkeleton } from "./skeleton-buttons";
 
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -33,11 +29,9 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     reset,
   } = useFetchPaginatedKeys(selectedDataType);
 
-  /**Resets internal state of useFetchPaginatedKeys then invalidates query to start from scratch*/
   const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
     reset();
     setSelectedDataType(dataType);
-    queryClient.invalidateQueries(["useFetchPaginatedKeys"]);
   };
 
   return (
@@ -63,27 +57,15 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           </div>
           <div className="space-y-1">
             {isLoading || error ? (
-              <div className="space-y-1">
-                {Array(10)
-                  .fill(0)
-                  .map((_, idx) => (
-                    <Skeleton className="w-full h-[40px] rounded" key={idx} />
-                  ))}
-              </div>
+              <LoadingSkeleton />
+            ) : dataKeys?.length ? (
+              <DataKeyButtons
+                dataKeys={dataKeys}
+                selectedDataKey={selectedDataKey}
+                onDataKeyChange={onDataKeyChange}
+              />
             ) : (
-              dataKeys?.map(([dataKey, dataType]) => {
-                return (
-                  <Button
-                    variant={selectedDataKey === dataKey ? "default" : "ghost"}
-                    className="justify-start w-full"
-                    key={dataKey}
-                    onClick={() => onDataKeyChange([dataKey, dataType])}
-                  >
-                    {dataKey}
-                    <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
-                  </Button>
-                );
-              })
+              <SidebarMissingData />
             )}
           </div>
         </div>
@@ -115,31 +97,3 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     </div>
   );
 }
-
-const ReloadButton = ({
-  onDataTypeChange,
-}: {
-  onDataTypeChange: (dataType?: RedisDataTypeUnion) => void;
-}) => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleClick = () => {
-    setIsLoading(true);
-    onDataTypeChange(undefined);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 350);
-  };
-
-  return (
-    <Button
-      variant="outline"
-      size="icon"
-      className="w-8 h-8"
-      onClick={handleClick}
-      disabled={isLoading}
-    >
-      <ReloadIcon className={isLoading ? "animate-spin" : ""} />
-    </Button>
-  );
-};
