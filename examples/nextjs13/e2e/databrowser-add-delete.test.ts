@@ -7,6 +7,8 @@ test("should add new data and delete it succesfully", async ({ page }) => {
   await page.getByPlaceholder("Foo").press("Tab");
   await page.getByPlaceholder("Bar").fill("bar");
 
+  await page.getByRole("combobox").click();
+  await page.getByLabel("Second(s)").click();
   await page.getByPlaceholder("1H is 3600 seconds").click();
   await page.getByPlaceholder("1H is 3600 seconds").fill("500");
 

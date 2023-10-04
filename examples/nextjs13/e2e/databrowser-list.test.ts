@@ -17,15 +17,15 @@ test("should add data from cli then try to paginate on databrowser", async ({ pa
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("really");
   await page.getByRole("button", { name: "really_long_list li" }).click();
-  await expect(page.getByText("item1", { exact: true })).toBeVisible();
+  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("button", { name: "Next" }).click();
-  await expect(page.getByText("item50", { exact: true })).toBeVisible();
+  await expect(page.getByText('"item50"', { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Previous" }).click();
   await page.getByRole("button", { name: "Previous" }).click();
   await page.getByRole("button", { name: "Previous" }).click();
   await page.getByRole("button", { name: "Previous" }).click();
-  await expect(page.getByText("item1", { exact: true })).toBeVisible();
+  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
 });

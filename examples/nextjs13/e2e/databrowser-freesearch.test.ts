@@ -11,6 +11,8 @@ test("should add data, search, and validate the search functionality", async ({ 
   await page.press('[placeholder="Foo"]', "Tab");
   await page.fill('[placeholder="Bar"]', "bar");
   await page.press('[placeholder="Bar"]', "Tab");
+  await page.getByRole("combobox").click();
+  await page.getByLabel("Second(s)").click();
   await page.fill('[placeholder="1H is 3600 seconds"]', "400");
 
   // Saving the changes
