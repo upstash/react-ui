@@ -12,7 +12,7 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   // Inputting the SADD command to add a set with 50 members
   await page
     .getByRole("textbox")
-    .fill("SADD really_long_set " + Array.from({ length: 50 }, (_, i) => `item${i + 1}`).join(" "));
+    .fill(`SADD really_long_set ${Array.from({ length: 50 }, (_, i) => `item${i + 1}`).join(" ")}`);
   await page.getByRole("textbox").press("Enter");
 
   await page.goto("http://localhost:3000/databrowser");

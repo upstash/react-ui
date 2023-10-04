@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { PropsWithChildren } from "react";
 
-export function DeleteAlertDialog({
-  children,
-  onDeleteConfirm,
-}: PropsWithChildren<{ onDeleteConfirm: () => void }>) {
+export function DeleteAlertDialog({ children, onDeleteConfirm }: PropsWithChildren<{ onDeleteConfirm: () => void }>) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
@@ -25,8 +22,8 @@ export function DeleteAlertDialog({
             <span className="font-bold">This action CANNOT BE UNDONE.</span>
             <br />
             <br />
-            By proceeding, you will <span className="font-bold">PERMANENTLY REMOVE</span> your data
-            from our servers, resulting in complete and irreversible loss of your information.
+            By proceeding, you will <span className="font-bold">PERMANENTLY REMOVE</span> your data from our servers,
+            resulting in complete and irreversible loss of your information.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

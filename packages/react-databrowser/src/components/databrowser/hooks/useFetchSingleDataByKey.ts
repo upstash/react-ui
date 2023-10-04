@@ -28,7 +28,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         setCurrentIndex((prev) => prev - 1);
       }
     },
-    [currentIndex]
+    [currentIndex],
   );
 
   useEffect(() => {
@@ -38,12 +38,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
   }, [selectedDataKeyTypePair[0]]);
 
   const { isLoading, error, data } = useQuery({
-    queryKey: [
-      "useFetchSingleDataByKey",
-      selectedDataKeyTypePair,
-      cursorStack.current[currentIndex],
-      currentIndex,
-    ],
+    queryKey: ["useFetchSingleDataByKey", selectedDataKeyTypePair, cursorStack.current[currentIndex], currentIndex],
     queryFn: async () => {
       const [key, dataType] = selectedDataKeyTypePair;
 
@@ -53,13 +48,9 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       }
 
       if (dataType === "zset") {
-        const [nextCursor, zrangeValue] = await redis.zscan(
-          key,
-          cursorStack.current[currentIndex],
-          {
-            count: DATA_PER_PAGE,
-          }
-        );
+        const [nextCursor, zrangeValue] = await redis.zscan(key, cursorStack.current[currentIndex], {
+          count: DATA_PER_PAGE,
+        });
         if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
         return { content: transformArray(zrangeValue), type: dataType };
       }
@@ -135,8 +126,7 @@ function transformArray(inputArray: (string | number)[]): ContentValue[] {
 
   return inputArray.reduce<ContentValue[]>((acc, curr, idx, src) => {
     if (idx % 2 === 0) {
-      if (typeof curr !== "string")
-        throw new Error("Invalid key format. Keys should be of type string.");
+      if (typeof curr !== "string") throw new Error("Invalid key format. Keys should be of type string.");
       acc.push({ content: toJsonStringifiable(curr, 0), value: src[idx + 1] });
     }
     return acc;

@@ -36,15 +36,15 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex-1 py-4 space-y-4 overflow-y-auto  min-h-[540px]">
+      <div className="min-h-[540px] flex-1 space-y-4 overflow-y-auto  py-4">
         <div className="px-3 py-2">
-          <div className="flex items-center mb-3 space-x-1">
+          <div className="mb-3 flex items-center space-x-1">
             <div className="relative">
-              <MagnifyingGlassIcon className="absolute top-0 bottom-0 w-5 h-5 my-auto text-gray-500 left-3 " />
+              <MagnifyingGlassIcon className="absolute bottom-0 left-3 top-0 my-auto h-5 w-5 text-gray-500 " />
               <Input
                 type="text"
                 placeholder="Search"
-                className="pl-10 w-[180px] inline-flex items-center justify-center rounded text-[13px] leading-none"
+                className="inline-flex w-[180px] items-center justify-center rounded pl-10 text-[13px] leading-none"
                 onChange={(e) => handleSearch(e.target.value)}
                 value={searchTerm.replaceAll("*", "")}
               />
@@ -59,11 +59,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             {isLoading || error ? (
               <LoadingSkeleton />
             ) : dataKeys?.length ? (
-              <DataKeyButtons
-                dataKeys={dataKeys}
-                selectedDataKey={selectedDataKey}
-                onDataKeyChange={onDataKeyChange}
-              />
+              <DataKeyButtons dataKeys={dataKeys} selectedDataKey={selectedDataKey} onDataKeyChange={onDataKeyChange} />
             ) : (
               <SidebarMissingData />
             )}
@@ -77,7 +73,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           <Button
             variant="outline"
             size="icon"
-            className="w-8 h-8 ml-auto disabled:bg-[#8080803d]"
+            className="ml-auto h-8 w-8 disabled:bg-[#8080803d]"
             disabled={direction.prevNotAllowed || isLoading}
             onClick={() => handlePageChange("prev")}
           >
@@ -86,7 +82,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           <Button
             variant="outline"
             size="icon"
-            className="w-8 h-8 disabled:bg-[#8080803d]"
+            className="h-8 w-8 disabled:bg-[#8080803d]"
             disabled={direction.nextNotAllowed || isLoading}
             onClick={() => handlePageChange("next")}
           >

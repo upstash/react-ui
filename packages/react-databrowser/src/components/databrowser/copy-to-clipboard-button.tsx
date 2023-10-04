@@ -8,11 +8,7 @@ type Props = {
   variant?: "outline" | "default" | "ghost";
 };
 
-export function CopyToClipboardButton({
-  onCopy,
-  sizeVariant = "icon-sm",
-  variant = "outline",
-}: Props) {
+export function CopyToClipboardButton({ onCopy, sizeVariant = "icon-sm", variant = "outline" }: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {

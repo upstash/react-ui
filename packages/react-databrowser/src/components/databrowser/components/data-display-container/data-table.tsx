@@ -1,18 +1,7 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Navigation, ContentValue } from "@/components/databrowser/hooks/useFetchSingleDataByKey";
 import { Button } from "@/components/ui/button";
-import {
-  CopyToClipboardButton,
-  handleCopyClick,
-} from "@/components/databrowser/copy-to-clipboard-button";
+import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 
 type Props = {
   data: ContentValue[];
@@ -22,7 +11,7 @@ type Props = {
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
-      <Table className="p-4 my-4 tracking-wide border border-dashed rounded-md">
+      <Table className="my-4 rounded-md border border-dashed p-4 tracking-wide">
         <TableCaption>
           <div className="flex items-center justify-end">
             <div className="space-x-2">
@@ -47,29 +36,21 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            {tableHeaders[0] !== null ? (
-              <TableHead className="w-[100px]">{tableHeaders[0]}</TableHead>
-            ) : null}
-            {tableHeaders[1] !== null ? (
-              <TableHead className="w-[100px]">{tableHeaders[1]}</TableHead>
-            ) : null}
+            {tableHeaders[0] !== null ? <TableHead className="w-[100px]">{tableHeaders[0]}</TableHead> : null}
+            {tableHeaders[1] !== null ? <TableHead className="w-[100px]">{tableHeaders[1]}</TableHead> : null}
           </TableRow>
         </TableHeader>
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={idx}>
-              {item.value !== null ? (
-                <TableCell className="font-medium text-[12px]">{item.value}</TableCell>
-              ) : null}
+              {item.value !== null ? <TableCell className="text-[12px] font-medium">{item.value}</TableCell> : null}
               {item.content !== null ? (
-                <TableCell className="font-medium text-[12px] flex w-full justify-between">
+                <TableCell className="flex w-full justify-between text-[12px] font-medium">
                   {item.content}
                   <CopyToClipboardButton
                     sizeVariant="icon-xs"
                     variant="ghost"
-                    onCopy={() =>
-                      handleCopyClick(`${item.value ? item.value + ":" : ""}${item.content}`)
-                    }
+                    onCopy={() => handleCopyClick(`${item.value ? `${item.value}:` : ""}${item.content}`)}
                   />
                 </TableCell>
               ) : null}

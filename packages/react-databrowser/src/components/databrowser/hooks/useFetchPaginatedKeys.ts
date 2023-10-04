@@ -25,7 +25,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
         setCurrentIndex((prev) => prev - 1);
       }
     },
-    [currentIndex]
+    [currentIndex],
   );
 
   //If user doesn't pass any asterisk we add two of them to end and start
@@ -41,13 +41,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   };
 
   const { error, data, status } = useQuery({
-    queryKey: [
-      "useFetchPaginatedKeys",
-      debouncedSearchTerm,
-      cursorStack.current[currentIndex],
-      dataType,
-      timestamp,
-    ],
+    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, cursorStack.current[currentIndex], dataType, timestamp],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
       const [nextCursor, keys] = await redis.scan(cursorStack.current[currentIndex], {

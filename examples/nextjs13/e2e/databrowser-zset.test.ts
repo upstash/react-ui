@@ -12,10 +12,7 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   // Inputting the ZADD command to add a zset with 50 members
   await page
     .getByRole("textbox")
-    .fill(
-      "ZADD really_long_zset " +
-        Array.from({ length: 50 }, (_, i) => `${i + 1} item${i + 1}`).join(" ")
-    );
+    .fill(`ZADD really_long_zset ${Array.from({ length: 50 }, (_, i) => `${i + 1} item${i + 1}`).join(" ")}`);
   await page.getByRole("textbox").press("Enter");
   await page.waitForSelector(".upstash-cli-result");
 

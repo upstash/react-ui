@@ -9,7 +9,7 @@ export const useAddData = () => {
       const res = await redis.set(dataKey, dataValue, { ...(ex ? { ex } : { keepTtl: true }) });
       return res === SUCCESS_MSG;
     },
-    { onSuccess: () => queryClient.invalidateQueries("useFetchPaginatedKeys") }
+    { onSuccess: () => queryClient.invalidateQueries("useFetchPaginatedKeys") },
   );
   return addData;
 };

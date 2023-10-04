@@ -12,7 +12,7 @@ export const useUpdateTTL = () => {
         queryClient.invalidateQueries("useFetchSingleDataByKey");
         queryClient.invalidateQueries("useFetchTTLByKey");
       },
-    }
+    },
   );
   return updateTTL;
 };
@@ -28,7 +28,7 @@ export const usePersistTTL = () => {
         queryClient.invalidateQueries("useFetchSingleDataByKey");
         queryClient.invalidateQueries("useFetchTTLByKey");
       },
-    }
+    },
   );
   return persistTTL;
 };

@@ -12,10 +12,7 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   // Inputting the HSET command to add a hash with 50 fields
   await page
     .getByRole("textbox")
-    .fill(
-      "HSET really_long_hash " +
-        Array.from({ length: 50 }, (_, i) => `field${i + 1} item${i + 1}`).join(" ")
-    );
+    .fill(`HSET really_long_hash ${Array.from({ length: 50 }, (_, i) => `field${i + 1} item${i + 1}`).join(" ")}`);
   await page.getByRole("textbox").press("Enter");
 
   await page.goto("http://localhost:3000/databrowser");

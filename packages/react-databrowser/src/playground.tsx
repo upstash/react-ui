@@ -28,5 +28,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Databrowser />
       </div>
     </main>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

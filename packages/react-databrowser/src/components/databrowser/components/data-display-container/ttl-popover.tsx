@@ -10,11 +10,7 @@ import { Loader2 } from "lucide-react";
 // We show None when expiration we recieve from server is -1
 const PERSISTED_KEY = -1;
 
-export function TTLPopover({
-  children,
-  TTL,
-  dataKey,
-}: PropsWithChildren<{ TTL?: number; dataKey: string }>) {
+export function TTLPopover({ children, TTL, dataKey }: PropsWithChildren<{ TTL?: number; dataKey: string }>) {
   const { toast } = useToast();
   const [newTTL, setNewTTL] = useState<number>();
 
@@ -81,32 +77,31 @@ export function TTLPopover({
         <div className="grid gap-4">
           <div className="space-y-2">
             <h4 className="font-medium leading-none">Expiration</h4>
-            <p className="text-sm text-muted-foreground">Set the expiration for the key.</p>
+            <p className="text-muted-foreground text-sm">Set the expiration for the key.</p>
           </div>
           <div className="grid gap-2">
-            <div className="grid items-center grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 items-center gap-4">
               <Label htmlFor="ttl">Seconds</Label>
               <Input
                 type="number"
                 id="ttl"
                 defaultValue={TTL}
-                className="h-8 col-span-2"
+                className="col-span-2 h-8"
                 onChange={({ currentTarget }) => {
                   handleTTLChange(currentTarget.valueAsNumber);
                 }}
               />
             </div>
             {TTL !== PERSISTED_KEY ? (
-              <div className="rounded-md bg-[#f4f4f5] font-medium text-sm p-2 gap-3 flex flex-col">
+              <div className="flex flex-col gap-3 rounded-md bg-[#f4f4f5] p-2 text-sm font-medium">
                 <span>
-                  Clicking this button will prevent your data from being automatically deleted after
-                  a certain period.
+                  Clicking this button will prevent your data from being automatically deleted after a certain period.
                 </span>
 
                 <Button size="sm" onClick={handlePersistTTL}>
                   {persistTTL.isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Please wait
                     </>
                   ) : (
@@ -116,8 +111,7 @@ export function TTLPopover({
               </div>
             ) : (
               <p className="text-sm ">
-                TTL sets a timer to automatically <span className="font-bold">delete keys</span>{" "}
-                after a defined period.
+                TTL sets a timer to automatically <span className="font-bold">delete keys</span> after a defined period.
               </p>
             )}
           </div>

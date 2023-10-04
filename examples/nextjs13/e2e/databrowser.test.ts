@@ -8,6 +8,6 @@ test("Check the missing data text", async ({ page }) => {
   // Get the text content of the element and compare it to the expected value.
   const missingDataText = await missingDataElement.textContent();
   expect(missingDataText).toBe(
-    "\"Oops! Data's playing hide and seek and it's winning! Try adding some data from CLI?\""
+    "\"Oops! Data's playing hide and seek and it's winning! Try adding some data from CLI?\"",
   );
 });

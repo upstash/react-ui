@@ -23,7 +23,7 @@ export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagP
         },
         "mr-0 h-5 px-1 py-0",
         "border-0 text-[11px] font-semibold uppercase leading-none tracking-wide",
-        isFull ? "" : "w-6 p-0"
+        isFull ? "" : "w-6 p-0",
       )}
     >
       {isFull ? value : value.slice(0, 2)}
