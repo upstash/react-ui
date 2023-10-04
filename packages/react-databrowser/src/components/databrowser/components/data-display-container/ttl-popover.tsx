@@ -23,40 +23,56 @@ export function TTLPopover({
 
   const handleTTLChange = (newTTLValue: number) => setNewTTL(newTTLValue);
   const handleUpdateTTL = async (isClosed: boolean, newTTLValue?: number) => {
-    if (isClosed && newTTLValue && newTTLValue !== TTL) {
-      const ok = await updateTTL.mutateAsync({ dataKey, newTTLValue });
+    try {
+      if (isClosed && newTTLValue && newTTLValue !== TTL) {
+        const ok = await updateTTL.mutateAsync({ dataKey, newTTLValue });
+        if (ok) {
+          toast({
+            title: "Time Limit Set: Your Key is Now Temporary",
+            description: "The expiration time for your key has been successfully updated.",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Uh oh! Something went wrong.",
+            description: "There was a problem with your request.",
+          });
+        }
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as Error).message,
+      });
+    } finally {
+      setNewTTL(undefined);
+    }
+  };
+
+  const handlePersistTTL = async () => {
+    try {
+      const ok = await persistTTL.mutateAsync(dataKey);
       if (ok) {
         toast({
-          title: "Time Limit Set: Your Key is Now Temporary",
-          description: "The expiration time for your key has been successfully updated.",
+          title: "Persist Success: Key Now Permanent",
+          description: "Confirmed! Your key has been set to remain indefinitely.",
         });
       } else {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
+          description: "Your key might be already persisted.",
         });
       }
-
-      setNewTTL(undefined);
-    }
-  };
-  const handlePersistTTL = async () => {
-    const ok = await persistTTL.mutateAsync(dataKey);
-    if (ok) {
-      toast({
-        title: "Persist Success: Key Now Permanent",
-        description: "Confirmed! Your key has been set to remain indefinitely.",
-      });
-    } else {
+      setNewTTL(PERSISTED_KEY);
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "Your key might be already persisted.",
+        description: (error as Error).message,
       });
     }
-
-    setNewTTL(PERSISTED_KEY);
   };
   return (
     <Popover onOpenChange={(isOpen) => handleUpdateTTL(!isOpen, newTTL)}>

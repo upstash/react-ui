@@ -3,7 +3,8 @@ import { useMutation } from "react-query";
 
 export const useUpdateTTL = () => {
   const updateTTL = useMutation(
-    async ({ dataKey, newTTLValue }: { dataKey: string; newTTLValue: number }) => {
+    async ({ dataKey, newTTLValue }: { dataKey?: string; newTTLValue: number }) => {
+      if (!dataKey) throw new Error("Key is missing!");
       return Boolean(await redis.expire(dataKey, newTTLValue));
     },
     {
@@ -18,7 +19,8 @@ export const useUpdateTTL = () => {
 
 export const usePersistTTL = () => {
   const persistTTL = useMutation(
-    async (dataKey: string) => {
+    async (dataKey?: string) => {
+      if (!dataKey) throw new Error("Key is missing!");
       return Boolean(await redis.persist(dataKey));
     },
     {

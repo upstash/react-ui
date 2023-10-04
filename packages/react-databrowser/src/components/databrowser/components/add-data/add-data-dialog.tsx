@@ -50,30 +50,38 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
   const addData = useAddData();
 
   const handleAddData = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
 
-    const formData = new FormData(e.currentTarget);
+      const key = formData.get("key") as string;
+      const value = formData.get("value") as string;
+      const exp = Number(formData.get("exp"));
+      const expUnit = formData.get("exp-unit") as ExpUnitUnion;
+      const ttl = convertToSeconds(expUnit, exp);
+      const ok = await addData.mutateAsync([key, value, ttl]);
+      if (!key || !value) throw new Error("Missing key or value data");
 
-    const key = formData.get("key") as string;
-    const value = formData.get("value") as string;
-    const exp = Number(formData.get("exp"));
-    const expUnit = formData.get("exp-unit") as ExpUnitUnion;
-    const ttl = convertToSeconds(expUnit, exp);
-    const ok = await addData.mutateAsync([key, value, ttl]);
-
-    if (ok) {
-      toast({
-        description: "Data Set Successfully!",
-      });
-      onNewDataAdd([key, "string"]);
-    } else {
+      if (ok) {
+        toast({
+          description: "Data Set Successfully!",
+        });
+        onNewDataAdd([key, "string"]);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Uh oh! Something went wrong.",
+          description: "There was a problem with your request.",
+        });
+      }
+      setOpen(false);
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
+        description: (error as Error).message,
       });
     }
-    setOpen(false);
   };
 
   return (

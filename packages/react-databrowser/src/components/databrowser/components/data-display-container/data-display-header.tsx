@@ -6,23 +6,33 @@ import { useDeleteKey } from "@/components/databrowser/hooks/useDeleteKey";
 import { useFetchTTLByKey } from "@/components/databrowser/hooks/useFetchTTLBy";
 import { DeleteAlertDialog } from "./delete-alert-dialog";
 import { TTLPopover } from "./ttl-popover";
+import { useToast } from "@/components/ui/use-toast";
 
 type Props = {
   selectedDataKey: string;
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
 };
 export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) => {
+  const { toast } = useToast();
   const deleteKey = useDeleteKey();
   const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(selectedDataKey);
 
   const handleDisplayTTL = () => {
     if (TTLData === -1) return "None";
-    return `${TTLData?.toString()}s`;
+    return TTLData ? `${TTLData.toString()}s` : "Missing";
   };
 
   const handleDeleteKey = async () => {
-    const result = await deleteKey.mutateAsync(selectedDataKey);
-    if (result) onDataKeyChange(undefined);
+    try {
+      const result = await deleteKey.mutateAsync(selectedDataKey);
+      if (result) onDataKeyChange(undefined);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: (error as Error).message,
+      });
+    }
   };
 
   return (
