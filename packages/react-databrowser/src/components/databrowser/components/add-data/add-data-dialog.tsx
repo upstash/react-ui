@@ -1,3 +1,5 @@
+import { useAddData } from "@/components/databrowser/hooks/useAddData";
+import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,20 +11,38 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { RedisDataTypeUnion } from "@/types";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import { FormEvent, useState } from "react";
-import { useAddData } from "@/components/databrowser/hooks/useAddData";
-import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Loader2 } from "lucide-react";
-import { RedisDataTypeUnion } from "@/types";
-import { Textarea } from "@/components/ui/textarea";
+import { FormEvent, useState } from "react";
+
+const expUnit = [
+  "Second(s)",
+  "Minute(s)",
+  "Hour(s)",
+  "Day(s)",
+  "Week(s)",
+  "Month(s)",
+  "Year(s)",
+] as const;
+export type ExpUnitUnion = (typeof expUnit)[number];
 
 type Props = {
   onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
 };
-//TODO: Should be extended in the future to accept other data types and expiration types.
+//TODO: Should be extended in the future to accept other data types.
 export function AddDataDialog({ onNewDataAdd }: Props) {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -36,9 +56,10 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
 
     const key = formData.get("key") as string;
     const value = formData.get("value") as string;
-    const ex = Number(formData.get("ttl"));
-
-    const ok = await addData.mutateAsync([key, value, ex]);
+    const exp = Number(formData.get("exp"));
+    const expUnit = formData.get("exp-unit") as ExpUnitUnion;
+    const ttl = convertToSeconds(expUnit, exp);
+    const ok = await addData.mutateAsync([key, value, ttl]);
 
     if (ok) {
       toast({
@@ -101,8 +122,8 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
                     e.target.value = prettified;
                   } catch {}
                 }}
-                cols={10}
-                rows={10}
+                cols={5}
+                rows={5}
                 id="value"
                 name="value"
                 placeholder="Bar"
@@ -110,16 +131,25 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
               />
             </div>
             <div className="grid items-center grid-cols-4 gap-4">
-              <Label
-                htmlFor="ttl"
-                className="h-10 w-full border border-neutral-200 bg-white py-2 ring-offset-white inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]"
-              >
-                Expiry(s)
-              </Label>
+              <Select name="exp-unit">
+                <SelectTrigger className="h-10 w-full border border-neutral-200 bg-white py-2 ring-offset-white inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]">
+                  <SelectValue placeholder="Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Expiry(s)</SelectLabel>
+                    {expUnit.map((dataType) => (
+                      <SelectItem value={dataType} key={dataType}>
+                        {dataType}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <Input
-                name="ttl"
+                name="exp"
                 type="number"
-                id="ttl"
+                id="exp"
                 placeholder="1H is 3600 seconds"
                 className="col-span-3"
               />
@@ -144,4 +174,21 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
       </DialogContent>
     </Dialog>
   );
+}
+
+const timeUnitToSeconds: Record<ExpUnitUnion, number> = {
+  "Second(s)": 1,
+  "Minute(s)": 60,
+  "Hour(s)": 3600,
+  "Day(s)": 86400,
+  "Week(s)": 604800,
+  "Month(s)": 2592000, // Note: This is an approximation!
+  "Year(s)": 31536000, // Note: This does not account for leap years!
+};
+
+function convertToSeconds(expUnit: ExpUnitUnion, exp: number): number {
+  if (!(expUnit in timeUnitToSeconds)) {
+    throw new Error("Invalid time unit");
+  }
+  return exp * timeUnitToSeconds[expUnit];
 }
