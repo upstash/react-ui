@@ -9,9 +9,7 @@ import "@/globals.css";
 import { queryClient } from "@/lib/clients";
 
 export const Databrowser = () => {
-  const [selectedDataKey, setSelectedDataKey] = useState<
-    [string, RedisDataTypeUnion] | undefined
-  >();
+  const [selectedDataKey, setSelectedDataKey] = useState<[string, RedisDataTypeUnion] | undefined>();
 
   const handleDataKeySelect = (dataKey?: [string, RedisDataTypeUnion]) => {
     setSelectedDataKey(dataKey);
@@ -24,12 +22,9 @@ export const Databrowser = () => {
           <AddDataDialog onNewDataAdd={handleDataKeySelect} />
         </div>
         <div className="overflow-hidden rounded-[0.5rem] border shadow">
-          <div className="grid lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
+          <div className="grid text-ellipsis lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
             <Sidebar selectedDataKey={selectedDataKey?.[0]} onDataKeyChange={handleDataKeySelect} />
-            <DataDisplayContainer
-              selectedDataKeyTypePair={selectedDataKey}
-              onDataKeyChange={handleDataKeySelect}
-            />
+            <DataDisplayContainer selectedDataKeyTypePair={selectedDataKey} onDataKeyChange={handleDataKeySelect} />
             <Toaster />
           </div>
         </div>

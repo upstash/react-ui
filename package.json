@@ -13,11 +13,19 @@
     "@changesets/cli": "^2.26.1",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.5",
     "rome": "^11.0.0",
     "turbo": "^1.9.3"
   },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "pnpm fmt",
+      "prettier --write --ignore-unknown"
+    ]
+  },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "packageManager": "pnpm@7.12.1"
 }
