@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { usePersistTTL, useUpdateTTL } from "@/components/databrowser/hooks/useUpdateTTL";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
+import { Loader2 } from "lucide-react";
 
 // We show None when expiration we recieve from server is -1
 const PERSISTED_KEY = -1;
@@ -15,8 +16,8 @@ export function TTLPopover({
   dataKey,
 }: PropsWithChildren<{ TTL?: number; dataKey: string }>) {
   const { toast } = useToast();
-
   const [newTTL, setNewTTL] = useState<number>();
+
   const updateTTL = useUpdateTTL();
   const persistTTL = usePersistTTL();
 
@@ -79,15 +80,30 @@ export function TTLPopover({
                 }}
               />
             </div>
-            <div className="rounded-md bg-[#f4f4f5] font-medium text-sm p-2 gap-3 flex flex-col">
-              <span>
-                Clicking this button will prevent your data from being automatically deleted after a
-                certain period.
-              </span>
-              <Button size="sm" onClick={handlePersistTTL}>
-                Persist Key
-              </Button>
-            </div>
+            {TTL !== PERSISTED_KEY ? (
+              <div className="rounded-md bg-[#f4f4f5] font-medium text-sm p-2 gap-3 flex flex-col">
+                <span>
+                  Clicking this button will prevent your data from being automatically deleted after
+                  a certain period.
+                </span>
+
+                <Button size="sm" onClick={handlePersistTTL}>
+                  {persistTTL.isLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    "Persist Key"
+                  )}
+                </Button>
+              </div>
+            ) : (
+              <p className="text-sm ">
+                TTL sets a timer to automatically <span className="font-bold">delete keys</span>{" "}
+                after a defined period.
+              </p>
+            )}
           </div>
         </div>
       </PopoverContent>
