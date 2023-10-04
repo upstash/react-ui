@@ -11,7 +11,7 @@ export const DisplayScrollarea = ({ data }: { data: string | null }) => {
           <div className="absolute top-3 right-4">
             <CopyToClipboardButton onCopy={() => handleCopyClick(stringifiable)} />
           </div>
-          <pre className="text-[12px]  tracking-wider">
+          <pre className="text-[12px] tracking-wider">
             <code className="text-white">{stringifiable}</code>
           </pre>
         </>

@@ -17,6 +17,7 @@ import { useAddData } from "@/components/databrowser/hooks/useAddData";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Loader2 } from "lucide-react";
 import { RedisDataTypeUnion } from "@/types";
+import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
   onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -84,13 +85,30 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
               <Input id="key" name="key" placeholder="Foo" className="col-span-3" />
             </div>
             <div className="grid items-center grid-cols-4 gap-4">
-              <Label
-                htmlFor="value"
-                className="h-10 w-full border border-neutral-200 bg-white py-2 ring-offset-white inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]"
-              >
-                Value
-              </Label>
-              <Input id="value" name="value" placeholder="Bar" className="col-span-3" />
+              <div className="flex h-full">
+                <Label
+                  htmlFor="value"
+                  className="h-10 w-full border border-neutral-200 bg-white py-2 ring-offset-white inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]"
+                >
+                  Value
+                </Label>
+              </div>
+              <Textarea
+                onBlur={(e) => {
+                  try {
+                    const value = JSON.parse(e.target.value);
+                    const prettified = JSON.stringify(value, null, 4);
+                    e.target.value = prettified;
+                    console.log("here");
+                  } catch {}
+                }}
+                cols={10}
+                rows={10}
+                id="value"
+                name="value"
+                placeholder="Bar"
+                className="col-span-3 overflow-x-auto"
+              />
             </div>
             <div className="grid items-center grid-cols-4 gap-4">
               <Label
