@@ -83,7 +83,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           content: list.map((item, idx) => {
             const overallIdx = start + idx + 1;
             const displayIdx = String(overallIdx).padStart(2, "0"); // '01', '02', ..., '50'
-            return { value: displayIdx, content: item };
+            return { value: displayIdx, content: toJsonStringifiable(item, 0) };
           }),
           type: dataType,
         } satisfies { content: ContentValue[]; type: "list" };
@@ -95,7 +95,10 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         });
         if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
         return {
-          content: setValues.map((item, _) => ({ value: null, content: item.toString() })),
+          content: setValues.map((item, _) => ({
+            value: null,
+            content: toJsonStringifiable(item, 0),
+          })),
           type: dataType,
         } satisfies { content: ContentValue[]; type: "set" };
       }
@@ -123,7 +126,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
 };
 
 export type ContentValue = {
-  content: string;
+  content: string | number;
   value: string | number | null;
 };
 
@@ -134,8 +137,16 @@ function transformArray(inputArray: (string | number)[]): ContentValue[] {
     if (idx % 2 === 0) {
       if (typeof curr !== "string")
         throw new Error("Invalid key format. Keys should be of type string.");
-      acc.push({ content: curr, value: src[idx + 1] });
+      acc.push({ content: toJsonStringifiable(curr, 0), value: src[idx + 1] });
     }
     return acc;
   }, []);
 }
+
+const toJsonStringifiable = <T>(content: T, spacing = 2) => {
+  try {
+    return JSON.stringify(content, null, spacing);
+  } catch (error) {
+    return content;
+  }
+};

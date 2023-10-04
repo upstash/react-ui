@@ -99,7 +99,6 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
                     const value = JSON.parse(e.target.value);
                     const prettified = JSON.stringify(value, null, 4);
                     e.target.value = prettified;
-                    console.log("here");
                   } catch {}
                 }}
                 cols={10}
