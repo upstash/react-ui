@@ -1,5 +1,8 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CopyToClipboardButton } from "@/components/databrowser/copy-to-clipboard-button";
+import {
+  CopyToClipboardButton,
+  handleCopyClick,
+} from "@/components/databrowser/copy-to-clipboard-button";
 
 export const DisplayScrollarea = ({ data }: { data: string | null }) => {
   const stringifiable = toJsonStringifiable(data);
@@ -18,14 +21,6 @@ export const DisplayScrollarea = ({ data }: { data: string | null }) => {
       ) : null}
     </ScrollArea>
   );
-};
-
-const handleCopyClick = async (textToCopy: string) => {
-  try {
-    await navigator.clipboard.writeText(textToCopy);
-  } catch (err) {
-    console.error("Failed to copy text: ", err);
-  }
 };
 
 const toJsonStringifiable = (content: string | null) => {

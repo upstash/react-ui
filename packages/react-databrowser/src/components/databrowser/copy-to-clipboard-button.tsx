@@ -2,7 +2,17 @@ import { CheckIcon, ClipboardCopyIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
-export function CopyToClipboardButton({ onCopy }: { onCopy: () => void }) {
+type Props = {
+  onCopy: () => void;
+  sizeVariant?: "icon-sm" | "icon-xs";
+  variant?: "outline" | "default" | "ghost";
+};
+
+export function CopyToClipboardButton({
+  onCopy,
+  sizeVariant = "icon-sm",
+  variant = "outline",
+}: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -14,8 +24,16 @@ export function CopyToClipboardButton({ onCopy }: { onCopy: () => void }) {
   };
 
   return (
-    <Button size="icon-sm" variant="outline" onClick={handleCopy}>
+    <Button size={sizeVariant} variant={variant} onClick={handleCopy}>
       {copied ? <CheckIcon /> : <ClipboardCopyIcon />}
     </Button>
   );
 }
+
+export const handleCopyClick = async (textToCopy: string) => {
+  try {
+    await navigator.clipboard.writeText(textToCopy);
+  } catch (err) {
+    console.error("Failed to copy text: ", err);
+  }
+};

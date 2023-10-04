@@ -9,6 +9,10 @@ import {
 } from "@/components/ui/table";
 import { Navigation, ContentValue } from "@/components/databrowser/hooks/useFetchSingleDataByKey";
 import { Button } from "@/components/ui/button";
+import {
+  CopyToClipboardButton,
+  handleCopyClick,
+} from "@/components/databrowser/copy-to-clipboard-button";
 
 type Props = {
   data: ContentValue[];
@@ -58,7 +62,16 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
                 <TableCell className="font-medium text-[12px]">{item.value}</TableCell>
               ) : null}
               {item.content !== null ? (
-                <TableCell className="font-medium text-[12px]">{item.content}</TableCell>
+                <TableCell className="font-medium text-[12px] flex w-full justify-between">
+                  {item.content}
+                  <CopyToClipboardButton
+                    sizeVariant="icon-xs"
+                    variant="ghost"
+                    onCopy={() =>
+                      handleCopyClick(`${item.value ? item.value + ":" : ""}${item.content}`)
+                    }
+                  />
+                </TableCell>
               ) : null}
             </TableRow>
           ))}
