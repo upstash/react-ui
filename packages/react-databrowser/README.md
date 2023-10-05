@@ -19,8 +19,6 @@
 - [Install](#1-install)
 - [Configuration](#2-configuration)
 - [Usage](#3-usage)
-- [Security Notice](#security-notice)
-- [Support and Contribution](#support-and-contribution)
 
 ## 1. Install
 
@@ -65,7 +63,6 @@ export default function DatabrowserDemo() {
   );
 }
 
-// Example CSS-in-JS styling
 const mainStyle = {
   height: "100vh",
   width: "100vw",
