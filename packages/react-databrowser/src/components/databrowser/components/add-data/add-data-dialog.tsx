@@ -29,7 +29,7 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
-export type ExpUnitUnion = (typeof expUnit)[number];
+export type ExpUnitUnion = typeof expUnit[number];
 
 type Props = {
   onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
