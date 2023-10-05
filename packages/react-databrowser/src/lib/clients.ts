@@ -1,14 +1,17 @@
+import { DatabrowserProps } from "@/store";
 import { Redis } from "@upstash/redis";
 import { QueryClient } from "react-query";
 
-const initializeRedis = () => {
-  if (!process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL) throw new Error("NEXT_PUBLIC_UPSTASH_REDIS_REST_URL is missing");
-  if (!process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN)
-    throw new Error("NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN is missing");
+export const redisClient = (databrowser?: DatabrowserProps) => {
+  const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
+  const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL;
+
+  if (!url) throw new Error("Redis URL is missing!");
+  if (!token) throw new Error("Redis TOKEN is missing!");
 
   const redis = new Redis({
-    url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL,
-    token: process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN,
+    url,
+    token,
   });
 
   return redis;
@@ -45,5 +48,3 @@ export const queryClient = new QueryClient({
     },
   },
 });
-
-export const redis = initializeRedis();

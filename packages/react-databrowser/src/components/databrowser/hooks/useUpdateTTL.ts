@@ -1,7 +1,10 @@
-import { redis, queryClient } from "@/lib/clients";
+import { queryClient } from "@/lib/clients";
+import { useDatabrowser } from "@/store";
 import { useMutation } from "react-query";
 
 export const useUpdateTTL = () => {
+  const { redis } = useDatabrowser();
+
   const updateTTL = useMutation(
     async ({ dataKey, newTTLValue }: { dataKey?: string; newTTLValue: number }) => {
       if (!dataKey) throw new Error("Key is missing!");
@@ -18,6 +21,8 @@ export const useUpdateTTL = () => {
 };
 
 export const usePersistTTL = () => {
+  const { redis } = useDatabrowser();
+
   const persistTTL = useMutation(
     async (dataKey?: string) => {
       if (!dataKey) throw new Error("Key is missing!");

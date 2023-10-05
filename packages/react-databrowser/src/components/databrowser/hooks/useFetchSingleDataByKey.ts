@@ -1,4 +1,4 @@
-import { redis } from "@/lib/clients";
+import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
@@ -16,6 +16,8 @@ export type Navigation = {
 };
 
 export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisDataTypeUnion]) => {
+  const { redis } = useDatabrowser();
+
   const cursorStack = useRef([INITIAL_CURSOR_NUM]);
   const listLength = useRef(INITIAL_CURSOR_NUM);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
