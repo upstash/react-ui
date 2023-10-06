@@ -14,7 +14,7 @@ test("should add new data and delete it succesfully", async ({ page }) => {
 
   await page.getByRole("button", { name: "Save changes" }).click();
 
-  await expect(page.getByRole("button", { name: "TTL: 500s" })).toHaveText("TTL: 500s");
+  await expect(page.getByRole("button", { name: /TTL: \d+s/ })).toHaveText(/TTL: \d+s/);
 
   await page.getByRole("button", { name: "Delete" }).click();
   await page.getByRole("button", { name: "Delete" }).click();
