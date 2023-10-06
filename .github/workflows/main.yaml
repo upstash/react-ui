@@ -1,44 +1,67 @@
 name: Build-E2E
+
 on:
   push:
     branches:
       - "**"
+
 jobs:
   Build:
     runs-on: ubuntu-latest
+    outputs: # Outputs for job status
+      status: ${{ job.status }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
       - name: Install pnpm
         run: npm i pnpm@latest -g
-
       - name: Install dependencies
         run: pnpm install
-
       - name: Build for production
         run: pnpm build
-
+      - name: Upload build artifacts # Save the build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: |
+            .next
+            public
 
   E2E:
-    timeout-minutes: 60
+    needs: Build # Ensuring E2E runs after Build
+    if: needs.Build.outputs.status == 'success' # Run this job only if Build was successful
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Cache pnpm modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
       - name: Install pnpm
         run: npm i pnpm@latest -g
-
       - name: Install dependencies
         run: pnpm install
-
+      - name: Download build artifacts # Use the previously built artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
-
       - name: Run Playwright tests
         run: pnpm test
         env:
