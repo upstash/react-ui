@@ -13,6 +13,7 @@
 ## Components
 
 - [Redis CLI](https://github.com/upstash/react-ui/blob/main/packages/react-cli/README.md)
+- [Redis Databrowser](https://github.com/upstash/react-ui/blob/main/packages/react-databrowser/README.md)
 
 
 <br/>
@@ -43,7 +44,7 @@ pnpm build
 This will prompt you to select which packages have changed. It will also create a changeset file in the `.changeset` directory.
 2. Run `pnpm changeset version`
 This will bump the versions of the packages previously specified with pnpm changeset (and any dependents of those) and update the changelog files.
-3. Run `pnpm install` 
+3. Run `pnpm install`
 This will update the lockfile and rebuild packages.
 4. Commit the changes
 5. Run `pnpm publish -r`

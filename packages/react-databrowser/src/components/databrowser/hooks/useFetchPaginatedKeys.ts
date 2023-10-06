@@ -1,9 +1,9 @@
-import { redis } from "@/lib/clients";
 import { zip } from "@/lib/utils";
 import { RedisDataTypeUnion } from "@/types";
 import { useCallback, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
+import { useDatabrowser } from "@/store";
 
 const DEFAULT_FETCH_COUNT = 10;
 const INITIAL_CURSOR_NUM = 0;
@@ -11,6 +11,8 @@ const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
+  const { redis } = useDatabrowser();
+
   const [timestamp, setTimestamp] = useState(Date.now());
   const cursorStack = useRef([INITIAL_CURSOR_NUM]);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);

@@ -1,7 +1,9 @@
-import { redis } from "@/lib/clients";
+import { useDatabrowser } from "@/store";
 import { useQuery } from "react-query";
 
 export const useFetchTTLByKey = (dataKey?: string) => {
+  const { redis } = useDatabrowser();
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["useFetchTTLByKey", dataKey],
     queryFn: async () => {
