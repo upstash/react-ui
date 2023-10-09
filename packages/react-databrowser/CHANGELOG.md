@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.0.4
+
+### Patch Changes
+
+- f393b2f: do something
+
 ## 0.0.3
 
 ### Patch Changes
