@@ -3,6 +3,6 @@
 
 
 
-if [[ -z "${DISABLE_HUSKY}" ]]; then
+if [ -z "$DISABLE_HUSKY" ]; then
     pnpm test
 fi
