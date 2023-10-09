@@ -1,13 +1,13 @@
 {
   "name": "@upstash/react-databrowser",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "private": false,
   "publishConfig": {
     "access": "public"
-  },  
+  },
   "bugs": {
     "url": "https://github.com/upstash/react-ui/issues"
   },

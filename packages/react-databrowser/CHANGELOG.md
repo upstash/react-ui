@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.0.5
+
+### Patch Changes
+
+- 3b2095b: update publishConfig
+
 ## 0.0.4
 
 ### Patch Changes
