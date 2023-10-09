@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm test
+
+
+if [ -z "$DISABLE_HUSKY" ]; then
+    pnpm test
+fi
