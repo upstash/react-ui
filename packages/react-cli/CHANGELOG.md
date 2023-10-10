@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.8
+
+### Patch Changes
+
+- c51eb3a: Applied formatter and linter
+
 ## 1.0.7
 
 ### Patch Changes
