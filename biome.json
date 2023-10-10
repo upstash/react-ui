@@ -1,0 +1,33 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.0.0/schema.json",
+  "organizeImports": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
+      "style": {
+        "useBlockStatements": "error",
+        "noNonNullAssertion": "off"
+      },
+      "performance": {
+        "noDelete": "off"
+      }
+    },
+    "ignore": ["node_modules", ".next", "dist", ".turbo"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentSize": 2,
+    "enabled": true,
+    "lineWidth": 120,
+    "ignore": ["node_modules", ".next", "dist", ".turbo"]
+  }
+}
