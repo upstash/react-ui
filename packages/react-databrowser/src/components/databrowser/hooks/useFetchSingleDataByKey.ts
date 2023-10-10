@@ -53,7 +53,9 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         const [nextCursor, zrangeValue] = await redis.zscan(key, cursorStack.current[currentIndex], {
           count: DATA_PER_PAGE,
         });
-        if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
+        if (currentIndex === cursorStack.current.length - 1) {
+          cursorStack.current.push(nextCursor);
+        }
         return { content: transformArray(zrangeValue), type: dataType };
       }
 
@@ -61,7 +63,9 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         const [nextCursor, hashValues] = await redis.hscan(key, cursorStack.current[currentIndex], {
           count: DATA_PER_PAGE,
         });
-        if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
+        if (currentIndex === cursorStack.current.length - 1) {
+          cursorStack.current.push(nextCursor);
+        }
         return { content: transformArray(hashValues), type: dataType };
       }
 
@@ -86,7 +90,9 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         const [nextCursor, setValues] = await redis.sscan(key, cursorStack.current[currentIndex], {
           count: DATA_PER_PAGE,
         });
-        if (currentIndex === cursorStack.current.length - 1) cursorStack.current.push(nextCursor);
+        if (currentIndex === cursorStack.current.length - 1) {
+          cursorStack.current.push(nextCursor);
+        }
         return {
           content: setValues.map((item, _) => ({
             value: null,
@@ -124,11 +130,15 @@ export type ContentValue = {
 };
 
 function transformArray(inputArray: (string | number)[]): ContentValue[] {
-  if (inputArray.length % 2 !== 0) throw new Error("The input array length must be even.");
+  if (inputArray.length % 2 !== 0) {
+    throw new Error("The input array length must be even.");
+  }
 
   return inputArray.reduce<ContentValue[]>((acc, curr, idx, src) => {
     if (idx % 2 === 0) {
-      if (typeof curr !== "string") throw new Error("Invalid key format. Keys should be of type string.");
+      if (typeof curr !== "string") {
+        throw new Error("Invalid key format. Keys should be of type string.");
+      }
       acc.push({ content: toJsonStringifiable(curr, 0), value: src[idx + 1] });
     }
     return acc;
@@ -138,7 +148,7 @@ function transformArray(inputArray: (string | number)[]): ContentValue[] {
 const toJsonStringifiable = <T>(content: T, spacing = 2) => {
   try {
     return JSON.stringify(content, null, spacing);
-  } catch (error) {
+  } catch (_error) {
     return content;
   }
 };

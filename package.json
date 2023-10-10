@@ -6,7 +6,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
-    "fmt": "pnpm rome check . --apply-suggested && pnpm rome format . --write",
+    "fmt": "pnpm biome format . --write && pnpm biome check . --apply-unsafe ",
     "prepare": "husky install",
     "bump-versions": "pnpm changeset version && pnpm install"
   },
@@ -16,8 +16,8 @@
     "lint-staged": "^13.0.3",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
-    "rome": "^11.0.0",
-    "turbo": "^1.9.3"
+    "turbo": "^1.9.3",
+    "@biomejs/biome": "^1.2.2"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
