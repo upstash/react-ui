@@ -29,7 +29,7 @@ import { Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
-export type ExpUnitUnion = typeof expUnit[number];
+export type ExpUnitUnion = (typeof expUnit)[number];
 
 type Props = {
   onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -52,7 +52,9 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
       const expUnit = formData.get("exp-unit") as ExpUnitUnion;
       const ttl = convertToSeconds(expUnit, exp);
       const ok = await addData.mutateAsync([key, value, ttl]);
-      if (!(key && value)) throw new Error("Missing key or value data");
+      if (!(key && value)) {
+        throw new Error("Missing key or value data");
+      }
 
       if (ok) {
         toast({

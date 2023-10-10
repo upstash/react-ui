@@ -1,5 +1,23 @@
 # @upstash/react-cli
 
+## 1.0.10
+
+### Patch Changes
+
+- ff6d5ba: Bumped postcss version to get rid of dependabot warning
+
+## 1.0.9
+
+### Patch Changes
+
+- 3dcd8d7: Add Vite to enable standalone mode in the CLI
+
+## 1.0.8
+
+### Patch Changes
+
+- c51eb3a: Applied formatter and linter
+
 ## 1.0.7
 
 ### Patch Changes

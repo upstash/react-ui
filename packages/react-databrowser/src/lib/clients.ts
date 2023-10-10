@@ -6,8 +6,12 @@ export const redisClient = (databrowser?: DatabrowserProps) => {
   const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
   const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL;
 
-  if (!url) throw new Error("Redis URL is missing!");
-  if (!token) throw new Error("Redis TOKEN is missing!");
+  if (!url) {
+    throw new Error("Redis URL is missing!");
+  }
+  if (!token) {
+    throw new Error("Redis TOKEN is missing!");
+  }
 
   const redis = new Redis({
     url,

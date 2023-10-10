@@ -5,7 +5,7 @@ export const LoadingSkeleton = () => (
     {Array(10)
       .fill(0)
       .map((_, idx) => (
-        <Skeleton className="w-full h-[40px] rounded" key={idx} />
+        <Skeleton className="h-[40px] w-full rounded" key={idx} />
       ))}
   </div>
 );

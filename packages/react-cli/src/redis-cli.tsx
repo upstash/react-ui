@@ -83,7 +83,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
   const [stdin, setStdin] = useState("");
 
   const specialCommands: Record<string, Command> = {
-    clear: (ctx) => {
+    clear: (_ctx) => {
       setResults([]);
       setHistoryIndex(null);
       setStdin("");
@@ -158,9 +158,13 @@ export const RedisCli: React.FC<CliProps> = (props) => {
    * the input should be updated to the command that they are currently on
    */
   useEffect(() => {
-    if (historyIndex === null) return;
+    if (historyIndex === null) {
+      return;
+    }
     const cmd = history[historyIndex];
-    if (!cmd) return;
+    if (!cmd) {
+      return;
+    }
     setStdin(cmd);
   }, [historyIndex, history]);
 
@@ -173,7 +177,9 @@ export const RedisCli: React.FC<CliProps> = (props) => {
    */
   const onEnter = async () => {
     try {
-      if (loading) return;
+      if (loading) {
+        return;
+      }
       setLoading(true);
 
       const command = stdin.trim();
