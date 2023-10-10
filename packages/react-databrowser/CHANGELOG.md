@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.0.6
+
+### Patch Changes
+
+- c51eb3a: Applied formatter and linter
+
 ## 0.0.5
 
 ### Patch Changes
