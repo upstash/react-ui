@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.9
+
+### Patch Changes
+
+- 3dcd8d7: Add Vite to enable standalone mode in the CLI
+
 ## 1.0.8
 
 ### Patch Changes
