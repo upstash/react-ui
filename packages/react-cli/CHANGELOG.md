@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.10
+
+### Patch Changes
+
+- ff6d5ba: Bumped postcss version to get rid of dependabot warning
+
 ## 1.0.9
 
 ### Patch Changes
