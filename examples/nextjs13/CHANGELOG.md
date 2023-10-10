@@ -1,5 +1,14 @@
 # nextjs13
 
+## 0.1.25
+
+### Patch Changes
+
+- ff6d5ba: Bumped postcss version to get rid of dependabot warning
+- Updated dependencies [ff6d5ba]
+  - @upstash/react-databrowser@0.0.7
+  - @upstash/react-cli@1.0.10
+
 ## 0.1.24
 
 ### Patch Changes

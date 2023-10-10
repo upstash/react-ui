@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.0.7
+
+### Patch Changes
+
+- ff6d5ba: Bumped postcss version to get rid of dependabot warning
+
 ## 0.0.6
 
 ### Patch Changes
