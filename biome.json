@@ -7,18 +7,25 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useButtonType": "warn"
+      },
       "correctness": {
         "noUnusedVariables": "warn"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "off"
+        "recommended": true
       },
       "style": {
         "useBlockStatements": "error",
         "noNonNullAssertion": "off"
       },
       "performance": {
-        "noDelete": "off"
+        "recommended": true
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
       }
     },
     "ignore": ["node_modules", ".next", "dist", ".turbo"]

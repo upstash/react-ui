@@ -18,14 +18,18 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
   const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(selectedDataKey);
 
   const handleDisplayTTL = () => {
-    if (TTLData === -1) return "None";
+    if (TTLData === -1) {
+      return "None";
+    }
     return TTLData ? `${TTLData.toString()}s` : "Missing";
   };
 
   const handleDeleteKey = async () => {
     try {
       const result = await deleteKey.mutateAsync(selectedDataKey);
-      if (result) onDataKeyChange(undefined);
+      if (result) {
+        onDataKeyChange(undefined);
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -36,12 +40,12 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
   };
 
   return (
-    <div className="flex items-center space-between">
+    <div className="space-between flex items-center">
       <TTLPopover TTL={TTLData} dataKey={selectedDataKey}>
-        <Button variant="outline" className="space-x-1 text-sm border-dashed">
+        <Button variant="outline" className="space-x-1 border-dashed text-sm">
           <span>TTL:</span>{" "}
           {isTTLLoading ? (
-            <Skeleton className="w-[70px] h-[20px] transition-all" />
+            <Skeleton className="h-[20px] w-[70px] transition-all" />
           ) : (
             <span className="font-bold">{handleDisplayTTL()}</span>
           )}
@@ -50,7 +54,7 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
       <div className="ml-auto">
         <DeleteAlertDialog onDeleteConfirm={handleDeleteKey}>
           <Button>
-            <MinusCircledIcon className="w-4 h-4 mr-2" />
+            <MinusCircledIcon className="mr-2 h-4 w-4" />
             Delete
           </Button>
         </DeleteAlertDialog>
