@@ -15,7 +15,7 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
     <div>
       <Table className="my-4 min-h-[500px] rounded-md border border-dashed p-4 tracking-wide">
         <TableCaption>
-          <div className="px-3 ">
+          <div>
             <div className="flex items-center gap-2">
               <Button
                 variant="outline"
