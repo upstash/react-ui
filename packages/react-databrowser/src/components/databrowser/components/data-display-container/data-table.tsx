@@ -1,7 +1,8 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Navigation, ContentValue } from "@/components/databrowser/hooks/useFetchSingleDataByKey";
+import { Navigation } from "@/components/databrowser/hooks/useFetchSingleDataByKey";
 import { Button } from "@/components/ui/button";
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
+import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
 
 type Props = {
   data: ContentValue[];

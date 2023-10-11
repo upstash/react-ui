@@ -4,6 +4,7 @@ import { useFetchSingleDataByKey } from "@/components/databrowser/hooks/useFetch
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { DataTable } from "./data-table";
 import { DisplayScrollarea } from "./display-scrollarea";
+import { MissingDataDisplay } from "./missing-data-display";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -12,7 +13,7 @@ type Props = {
 export function DataDisplay({ selectedDataKeyTypePair }: Props) {
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
-  console.log({ data });
+
   return (
     <div className="h-full flex-col border-none p-0">
       <div className="flex items-center justify-between">
@@ -38,6 +39,8 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
         <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Content"]} />
       ) : keyType === "stream" && data?.type === "stream" ? (
         <DataTable data={data.content} navigation={navigation} tableHeaders={["Timestamp", "Content"]} />
+      ) : data?.type === "unknown" ? (
+        <MissingDataDisplay />
       ) : null}
     </div>
   );
