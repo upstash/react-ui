@@ -19,7 +19,7 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
   return (
     <DatabrowserProvider databrowser={{ token, url }}>
       <QueryClientProvider client={queryClient}>
-        <div className="flex flex-col gap-4">
+        <div className="bg-red flex flex-col gap-4">
           <div className="ml-auto">
             <AddDataDialog onNewDataAdd={handleDataKeySelect} />
           </div>

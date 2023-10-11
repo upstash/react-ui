@@ -18,6 +18,7 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
           <div>
             <div className="flex items-center gap-2">
               <Button
+                data-testid="datatable-prev"
                 variant="outline"
                 size="icon"
                 className="ml-auto h-8 w-8 disabled:bg-[#8080803d]"
@@ -27,6 +28,7 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
                 <ArrowLeftIcon />
               </Button>
               <Button
+                data-testid="datatable-next"
                 variant="outline"
                 size="icon"
                 className="h-8 w-8 disabled:bg-[#8080803d]"
