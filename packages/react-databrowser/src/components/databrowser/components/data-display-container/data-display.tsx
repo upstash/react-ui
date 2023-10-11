@@ -30,15 +30,15 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea data={data.content} />
       ) : keyType === "zset" && data?.type === "zset" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Score", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Score", "Members"]} />
       ) : keyType === "hash" && data?.type === "hash" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Field", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Field", "Fields"]} />
       ) : keyType === "list" && data?.type === "list" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Index", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Index", "Members"]} />
       ) : keyType === "set" && data?.type === "set" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Members"]} />
       ) : keyType === "stream" && data?.type === "stream" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Timestamp", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["StreamID", "Fields"]} />
       ) : data?.type === "unknown" ? (
         <MissingDataDisplay />
       ) : null}

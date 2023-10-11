@@ -3,6 +3,7 @@ import { Navigation } from "@/components/databrowser/hooks/useFetchSingleDataByK
 import { Button } from "@/components/ui/button";
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
+import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 
 type Props = {
   data: ContentValue[];
@@ -14,23 +15,25 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
     <div>
       <Table className="my-4 rounded-md border border-dashed p-4 tracking-wide">
         <TableCaption>
-          <div className="flex items-center justify-end">
-            <div className="space-x-2">
+          <div className="px-3 ">
+            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="ml-auto h-8 w-8 disabled:bg-[#8080803d]"
                 onClick={() => navigation.handlePageChange("prev")}
                 disabled={navigation.prevNotAllowed}
               >
-                Previous
+                <ArrowLeftIcon />
               </Button>
               <Button
                 variant="outline"
-                size="sm"
+                size="icon"
+                className="h-8 w-8 disabled:bg-[#8080803d]"
                 onClick={() => navigation.handlePageChange("next")}
                 disabled={navigation.nextNotAllowed}
               >
-                Next
+                <ArrowRightIcon />
               </Button>
             </div>
           </div>
