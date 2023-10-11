@@ -20,16 +20,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { RedisDataTypeUnion } from "@/types";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import { Loader2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
-export type ExpUnitUnion = typeof expUnit[number];
+export type ExpUnitUnion = (typeof expUnit)[number];
 
 type Props = {
   onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -156,14 +156,9 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
           </div>
           <DialogFooter>
             <Button type="submit" disabled={addData.isLoading}>
-              {addData.isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Please wait
-                </>
-              ) : (
-                "Save changes"
-              )}
+              <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
+                Save changes
+              </Spinner>
             </Button>
           </DialogFooter>
         </form>
