@@ -36,7 +36,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
 
   return (
     <div className="flex flex-col">
-      <div className="min-h-[540px] flex-1 space-y-4 overflow-y-auto  py-4">
+      <div className="min-h-[670px] flex-1 space-y-4 overflow-y-auto  py-4">
         <div className="px-3 py-2">
           <div className="mb-3 flex items-center space-x-1">
             <div className="relative">

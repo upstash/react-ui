@@ -30,8 +30,8 @@ export const DATA_PER_PAGE = 10;
 export function transformStream(result: Record<string, Record<string, unknown>>) {
   return Object.entries(result).map(([key, values]) => ({
     content: Object.entries(values)
-      .map(([field, value]) => `${field} ${value}`)
-      .join(" "),
+      .map(([field, value]) => `${field}:${value}`)
+      .join("\n"),
     value: key,
   }));
 }

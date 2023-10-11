@@ -13,7 +13,7 @@ type Props = {
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
-      <Table className="my-4 rounded-md border border-dashed p-4 tracking-wide">
+      <Table className="my-4 min-h-[500px] rounded-md border border-dashed p-4 tracking-wide">
         <TableCaption>
           <div className="px-3 ">
             <div className="flex items-center gap-2">
@@ -49,7 +49,7 @@ export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
             <TableRow key={idx}>
               {item.value !== null ? <TableCell className="text-[12px] font-medium">{item.value}</TableCell> : null}
               {item.content !== null ? (
-                <TableCell className="flex w-full justify-between text-[12px] font-medium">
+                <TableCell className="flex w-full justify-between whitespace-break-spaces text-[12px] font-medium">
                   {item.content}
                   <CopyToClipboardButton
                     sizeVariant="icon-xs"
