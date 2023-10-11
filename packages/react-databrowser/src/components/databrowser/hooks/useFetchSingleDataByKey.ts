@@ -1,6 +1,6 @@
 import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "react-query";
 
 //TODO: Address the issue of useEffect taking additional time to reset the cursor when switching between identical data types, which results in unnecessary,
@@ -18,7 +18,8 @@ export type Navigation = {
 export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisDataTypeUnion]) => {
   const { redis } = useDatabrowser();
 
-  const cursorStack = useRef([INITIAL_CURSOR_NUM]);
+  const timestamp = useMemo(() => Date.now(), [selectedDataKeyTypePair[0]]);
+  const cursorStack = useRef<(string | number)[]>([INITIAL_CURSOR_NUM]);
   const listLength = useRef(INITIAL_CURSOR_NUM);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
 
@@ -40,7 +41,13 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
   }, [selectedDataKeyTypePair[0]]);
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ["useFetchSingleDataByKey", selectedDataKeyTypePair, cursorStack.current[currentIndex], currentIndex],
+    queryKey: [
+      "useFetchSingleDataByKey",
+      selectedDataKeyTypePair[0],
+      cursorStack.current[currentIndex],
+      currentIndex,
+      timestamp,
+    ],
     queryFn: async () => {
       const [key, dataType] = selectedDataKeyTypePair;
 
@@ -50,7 +57,8 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       }
 
       if (dataType === "zset") {
-        const [nextCursor, zrangeValue] = await redis.zscan(key, cursorStack.current[currentIndex], {
+        const cursorStackNumber = cursorStack.current as number[];
+        const [nextCursor, zrangeValue] = await redis.zscan(key, cursorStackNumber[currentIndex], {
           count: DATA_PER_PAGE,
         });
         if (currentIndex === cursorStack.current.length - 1) {
@@ -60,7 +68,8 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       }
 
       if (dataType === "hash") {
-        const [nextCursor, hashValues] = await redis.hscan(key, cursorStack.current[currentIndex], {
+        const cursorStackNumber = cursorStack.current as number[];
+        const [nextCursor, hashValues] = await redis.hscan(key, cursorStackNumber[currentIndex], {
           count: DATA_PER_PAGE,
         });
         if (currentIndex === cursorStack.current.length - 1) {
@@ -87,7 +96,8 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       }
 
       if (dataType === "set") {
-        const [nextCursor, setValues] = await redis.sscan(key, cursorStack.current[currentIndex], {
+        const cursorStackNumber = cursorStack.current as number[];
+        const [nextCursor, setValues] = await redis.sscan(key, cursorStackNumber[currentIndex], {
           count: DATA_PER_PAGE,
         });
         if (currentIndex === cursorStack.current.length - 1) {
@@ -100,6 +110,26 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           })),
           type: dataType,
         } satisfies { content: ContentValue[]; type: "set" };
+      }
+
+      if (dataType === "stream") {
+        const cursorStackString = cursorStack.current as string[];
+        const result = await redis.xrange(
+          key,
+          Number(cursorStackString[currentIndex]) === INITIAL_CURSOR_NUM ? "-" : cursorStackString[currentIndex],
+          "+",
+          DATA_PER_PAGE,
+        );
+
+        const transformedData = transformStream(result);
+        const nextCursor = transformedData.at(-1)?.value;
+        if (currentIndex === cursorStack.current.length - 1) {
+          cursorStack.current.push(
+            transformedData.length === DATA_PER_PAGE && nextCursor ? nextCursor : INITIAL_CURSOR_NUM,
+          );
+        }
+
+        return { content: transformedData, type: dataType };
       }
 
       if (dataType === "json") {
@@ -123,6 +153,42 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     } satisfies Navigation,
   };
 };
+
+/**
+ * Transforms a data object into a specific desired array format.
+ *
+ * Converts an input object like:
+ *
+ * ```
+ * {
+ *   "1696942597667-0": {item: 1, item1: 2, item2: 3},
+ *   "1696942598807-0": {item: 2}
+ * }
+ * ```
+ *
+ * Into an output format like:
+ *
+ * ```
+ * [
+ *   {
+ *     value: "1696942597667-0",
+ *     content: ["item 1", "item1 2", "item2 3"]
+ *   },
+ *   {
+ *     value: "1696942598807-0",
+ *     content: ["item 2"]
+ *   }
+ * ]
+ * ```
+ */
+function transformStream(result: Record<string, Record<string, unknown>>) {
+  return Object.entries(result).map(([key, values]) => ({
+    content: Object.entries(values)
+      .map(([field, value]) => `${field} ${value}`)
+      .join(" "),
+    value: key,
+  }));
+}
 
 export type ContentValue = {
   content: string | number;

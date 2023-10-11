@@ -12,7 +12,7 @@ type Props = {
 export function DataDisplay({ selectedDataKeyTypePair }: Props) {
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
-
+  console.log({ data });
   return (
     <div className="h-full flex-col border-none p-0">
       <div className="flex items-center justify-between">
@@ -36,6 +36,8 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
         <DataTable data={data.content} navigation={navigation} tableHeaders={["Index", "Content"]} />
       ) : keyType === "set" && data?.type === "set" ? (
         <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Content"]} />
+      ) : keyType === "stream" && data?.type === "stream" ? (
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Timestamp", "Content"]} />
       ) : null}
     </div>
   );

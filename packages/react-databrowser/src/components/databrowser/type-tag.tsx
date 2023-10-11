@@ -20,6 +20,7 @@ export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagP
           "bg-blue-500": value === "set",
           "bg-yellow-500": value === "json",
           "bg-red-500": value === "zset",
+          "bg-indigo-500": value === "stream",
         },
         "mr-0 h-5 px-1 py-0",
         "border-0 text-[11px] font-semibold uppercase leading-none tracking-wide",
