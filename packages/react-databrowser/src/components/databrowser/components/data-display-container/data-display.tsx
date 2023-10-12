@@ -4,6 +4,7 @@ import { useFetchSingleDataByKey } from "@/components/databrowser/hooks/useFetch
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { DataTable } from "./data-table";
 import { DisplayScrollarea } from "./display-scrollarea";
+import { MissingDataDisplay } from "./missing-data-display";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -25,17 +26,21 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
         </div>
       </div>
       {isLoading || error ? (
-        <Skeleton className="my-4 flex  h-[400px] rounded p-4 shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] transition-all" />
+        <Skeleton className="my-4 flex  h-[548px] rounded p-4 shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] transition-all" />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea data={data.content} />
       ) : keyType === "zset" && data?.type === "zset" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Score", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Score", "Members"]} />
       ) : keyType === "hash" && data?.type === "hash" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Field", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Field", "Fields"]} />
       ) : keyType === "list" && data?.type === "list" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={["Index", "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["Index", "Members"]} />
       ) : keyType === "set" && data?.type === "set" ? (
-        <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Content"]} />
+        <DataTable data={data.content} navigation={navigation} tableHeaders={[null, "Members"]} />
+      ) : keyType === "stream" && data?.type === "stream" ? (
+        <DataTable data={data.content} navigation={navigation} tableHeaders={["StreamID", "Fields"]} />
+      ) : data?.type === "unknown" ? (
+        <MissingDataDisplay />
       ) : null}
     </div>
   );

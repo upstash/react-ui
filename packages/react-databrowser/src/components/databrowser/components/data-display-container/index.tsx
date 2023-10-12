@@ -18,7 +18,7 @@ export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange 
       <div className="h-full px-4 py-6 lg:px-8">
         <div className="h-full space-y-6">
           <DataDisplayHeader selectedDataKey={selectedDataKeyTypePair[0]} onDataKeyChange={onDataKeyChange} />
-          <DataDisplay selectedDataKeyTypePair={selectedDataKeyTypePair} />
+          <DataDisplay selectedDataKeyTypePair={selectedDataKeyTypePair} key={selectedDataKeyTypePair[0]} />
         </div>
       </div>
     </div>

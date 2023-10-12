@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         style={{
           height: "100%",
           width: "100%",
-          maxHeight: "45rem",
+          maxHeight: "50rem",
           maxWidth: "64rem",
           borderRadius: "0.5rem",
           overflow: "hidden",

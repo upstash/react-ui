@@ -53,7 +53,7 @@ export const DataDisplayHeader = ({ selectedDataKey, onDataKeyChange }: Props) =
       </TTLPopover>
       <div className="ml-auto">
         <DeleteAlertDialog onDeleteConfirm={handleDeleteKey}>
-          <Button>
+          <Button variant="secondary" className="border-1 border">
             <MinusCircledIcon className="mr-2 h-4 w-4" />
             Delete
           </Button>

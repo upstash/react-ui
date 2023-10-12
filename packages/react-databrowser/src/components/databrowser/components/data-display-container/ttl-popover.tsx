@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { usePersistTTL, useUpdateTTL } from "@/components/databrowser/hooks/useUpdateTTL";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 // We show None when expiration we recieve from server is -1
 const PERSISTED_KEY = -1;
@@ -99,14 +99,9 @@ export function TTLPopover({ children, TTL, dataKey }: PropsWithChildren<{ TTL?:
                 </span>
 
                 <Button size="sm" onClick={handlePersistTTL}>
-                  {persistTTL.isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Please wait
-                    </>
-                  ) : (
-                    "Persist Key"
-                  )}
+                  <Spinner isLoading={persistTTL.isLoading} isLoadingText="Please wait">
+                    Persist Key
+                  </Spinner>
                 </Button>
               </div>
             ) : (
