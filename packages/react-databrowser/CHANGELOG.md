@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.1.0
+
+### Minor Changes
+
+- 119e7be: Add ability to view streams in databrowser
+
 ## 0.0.7
 
 ### Patch Changes
