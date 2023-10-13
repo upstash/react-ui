@@ -17,10 +17,10 @@ export function DataDisplay({ selectedDataKeyTypePair }: Props) {
 
   return (
     <div className="h-full flex-col border-none p-0">
-      <div className="flex items-center justify-between">
-        <div className="w-full space-y-1">
-          <div className="flex w-full items-center gap-3">
-            <h2 className="text-xl font-semibold tracking-tight">{key} </h2>
+      <div className="flex w-full items-center justify-between">
+        <div className="space-y-1">
+          <div className="flex  items-center gap-3">
+            <h2 className="line-clamp-1 w-[150px] text-xl font-semibold tracking-tight">{key} </h2>
             <RedisTypeTag isFull value={keyType} />
             <div className="ml-auto">
               <CopyToClipboardButton variant="ghost" onCopy={() => handleCopyClick(key)} svgSize={{ w: 20, h: 20 }} />
