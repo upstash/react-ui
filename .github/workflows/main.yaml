@@ -47,6 +47,9 @@ jobs:
           node-version: 18
           cache: "pnpm"
 
+       - name: Install Playwright Browsers
+         run: pnpx playwright install --with-deps
+
        - name: Install
          run: pnpm install
 
