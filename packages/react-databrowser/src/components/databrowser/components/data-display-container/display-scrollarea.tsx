@@ -22,7 +22,7 @@ export const DisplayScrollarea = ({ data }: { data: string | null }) => {
 
 const toJsonStringifiable = (content: string | null) => {
   try {
-    return JSON.stringify(content, null, 2);
+    return JSON.parse(JSON.stringify(content, null, 2));
   } catch {
     return content;
   }
