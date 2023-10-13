@@ -39,7 +39,6 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     cursorStack.current = [INITIAL_CURSOR_NUM];
     listLength.current = INITIAL_CURSOR_NUM;
   }, [selectedDataKeyTypePair[0]]);
-  console.log({ stack: cursorStack.current });
 
   const { isLoading, error, data } = useQuery({
     queryKey: [

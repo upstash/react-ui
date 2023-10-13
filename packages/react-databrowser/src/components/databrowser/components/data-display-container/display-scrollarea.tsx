@@ -1,7 +1,7 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 
-export const DisplayScrollarea = ({ data }: { data: string | null }) => {
+export const DisplayScrollarea = ({ data }: { data: string | JSON | null }) => {
   const stringifiable = toJsonStringifiable(data);
 
   return (
@@ -20,10 +20,15 @@ export const DisplayScrollarea = ({ data }: { data: string | null }) => {
   );
 };
 
-const toJsonStringifiable = (content: string | null) => {
+const toJsonStringifiable = (content: string | JSON | null) => {
   try {
-    return JSON.parse(JSON.stringify(content, null, 2));
+    if (typeof content === "string") {
+      return content;
+    }
+    if (typeof content === "object") {
+      return JSON.stringify(content, null, 2);
+    }
   } catch {
-    return content;
+    return JSON.stringify(content, null, 2);
   }
 };

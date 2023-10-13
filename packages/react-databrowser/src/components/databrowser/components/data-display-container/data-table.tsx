@@ -13,7 +13,7 @@ type Props = {
 export const DataTable = ({ data, navigation, tableHeaders }: Props) => {
   return (
     <div>
-      <Table className="my-4 min-h-[500px] rounded-md border border-dashed p-4 tracking-wide">
+      <Table className="my-4 rounded-md border border-dashed p-4 tracking-wide">
         <TableCaption>
           <div>
             <div className="flex items-center gap-2">
