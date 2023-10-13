@@ -50,14 +50,10 @@ jobs:
        - name: Install
          run: pnpm install
 
-       - name: Install playwright
-         run: pnpm install @playwright/test playwright -g
-
-       - name: Install Playwright Browsers
-         run: pnpm exec playwright install --with-deps
-
-       - name: Run Playwright tests
+       - name: Install playwright browsers
+         run: npx playwright install --with-deps
+       - name: Run tests
          run: pnpm test
-         env:
-          NEXT_PUBLIC_UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
-          NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+env:
+  NEXT_PUBLIC_UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+  NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
