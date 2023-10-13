@@ -17,15 +17,15 @@ test("should add data from cli then try to paginate on databrowser", async ({ pa
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("really");
   await page.getByRole("button", { name: "really_long_list li" }).click();
-  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item1", { exact: true })).toBeVisible();
   await page.getByTestId("datatable-next").click();
   await page.getByTestId("datatable-next").click();
   await page.getByTestId("datatable-next").click();
   await page.getByTestId("datatable-next").click();
-  await expect(page.getByText('"item50"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item50", { exact: true })).toBeVisible();
   await page.getByTestId("datatable-prev").click();
   await page.getByTestId("datatable-prev").click();
   await page.getByTestId("datatable-prev").click();
   await page.getByTestId("datatable-prev").click();
-  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item1", { exact: true })).toBeVisible();
 });
