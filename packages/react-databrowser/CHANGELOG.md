@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.1.1
+
+### Patch Changes
+
+- dd0964c: Fix style issues
+
 ## 0.1.0
 
 ### Minor Changes

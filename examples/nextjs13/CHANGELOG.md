@@ -1,5 +1,13 @@
 # nextjs13
 
+## 0.1.27
+
+### Patch Changes
+
+- dd0964c: Fix style issues
+- Updated dependencies [dd0964c]
+  - @upstash/react-databrowser@0.1.1
+
 ## 0.1.26
 
 ### Patch Changes
