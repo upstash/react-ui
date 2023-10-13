@@ -21,17 +21,17 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   await page.getByRole("button", { name: "really_long_set se" }).click();
 
   // Expect the first item of the set to be visible
-  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item1", { exact: true })).toBeVisible();
 
   // Navigate through pages to find the last item
   for (let i = 0; i < 4; i++) {
     await page.getByTestId("datatable-next").click();
   }
-  await expect(page.getByText('"item50"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item50", { exact: true })).toBeVisible();
 
   // Navigate back to find the first item again
   for (let i = 0; i < 4; i++) {
     await page.getByTestId("datatable-prev").click();
   }
-  await expect(page.getByText('"item1"', { exact: true })).toBeVisible();
+  await expect(page.getByText("item1", { exact: true })).toBeVisible();
 });

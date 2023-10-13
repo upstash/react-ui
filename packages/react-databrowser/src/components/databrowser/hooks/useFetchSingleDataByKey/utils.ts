@@ -57,10 +57,15 @@ export function transformArray(inputArray: (string | number)[]): ContentValue[] 
   }, []);
 }
 
-export const toJsonStringifiable = <T>(content: T, spacing = 2) => {
-  try {
-    return JSON.stringify(content, null, spacing);
-  } catch (_error) {
-    return content;
+export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
+  if (typeof content === "string") {
+    try {
+      const parsed = JSON.parse(content);
+      return JSON.stringify(parsed, null, spacing);
+    } catch {
+      return content;
+    }
   }
+
+  return JSON.stringify(content, null, spacing);
 };

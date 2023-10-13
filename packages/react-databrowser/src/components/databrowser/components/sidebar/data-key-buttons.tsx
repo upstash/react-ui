@@ -11,13 +11,13 @@ export const DataKeyButtons = ({ dataKeys, selectedDataKey, onDataKeyChange }: P
   <>
     {dataKeys.map(([dataKey, dataType]) => (
       <Button
+        className="w-full"
         variant={selectedDataKey === dataKey ? "default" : "ghost"}
-        className="justify-start w-full"
         key={dataKey}
         onClick={() => onDataKeyChange([dataKey, dataType])}
       >
-        {dataKey}
-        <RedisTypeTag value={dataType} className="ml-auto pointer-events-none" />
+        <span className="line-clamp-1 w-[150px] text-left">{dataKey}</span>
+        <RedisTypeTag value={dataType} className="pointer-events-none ml-auto" />
       </Button>
     ))}
   </>

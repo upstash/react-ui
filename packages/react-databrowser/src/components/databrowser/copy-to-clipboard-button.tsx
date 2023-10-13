@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 type Props = {
   onCopy: () => void;
   sizeVariant?: "icon-sm" | "icon-xs";
+  svgSize?: { w: number; h: number };
   variant?: "outline" | "default" | "ghost";
 };
 
-export function CopyToClipboardButton({ onCopy, sizeVariant = "icon-sm", variant = "outline" }: Props) {
+export function CopyToClipboardButton({ onCopy, sizeVariant = "icon-sm", variant = "outline", svgSize }: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -21,7 +22,7 @@ export function CopyToClipboardButton({ onCopy, sizeVariant = "icon-sm", variant
 
   return (
     <Button size={sizeVariant} variant={variant} onClick={handleCopy}>
-      {copied ? <CheckIcon /> : <ClipboardCopyIcon />}
+      {copied ? <CheckIcon /> : <ClipboardCopyIcon width={svgSize?.w ?? 15} height={svgSize?.h ?? 15} />}
     </Button>
   );
 }

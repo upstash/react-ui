@@ -55,7 +55,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
               key={selectedDataType}
             />
           </div>
-          <div className="space-y-1">
+          <div className="w-full space-y-1">
             {isLoading || error ? (
               <LoadingSkeleton />
             ) : dataKeys?.length ? (
