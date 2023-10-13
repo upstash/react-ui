@@ -50,8 +50,6 @@ jobs:
        - name: Install
          run: pnpm install
 
-       - name: Install playwright browsers
-         run: npx playwright install --with-deps
        - name: Run tests
          run: pnpm test
 env:
