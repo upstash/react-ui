@@ -48,7 +48,7 @@ jobs:
           cache: "pnpm"
 
        - name: Install Playwright Browsers
-         run: pnpx playwright install --with-deps
+         run: pnpx playwright install
 
        - name: Install
          run: pnpm install
