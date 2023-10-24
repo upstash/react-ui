@@ -12,22 +12,21 @@ export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagP
     <Badge
       className={clsx(
         className,
-        "!inline-flex items-center justify-center rounded drop-shadow-sm",
+        "!inline-flex items-center justify-center rounded-[26px]",
         {
-          "bg-[#0A8633]": value === "string",
-          "bg-[#B95816]": value === "list",
-          "bg-[#925CBB]": value === "hash",
-          "bg-[#016DF2]": value === "set",
-          "bg-[#976C13]": value === "json",
-          "bg-[#E70F09]": value === "zset",
-          "bg-[#626CC5]": value === "stream",
+          "bg-[#16A34A]": value === "string",
+          "bg-[#F97316]": value === "list",
+          "bg-[#8B5CF6]": value === "hash",
+          "bg-[#3B82F6]": value === "set",
+          "bg-[#F59E0B]": value === "json",
+          "bg-[#EF4444]": value === "zset",
+          "bg-[#EC4899]": value === "stream",
         },
-        "mr-0 h-5 px-1 py-0",
-        "border-0 text-[11px] font-semibold uppercase leading-none tracking-wide ",
-        isFull ? "" : "w-6 p-0",
+        "text-[10px] font-medium uppercase leading-none tracking-wide ",
+        isFull ? "" : "h-5 w-5",
       )}
     >
-      {isFull ? value : value.slice(0, 2)}
+      {isFull ? value : value[0]}
     </Badge>
   );
 }

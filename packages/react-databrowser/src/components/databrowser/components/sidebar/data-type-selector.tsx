@@ -21,8 +21,8 @@ export function DataTypeSelector({ onDataTypeChange, dataType }: Props) {
 
   return (
     <Select onValueChange={handleValueChange} value={dataType}>
-      <SelectTrigger className="inline-flex items-center justify-center rounded px-[15px] text-[13px] leading-none gap-[5px] min-w-[90px]">
-        <SelectValue placeholder="Type" />
+      <SelectTrigger className="inline-flex h-[32px] min-w-[100px] items-center justify-center gap-[5px] rounded-none rounded-r-lg border-[#D9D9D9] text-[14px] text-[#1F1F1F]">
+        <SelectValue placeholder="All Type" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

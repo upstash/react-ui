@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
 import { useDatabrowser } from "@/store";
 
-export const DEFAULT_FETCH_COUNT = 13;
+export const DEFAULT_FETCH_COUNT = 10;
 const INITIAL_CURSOR_NUM = 0;
 const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
