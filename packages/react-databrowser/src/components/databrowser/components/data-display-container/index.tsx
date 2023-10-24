@@ -14,11 +14,17 @@ export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange 
   }
 
   return (
-    <div className="col-span-4 border-l">
-      <div className="h-full px-4 py-6 lg:px-8">
-        <div className="h-full space-y-6">
-          <DataDisplayHeader selectedDataKey={selectedDataKeyTypePair[0]} onDataKeyChange={onDataKeyChange} />
-          <DataDisplay selectedDataKeyTypePair={selectedDataKeyTypePair} key={selectedDataKeyTypePair[0]} />
+    <div className="col-span-4">
+      <div className="h-full py-1 pr-1">
+        <div
+          className="h-full space-y-6 rounded-lg bg-white py-[12px]"
+          style={{ boxShadow: "0px 0px 6px 0px #0000001A" }}
+        >
+          <DataDisplay
+            selectedDataKeyTypePair={selectedDataKeyTypePair}
+            key={selectedDataKeyTypePair[0]}
+            onDataKeyChange={onDataKeyChange}
+          />
         </div>
       </div>
     </div>

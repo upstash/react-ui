@@ -28,7 +28,7 @@ export function DeleteAlertDialog({ children, onDeleteConfirm }: PropsWithChildr
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="bg-red-500 hover:bg-red-600" onClick={onDeleteConfirm}>
+          <AlertDialogAction className="bg-red-500 text-gray-50 hover:bg-red-600" onClick={onDeleteConfirm}>
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>
