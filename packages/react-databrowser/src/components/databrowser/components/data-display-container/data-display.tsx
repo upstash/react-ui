@@ -20,7 +20,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
   const isLoadingOrError = isLoading || error;
-
+  console.log({ data });
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4">
@@ -55,7 +55,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       <div className="flex w-full px-4">
         <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} />
         <div className="p ml-2 flex items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
-          Memory: ~60 bytes
+          Memory: ~{data?.memory} bytes
         </div>
         {keyType !== "json" && keyType !== "string" && (
           <div className="ml-auto flex items-center gap-2">

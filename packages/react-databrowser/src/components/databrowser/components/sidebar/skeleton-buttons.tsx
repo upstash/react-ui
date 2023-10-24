@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DEFAULT_FETCH_COUNT } from "../../hooks/useFetchPaginatedKeys";
 
 export const LoadingSkeleton = () => (
-  <div className="space-y-1">
+  <div className="flex flex-col gap-[1px]">
     {Array(DEFAULT_FETCH_COUNT)
       .fill(0)
       .map((_, idx) => (

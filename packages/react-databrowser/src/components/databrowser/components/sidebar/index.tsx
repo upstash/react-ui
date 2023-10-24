@@ -10,6 +10,7 @@ import { ReloadButton } from "./reload-button";
 import { SidebarMissingData } from "./sidebar-missing-data";
 import { LoadingSkeleton } from "./skeleton-buttons";
 import { AddDataDialog } from "../add-data/add-data-dialog";
+import { DisplayDbSize } from "./display-db-size";
 
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
@@ -35,7 +36,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-h-[543px] flex-col">
       <div className="flex-1 overflow-y-auto pt-[12px]">
         <div className="px-3">
           <div className="flex items-center gap-2 drop-shadow-sm">
@@ -71,7 +72,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
       <div className="px-3 pb-4">
         <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
         <div className="flex items-center gap-2">
-          <div className="text-sm font-normal text-[#00000066]">Total: 77,123</div>
+          <DisplayDbSize />
           <Button
             variant="outline"
             size="icon"
