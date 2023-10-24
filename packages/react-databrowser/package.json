@@ -55,6 +55,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@upstash/redis": "^1.23.3",
+    "html-react-parser": "^4.2.9",
     "react-query": "^3.39.3"
   }
 }

@@ -61,7 +61,11 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
         });
       } else {
         console.error(`Unsupported data type: ${dataType}`);
-        return { content: null, type: "unknown" } satisfies { content: null; type: "unknown" };
+        return { content: null, type: "unknown", memory: null } satisfies {
+          content: null;
+          type: "unknown";
+          memory: null;
+        };
       }
     },
   });
