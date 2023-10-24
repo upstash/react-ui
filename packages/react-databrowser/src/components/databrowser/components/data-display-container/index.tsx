@@ -15,7 +15,7 @@ export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange 
   return (
     <div className="col-span-4">
       <div className="h-full py-1 pr-1">
-        <div className="h-full space-y-6 rounded-lg bg-white pt-2" style={{ boxShadow: "0px 0px 6px 0px #0000001A" }}>
+        <div className="h-full space-y-6 rounded-lg bg-white" style={{ boxShadow: "0px 0px 6px 0px #0000001A" }}>
           <DataDisplay
             selectedDataKeyTypePair={selectedDataKeyTypePair}
             key={selectedDataKeyTypePair[0]}
