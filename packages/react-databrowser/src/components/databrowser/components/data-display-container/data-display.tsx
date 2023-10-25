@@ -36,7 +36,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
       {isLoadingOrError ? (
-        <Skeleton className="m-3 flex h-[401px] shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]" />
+        <Skeleton className="mx-3 flex h-[420px] shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]" />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea data={data.content} />
       ) : keyType === "zset" && data?.type === "zset" ? (

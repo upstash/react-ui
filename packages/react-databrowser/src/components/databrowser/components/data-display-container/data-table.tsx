@@ -9,7 +9,7 @@ type Props = {
 export const DataTable = ({ data, tableHeaders }: Props) => {
   return (
     <div className="px-2">
-      <Table>
+      <Table className="border-spacing-10">
         <TableHeader>
           <TableRow className="pointer-events-none border-none">
             {tableHeaders[0] !== null ? (
@@ -22,14 +22,20 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
         </TableHeader>
         <TableBody>
           {data.map((item, idx) => (
-            <TableRow key={idx} className="h-[38px] border-none odd:bg-[#00000008]">
+            <TableRow key={idx} className="h-[38px] border-none">
               {item.value !== null ? (
-                <TableCell className="w-20 text-[14px] font-medium">
+                <TableCell
+                  className={`w-20 text-[14px] font-medium ${idx % 2 === 0 ? "rounded-l bg-[#00000008]" : ""}`}
+                >
                   <p className="w-20 overflow-hidden truncate whitespace-nowrap">{item.value}</p>
                 </TableCell>
               ) : null}
               {item.content !== null ? (
-                <TableCell className="relative flex items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-medium">
+                <TableCell
+                  className={`relative flex items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-medium ${
+                    idx % 2 === 0 ? "rounded-r bg-[#00000008]" : ""
+                  } ${item.value === null ? "rounded-l" : ""}`}
+                >
                   <p className="w-[200px] overflow-hidden truncate whitespace-nowrap">{item.content}</p>
                   <div className="absolute right-4">
                     <CopyToClipboardButton
