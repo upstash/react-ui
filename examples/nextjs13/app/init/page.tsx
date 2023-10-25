@@ -12,38 +12,15 @@ export default function Home() {
   }
 
   return (
-    <main
-      style={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        background: "rgb(250,250,250)",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          maxHeight: "32rem",
-          maxWidth: "48rem",
-          borderRadius: "0.5rem",
-          overflow: "hidden",
-        }}
-      >
-        <RedisCli
-          url={upstashRedisRestUrl}
-          token={upstashRedisRestToken}
-          init={[
-            "clear",
-            "set x y",
-            "get x",
-            "help", // this handles both redis commands and special commands like `help`
-          ]}
-        />
-      </div>
-    </main>
+    <RedisCli
+      url={upstashRedisRestUrl}
+      token={upstashRedisRestToken}
+      init={[
+        "clear",
+        "set x y",
+        "get x",
+        "help", // this handles both redis commands and special commands like `help`
+      ]}
+    />
   );
 }
