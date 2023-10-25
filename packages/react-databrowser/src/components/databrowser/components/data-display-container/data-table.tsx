@@ -24,16 +24,20 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
           {data.map((item, idx) => (
             <TableRow key={idx} className="h-[38px] border-none odd:bg-[#00000008]">
               {item.value !== null ? (
-                <TableCell className="w-20 text-[14px] font-medium">{item.value}</TableCell>
+                <TableCell className="w-20 text-[14px] font-medium">
+                  <p className="w-20 overflow-hidden truncate whitespace-nowrap">{item.value}</p>
+                </TableCell>
               ) : null}
               {item.content !== null ? (
-                <TableCell className="flex items-center whitespace-break-spaces border-none text-[14px] font-medium">
-                  {item.content}
-                  <CopyToClipboardButton
-                    sizeVariant="icon-xs"
-                    variant="ghost"
-                    onCopy={() => handleCopyClick(item.content.toString())}
-                  />
+                <TableCell className="relative flex items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-medium">
+                  <p className="w-[200px] overflow-hidden truncate whitespace-nowrap">{item.content}</p>
+                  <div className="absolute right-4">
+                    <CopyToClipboardButton
+                      sizeVariant="icon-xs"
+                      variant="ghost"
+                      onCopy={() => handleCopyClick(item.content.toString())}
+                    />
+                  </div>
                 </TableCell>
               ) : null}
             </TableRow>

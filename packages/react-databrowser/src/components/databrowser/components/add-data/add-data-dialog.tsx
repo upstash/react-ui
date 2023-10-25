@@ -156,7 +156,11 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={addData.isLoading}>
+            <Button
+              type="submit"
+              disabled={addData.isLoading}
+              className="bg-[#16A34A] text-white hover:bg-[#16A34A]/90"
+            >
               <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
                 Save changes
               </Spinner>
