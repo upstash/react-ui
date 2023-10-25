@@ -13,8 +13,7 @@ const DEBOUNCE_TIME = 250;
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const { redis } = useDatabrowser();
 
-  const [timestamp, setTimestamp] = useState(Date.now());
-  const cursorStack = useRef([INITIAL_CURSOR_NUM]);
+  const cursorStack = useRef<{ [key: string]: number[] }>({});
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
@@ -36,25 +35,33 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   };
 
   const reset = () => {
-    cursorStack.current = [INITIAL_CURSOR_NUM];
     setCurrentIndex(INITIAL_CURSOR_NUM);
     setSearchTerm(SCAN_MATCH_ALL);
-    setTimestamp(Date.now());
   };
 
-  const { error, data, status } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, cursorStack.current[currentIndex], dataType, timestamp],
+  const { error, data, isLoading } = useQuery({
+    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, currentIndex, dataType],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
-      const [nextCursor, keys] = await redis.scan(cursorStack.current[currentIndex], {
-        count: DEFAULT_FETCH_COUNT,
-        match: debouncedSearchTerm,
-        type: dataType,
-      });
 
       // nextCursor is only pushed onto the cursorStack when you are at the most recent cursor,
-      if (currentIndex === cursorStack.current.length - 1) {
-        cursorStack.current.push(nextCursor);
+      const [nextCursor, keys] = await redis.scan(
+        (cursorStack.current[debouncedSearchTerm] || [INITIAL_CURSOR_NUM])[currentIndex],
+        {
+          count: DEFAULT_FETCH_COUNT,
+          match: debouncedSearchTerm,
+          type: dataType,
+        },
+      );
+
+      // Check if the cursor array exists for the searchTerm; if not, initialize it
+      if (!cursorStack.current[debouncedSearchTerm]) {
+        cursorStack.current[debouncedSearchTerm] = [INITIAL_CURSOR_NUM];
+      }
+
+      // Push the nextCursor only if at the most recent cursor for the specific searchTerm
+      if (currentIndex === (cursorStack.current[debouncedSearchTerm] || []).length - 1) {
+        cursorStack.current[debouncedSearchTerm].push(nextCursor);
       }
 
       //Feed pipeline with keys
@@ -71,7 +78,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     },
   });
   return {
-    isLoading: status === "loading",
+    isLoading,
     error,
     data,
     handlePageChange,
@@ -80,7 +87,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     searchTerm,
     direction: {
       prevNotAllowed: currentIndex === 0,
-      nextNotAllowed: cursorStack.current[currentIndex + 1] === 0,
+      nextNotAllowed: (cursorStack.current[debouncedSearchTerm] || [])[currentIndex + 1] === 0,
     },
   };
 };
