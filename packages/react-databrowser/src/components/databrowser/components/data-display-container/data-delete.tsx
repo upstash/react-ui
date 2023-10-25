@@ -30,7 +30,7 @@ export const DataDelete = ({ onDataKeyChange, selectedDataKey }: Props) => {
   };
 
   return (
-    <div className="ml-auto">
+    <div className="ml-auto" data-testid="delete">
       <DeleteAlertDialog onDeleteConfirm={handleDeleteKey}>
         <Button variant="outline" size="icon" className="h-8 w-8 rounded-md border border-[#D9D9D9]">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

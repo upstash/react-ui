@@ -22,6 +22,7 @@ export const ReloadButton = ({ onDataTypeChange }: { onDataTypeChange: (dataType
         className="h-8 w-8 rounded-md border border-[#D9D9D9]"
         onClick={handleClick}
         disabled={isLoading}
+        data-testid="reset"
       >
         <ReloadIcon className={isLoading ? "animate-spin" : ""} />
       </Button>

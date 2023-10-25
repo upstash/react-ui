@@ -66,6 +66,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
               className="ml-auto h-8 w-8 disabled:bg-[#0000000D]"
               onClick={() => navigation.handlePageChange("prev")}
               disabled={navigation.prevNotAllowed}
+              data-testid="datatable-prev"
             >
               <ChevronLeftIcon width="20px" height="20px" />
             </Button>
@@ -75,6 +76,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
               className="h-8 w-8 disabled:bg-[#0000000D]"
               onClick={() => navigation.handlePageChange("next")}
               disabled={navigation.nextNotAllowed}
+              data-testid="datatable-next"
             >
               <ChevronRightIcon width="20px" height="20px" />
             </Button>

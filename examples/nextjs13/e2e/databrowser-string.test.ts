@@ -17,7 +17,7 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.goto("http://localhost:3000/databrowser");
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("my_string");
-  await page.getByRole("button", { name: "my_string st" }).click();
+  await page.getByRole("button", { name: "S my_string" }).click();
 
-  await expect(page.locator(`pre > code:has-text("${myString}")`)).toBeVisible();
+  await expect(page.locator(':text-matches("Hello, this is a string!")')).toBeVisible();
 });

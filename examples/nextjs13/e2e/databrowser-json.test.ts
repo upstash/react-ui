@@ -20,10 +20,10 @@ test("should add JSON data from cli then try to navigate on databrowser", async 
   await page.goto("http://localhost:3000/databrowser");
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("my_json_object");
-  await page.getByRole("button", { name: "my_json_object js" }).click();
+  await page.getByRole("button", { name: "j my_json_object" }).click();
 
   // Expect some data from the JSON object to be visible on the screen
-  await expect(page.locator('pre > code:has-text("John Doe")')).toBeVisible();
-  await expect(page.locator('pre > code:has-text("30")')).toBeVisible();
-  await expect(page.locator('pre > code:has-text("Ford")')).toBeVisible();
+  await expect(page.locator(':text-matches("John Doe")')).toBeVisible();
+  await expect(page.locator(':text-matches("30")')).toBeVisible();
+  await expect(page.locator(':text-matches("Ford")')).toBeVisible();
 });

@@ -18,20 +18,20 @@ test("should add data from cli then try to navigate on databrowser", async ({ pa
   await page.goto("http://localhost:3000/databrowser");
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("really");
-  await page.getByRole("button", { name: "really_long_hash ha" }).click();
+  await page.getByRole("button", { name: "H really_long_hash" }).click();
 
   // Expect the first item of the hash to be visible
   await expect(page.getByText("item1", { exact: true })).toBeVisible();
 
   // Navigate through pages to find the last item
   for (let i = 0; i < 4; i++) {
-    await page.getByTestId("datatable-next").click();
+    await page.getByTestId("datatable-next").click({ delay: 100 });
   }
   await expect(page.getByText("item50", { exact: true })).toBeVisible();
 
   // Navigate back to find the first item again
   for (let i = 0; i < 4; i++) {
-    await page.getByTestId("datatable-prev").click();
+    await page.getByTestId("datatable-prev").click({ delay: 100 });
   }
   await expect(page.getByText("item1", { exact: true })).toBeVisible();
 });

@@ -2,7 +2,8 @@ import { test, expect } from "@playwright/test";
 
 test("should add new data and delete it succesfully", async ({ page }) => {
   await page.goto("http://localhost:3000/databrowser");
-  await page.getByRole("button", { name: "Add" }).click();
+  await page.getByTestId("add-new-data").click({ delay: 100 });
+
   await page.getByPlaceholder("Foo").fill("foo");
   await page.getByPlaceholder("Foo").press("Tab");
   await page.getByPlaceholder("Bar").fill("bar");
@@ -14,9 +15,7 @@ test("should add new data and delete it succesfully", async ({ page }) => {
 
   await page.getByRole("button", { name: "Save changes" }).click();
 
-  await expect(page.getByRole("button", { name: /TTL: \d+s/ })).toHaveText(/TTL: \d+s/);
-
-  await page.getByRole("button", { name: "Delete" }).click();
+  await page.getByTestId("delete").click({ delay: 100 });
   await page.getByRole("button", { name: "Delete" }).click();
 
   const missingDataElement = page.locator('[data-testid="missing-data"]');

@@ -79,6 +79,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             className="ml-auto h-8 w-8 disabled:bg-[#0000000D]"
             disabled={direction.prevNotAllowed || isLoading}
             onClick={() => handlePageChange("prev")}
+            data-testid="sidebar-prev"
           >
             <ChevronLeftIcon width="20px" height="20px" />
           </Button>
@@ -88,6 +89,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
             className="h-8 w-8 disabled:bg-[#0000000D]"
             disabled={direction.nextNotAllowed || isLoading}
             onClick={() => handlePageChange("next")}
+            data-testid="sidebar-next"
           >
             <ChevronRightIcon width="20px" height="20px" />
           </Button>

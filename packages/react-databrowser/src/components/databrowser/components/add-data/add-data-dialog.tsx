@@ -82,7 +82,12 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div>
-          <Button variant="outline" size="icon" className="h-8 w-8 rounded-md bg-[#13B981] hover:bg-[#13B981]/90">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 rounded-md bg-[#13B981] hover:bg-[#13B981]/90"
+            data-testid="add-new-data"
+          >
             <PlusIcon className="h-4 w-4 text-white" />
           </Button>
         </div>
