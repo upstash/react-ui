@@ -23,8 +23,8 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4">
-        <div className="flex w-[200px] items-center gap-3">
-          <p className="w-[200px] overflow-hidden truncate whitespace-nowrap text-left text-lg font-semibold text-[#000000]">
+        <div className="flex w-[165px] items-center gap-3">
+          <p className="w-[165px] overflow-hidden truncate whitespace-nowrap text-left text-lg font-semibold text-[#000000]">
             {key}
           </p>
           <RedisTypeTag isFull value={keyType} />
