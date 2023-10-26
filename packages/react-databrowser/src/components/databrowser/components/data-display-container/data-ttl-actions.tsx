@@ -18,17 +18,17 @@ export const DataTTLActions = ({ selectedDataKey }: Props) => {
 
   return (
     <TTLPopover TTL={TTLData} dataKey={selectedDataKey}>
-      <div className="p flex items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
+      <div className="flex h-[25px] w-[120px] items-center justify-center gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
         <span>TTL:</span>{" "}
         {isTTLLoading ? <Skeleton className="h-[20px] transition-all" /> : <span>{handleDisplayTTL()}</span>}
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
-            d="M1 1L5 5L9 1"
+            d="M4 6L8 10L12 6"
             stroke="black"
-            strokeOpacity="0.6"
-            strokeWidth="1.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            stroke-opacity="0.6"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
         </svg>
       </div>

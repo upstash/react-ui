@@ -23,7 +23,7 @@ export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagP
           "bg-[#EC4899]": value === "stream",
         },
         "text-[10px] font-medium uppercase leading-none tracking-wide ",
-        isFull ? "rounded-md p-[6px]" : "h-5 w-5",
+        isFull ? "h-5 rounded-md p-[6px]" : "h-5 w-5 p-0",
       )}
     >
       {isFull ? value : value[0]}

@@ -8,7 +8,7 @@ export const DisplayScrollarea = ({ data }: { data: string | JSON | null }) => {
   console.log({ data });
 
   return (
-    <ScrollArea className="flex h-[420px] shrink-0 items-center justify-center overflow-x-auto rounded-md p-3 ">
+    <ScrollArea className="flex h-[425px] shrink-0 items-center justify-center overflow-x-auto rounded-md p-3 ">
       {stringifiable ? (
         <>
           <div className="absolute right-4 top-3">

@@ -22,7 +22,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   const isLoadingOrError = isLoading || error;
   return (
     <div className="h-full flex-col pt-2">
-      <div className="flex w-full items-center justify-between px-4">
+      <div className="flex w-full items-center justify-between px-4 ">
         <div className="flex w-[165px] items-center gap-3">
           <p className="w-[165px] overflow-hidden truncate whitespace-nowrap text-left text-lg font-semibold text-[#000000]">
             {key}
@@ -36,7 +36,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
       {isLoadingOrError ? (
-        <Skeleton className="mx-3 flex h-[420px] shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px]" />
+        <Skeleton className="h-[425px] rounded-none shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] " />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea data={data.content} />
       ) : keyType === "zset" && data?.type === "zset" ? (
@@ -52,10 +52,10 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       ) : data?.type === "unknown" ? (
         <MissingDataDisplay />
       ) : null}
-      <div className="mb-[12px] mt-[5px] h-[1px] w-full bg-[#0000000D]" />
+      <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
       <div className="flex w-full px-4">
         <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} />
-        <div className="p ml-2 flex items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
+        <div className="ml-2  flex h-[25px] items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
           Memory: ~{data?.memory} bytes
         </div>
         {keyType !== "json" && keyType !== "string" && (

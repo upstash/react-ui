@@ -1,6 +1,7 @@
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
+import { cn } from "@/lib/utils";
 
 type Props = {
   data: ContentValue[];
@@ -8,7 +9,7 @@ type Props = {
 };
 export const DataTable = ({ data, tableHeaders }: Props) => {
   return (
-    <div className="px-2">
+    <div className="h-[425px] px-2">
       <Table className="border-spacing-10">
         <TableHeader>
           <TableRow className="pointer-events-none border-none">
@@ -22,19 +23,25 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
         </TableHeader>
         <TableBody>
           {data.map((item, idx) => (
-            <TableRow key={idx} className="h-[38px] border-none">
+            <TableRow key={idx} className="border-none">
               {item.value !== null ? (
                 <TableCell
-                  className={`w-20 text-[14px] font-medium ${idx % 2 === 0 ? "rounded-l bg-[#00000008]" : ""}`}
+                  className={cn("h-[38px] w-20 border-none text-[14px] font-medium", {
+                    "rounded-l bg-[#00000008]": idx % 2 === 0,
+                  })}
                 >
                   <p className="w-20 overflow-hidden truncate whitespace-nowrap">{item.value}</p>
                 </TableCell>
               ) : null}
               {item.content !== null ? (
                 <TableCell
-                  className={`relative flex items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-medium ${
-                    idx % 2 === 0 ? "rounded-r bg-[#00000008]" : ""
-                  } ${item.value === null ? "rounded-l" : ""}`}
+                  className={cn(
+                    "relative flex h-[38px] items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-medium",
+                    {
+                      "rounded-r bg-[#00000008]": idx % 2 === 0,
+                      "rounded-l": item.value === null,
+                    },
+                  )}
                 >
                   <p className="w-[200px] overflow-hidden truncate whitespace-nowrap">{item.content}</p>
                   <div className="absolute right-4">
