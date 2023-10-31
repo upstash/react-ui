@@ -1,13 +1,16 @@
+import { useState } from "react";
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
 import { cn } from "@/lib/utils";
+import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
 
 type Props = {
   data: ContentValue[];
   tableHeaders: [string | null, string];
 };
 export const DataTable = ({ data, tableHeaders }: Props) => {
+  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+
   return (
     <div className="h-[425px] px-2">
       <Table className="border-spacing-10">
@@ -23,7 +26,12 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
         </TableHeader>
         <TableBody>
           {data.map((item, idx) => (
-            <TableRow key={idx} className="border-none">
+            <TableRow
+              key={idx}
+              className="border-none hover:bg-transparent"
+              onMouseEnter={() => setHoveredRow(idx)}
+              onMouseLeave={() => setHoveredRow(null)}
+            >
               {item.value !== null ? (
                 <TableCell
                   className={cn("h-[38px] w-20 border-none text-[14px] font-medium", {
@@ -44,13 +52,16 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
                   )}
                 >
                   <p className="w-[200px] overflow-hidden truncate whitespace-nowrap">{item.content}</p>
-                  <div className="absolute right-4">
-                    <CopyToClipboardButton
-                      sizeVariant="icon-xs"
-                      variant="ghost"
-                      onCopy={() => handleCopyClick(item.content.toString())}
-                    />
-                  </div>
+                  {hoveredRow === idx && (
+                    <div className="absolute right-[10px] top-[5px]">
+                      <CopyToClipboardButton
+                        sizeVariant="icon-sm"
+                        variant="ghost"
+                        onCopy={() => handleCopyClick(item.content.toString())}
+                        svgSize={{ h: 22, w: 22 }}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               ) : null}
             </TableRow>

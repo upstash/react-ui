@@ -23,15 +23,13 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4 ">
-        <div className="flex w-[165px] items-center gap-3">
-          <p className="w-[165px] overflow-hidden truncate whitespace-nowrap text-left text-lg font-semibold text-[#000000]">
-            {key}
-          </p>
-          <RedisTypeTag isFull value={keyType} />
-          <CopyToClipboardButton variant="ghost" onCopy={() => handleCopyClick(key)} svgSize={{ w: 20, h: 20 }} />
-        </div>
-        <div className="ml-auto">
-          <DataDelete selectedDataKey={selectedDataKeyTypePair[0]} onDataKeyChange={onDataKeyChange} />
+        <div className="flex w-full items-center gap-2">
+          <p className="max-w-[540px] truncate text-left text-lg font-semibold text-[#000000]">{key}</p>
+          <RedisTypeTag isFull value={keyType} className="pointer-events-none" />
+          <CopyToClipboardButton variant="ghost" onCopy={() => handleCopyClick(key)} svgSize={{ w: 22, h: 22 }} />
+          <div className="ml-auto">
+            <DataDelete selectedDataKey={selectedDataKeyTypePair[0]} onDataKeyChange={onDataKeyChange} />
+          </div>
         </div>
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />

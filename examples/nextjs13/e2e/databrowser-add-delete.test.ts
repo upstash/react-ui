@@ -21,7 +21,5 @@ test("should add new data and delete it succesfully", async ({ page }) => {
   const missingDataElement = page.locator('[data-testid="missing-data"]');
 
   const missingDataText = await missingDataElement.textContent();
-  expect(missingDataText).toBe(
-    "\"Oops! Data's playing hide and seek and it's winning! Try adding some data from CLI?\"",
-  );
+  expect(missingDataText).toBe("Select a record from the list");
 });
