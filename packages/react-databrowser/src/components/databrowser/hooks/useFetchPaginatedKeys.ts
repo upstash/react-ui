@@ -1,7 +1,7 @@
 import { partition, zip } from "@/lib/utils";
 import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
 
@@ -15,7 +15,11 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
 
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
+  const [lastCursor, setLastCursor] = useState(INITIAL_CURSOR_NUM);
+  const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
+  const compositeKey = `${dataType}-${debouncedSearchTerm}`;
+  const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
@@ -27,7 +31,6 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     },
     [currentIndex],
   );
-
   //If user doesn't pass any asterisk we add two of them to end and start
   const handleSearch = (query: string) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
@@ -38,52 +41,63 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setSearchTerm(SCAN_MATCH_ALL);
   };
 
-  const { error, data, isLoading } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, dataType],
+  const { error, isLoading } = useQuery({
+    queryKey: ["useFetchPaginatedKeys", compositeKey, page],
     queryFn: async () => {
       const rePipeline = redis.pipeline();
 
-      let cursor = null;
-      const hehe: [string, RedisDataTypeUnion][][] = [];
+      const pageData: [string, RedisDataTypeUnion][] = [];
+      let cursor = lastCursor;
 
-      while (cursor !== 0) {
-        const [nextCursor, keys] = await redis.scan(cursor ?? 0, {
+      while (true) {
+        const [nextCursor, keys] = await redis.scan(cursor, {
           count: DEFAULT_FETCH_COUNT,
           match: debouncedSearchTerm,
           type: dataType,
         });
-        cursor = nextCursor;
-
         // Feed pipeline with keys
         for (const key of keys) {
           rePipeline.type(key);
         }
 
-        // Required to transform hashes into actual keys
-        // Example value: [["foo", "string"],["bar", "json"]]
         const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
         const zippedKeyValues: [string, RedisDataTypeUnion][] = zip(keys, types);
-        hehe.push(zippedKeyValues);
+        pageData.push(...zippedKeyValues);
+
+        // If page is full or cursor reached 0, stop fetching
+        if (pageData.length >= 10 || nextCursor === 0) {
+          setLastCursor(nextCursor);
+          break;
+        }
+
+        cursor = nextCursor;
       }
-      const transformedData = partition(
-        hehe.flatMap((x) => x),
-        10,
-      );
-      return transformedData;
+
+      setData((prevState) => ({
+        ...prevState,
+        [compositeKey]: [...(prevState[compositeKey] || []), ...partition(pageData, 10)],
+      }));
     },
   });
+
+  useEffect(() => {
+    const isCurrentAtLastItem = currentIndex === (data?.[compositeKey]?.length ?? 0) - 1;
+    if (isCurrentAtLastItem && lastCursor !== 0) {
+      setPage((prevState) => prevState + 1);
+    }
+  }, [currentIndex, compositeKey, lastCursor, data]);
 
   return {
     isLoading,
     error,
-    data: data?.[currentIndex],
+    data: data?.[compositeKey]?.[currentIndex],
     handlePageChange,
     handleSearch,
     reset,
     searchTerm,
     direction: {
       prevNotAllowed: currentIndex === 0,
-      nextNotAllowed: currentIndex === (data?.length ?? 0) - 1,
+      nextNotAllowed: currentIndex === (data?.[compositeKey]?.length ?? 0) - 1,
     },
   };
 };
