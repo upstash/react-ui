@@ -16,6 +16,16 @@ export function zip<T, U>(array1: T[], array2: U[]): Array<[T, U]> {
   return result;
 }
 
+export function partition<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+
+  return result;
+}
+
 type ColorOptions = {
   keyColor?: string;
   numberColor?: string;
