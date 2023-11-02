@@ -59,7 +59,9 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           </div>
           <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
           <div className="w-full py-[8px]">
-            {isLoading || error ? (
+            {error ? (
+              <SidebarMissingData />
+            ) : isLoading ? (
               <LoadingSkeleton />
             ) : dataKeys?.length ? (
               <DataKeyButtons dataKeys={dataKeys} selectedDataKey={selectedDataKey} onDataKeyChange={onDataKeyChange} />
