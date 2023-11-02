@@ -17,10 +17,10 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
         <TableHeader>
           <TableRow className="pointer-events-none border-none">
             {tableHeaders[0] !== null ? (
-              <TableHead className="px-2 text-[11px] font-medium text-[#00000066]">{tableHeaders[0]}</TableHead>
+              <TableHead className="px-3 text-[11px] font-medium text-[#00000066]">{tableHeaders[0]}</TableHead>
             ) : null}
             {tableHeaders[1] !== null ? (
-              <TableHead className="px-2 text-[11px] font-medium text-[#00000066]">{tableHeaders[1]}</TableHead>
+              <TableHead className="px-3 text-[11px] font-medium text-[#00000066]">{tableHeaders[1]}</TableHead>
             ) : null}
           </TableRow>
         </TableHeader>
@@ -34,17 +34,17 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
             >
               {item.value !== null ? (
                 <TableCell
-                  className={cn("h-[38px] w-20 border-none text-[14px] font-normal", {
+                  className={cn("h-[38px] w-32 border-none px-3 py-[10px] text-[14px] font-normal", {
                     "rounded-l bg-[#00000008]": idx % 2 === 0,
                   })}
                 >
-                  <p className="w-20 overflow-hidden truncate whitespace-nowrap">{item.value}</p>
+                  <p className="w-32 overflow-hidden truncate whitespace-nowrap ">{item.value}</p>
                 </TableCell>
               ) : null}
               {item.content !== null ? (
                 <TableCell
                   className={cn(
-                    "relative flex h-[38px] items-center overflow-hidden truncate whitespace-break-spaces border-none text-[14px] font-normal",
+                    "relative flex h-[38px] items-center overflow-hidden truncate whitespace-break-spaces border-none px-3 py-[10px]  text-[14px] font-normal",
                     {
                       "rounded-r bg-[#00000008]": idx % 2 === 0,
                       "rounded-l": item.value === null,
