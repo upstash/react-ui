@@ -85,7 +85,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 rounded-md bg-[#13B981] hover:bg-[#13B981]/90"
+            className="h-8 w-8 border-none bg-[#13B981] hover:bg-[#13B981]/90"
             data-testid="add-new-data"
           >
             <PlusIcon className="h-4 w-4 text-white" />

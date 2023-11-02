@@ -44,7 +44,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
               <Input
                 type="text"
                 placeholder="Search"
-                className="h-[32px] w-[140px] items-center justify-center rounded-none rounded-l-lg border-r-0 border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66]"
+                className="h-[32px] w-[140px] items-center justify-center rounded-none rounded-l-lg border-r-0 border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] focus-visible:ring-0"
                 onChange={(e) => handleSearch(e.target.value)}
                 value={searchTerm.replaceAll("*", "")}
               />
