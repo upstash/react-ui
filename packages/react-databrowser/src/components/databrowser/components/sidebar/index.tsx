@@ -4,13 +4,13 @@ import { Input } from "@/components/ui/input";
 import { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { AddDataDialog } from "../add-data/add-data-dialog";
 import { DataKeyButtons } from "./data-key-buttons";
 import { DataTypeSelector } from "./data-type-selector";
+import { DisplayDbSize } from "./display-db-size";
 import { ReloadButton } from "./reload-button";
 import { SidebarMissingData } from "./sidebar-missing-data";
 import { LoadingSkeleton } from "./skeleton-buttons";
-import { AddDataDialog } from "../add-data/add-data-dialog";
-import { DisplayDbSize } from "./display-db-size";
 
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;

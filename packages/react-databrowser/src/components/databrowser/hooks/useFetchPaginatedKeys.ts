@@ -12,13 +12,13 @@ const DEBOUNCE_TIME = 250;
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const { redis } = useDatabrowser();
-
+  const allTypesIncluded = dataType === "All Types" ? undefined : dataType;
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
   const [lastCursor, setLastCursor] = useState(INITIAL_CURSOR_NUM);
   const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
-  const compositeKey = `${dataType}-${debouncedSearchTerm}`;
+  const compositeKey = `${allTypesIncluded}-${debouncedSearchTerm}`;
   const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
 
   const handlePageChange = useCallback(
@@ -53,7 +53,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
         const [nextCursor, keys] = await redis.scan(cursor, {
           count: DEFAULT_FETCH_COUNT,
           match: debouncedSearchTerm,
-          type: dataType,
+          type: allTypesIncluded,
         });
         // Feed pipeline with keys
         for (const key of keys) {
