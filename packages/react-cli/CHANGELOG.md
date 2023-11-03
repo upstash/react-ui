@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.11
+
+### Minor Changes
+
+- 4d8d0a6: Disabling of sourcemap and allowing minimize in cli
+
 ## 1.0.10
 
 ### Patch Changes
