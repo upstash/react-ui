@@ -6,7 +6,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
-    "fmt": "pnpm biome format . --write && pnpm biome check . --apply-unsafe ",
+    "fmt": "pnpm biome check . --apply-unsafe ",
     "prepare": "husky install",
     "bump-versions": "pnpm changeset version && pnpm install"
   },

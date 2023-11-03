@@ -30,11 +30,5 @@
     },
     "ignore": ["node_modules", ".next", "dist", ".turbo"]
   },
-  "formatter": {
-    "indentStyle": "space",
-    "indentSize": 2,
-    "enabled": true,
-    "lineWidth": 120,
-    "ignore": ["node_modules", ".next", "dist", ".turbo"]
-  }
+  "formatter": { "enabled": false }
 }

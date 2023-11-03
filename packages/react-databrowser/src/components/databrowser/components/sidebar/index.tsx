@@ -1,12 +1,13 @@
 import { useFetchPaginatedKeys } from "@/components/databrowser/hooks/useFetchPaginatedKeys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { RedisDataTypeUnion } from "@/types";
-import { ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { AddDataDialog } from "../add-data/add-data-dialog";
 import { DataKeyButtons } from "./data-key-buttons";
 import { DataTypeSelector } from "./data-type-selector";
+import { DisplayDbSize } from "./display-db-size";
 import { ReloadButton } from "./reload-button";
 import { SidebarMissingData } from "./sidebar-missing-data";
 import { LoadingSkeleton } from "./skeleton-buttons";
@@ -35,28 +36,32 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="min-h-[670px] flex-1 space-y-4 overflow-y-auto  py-4">
-        <div className="px-3 py-2">
-          <div className="mb-3 flex items-center space-x-1">
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute bottom-0 left-3 top-0 my-auto h-5 w-5 text-gray-500 " />
+    <div className="flex min-h-[543px] flex-col">
+      <div className="flex-1 overflow-y-auto pt-[12px]">
+        <div className="px-3">
+          <div className="flex items-center gap-2 drop-shadow-sm">
+            <div className="flex">
               <Input
                 type="text"
                 placeholder="Search"
-                className="inline-flex w-[180px] items-center justify-center rounded pl-10 text-[13px] leading-none"
+                className="h-[32px] w-[140px] items-center justify-center rounded-none rounded-l-lg border-r-0 border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] focus-visible:ring-0"
                 onChange={(e) => handleSearch(e.target.value)}
                 value={searchTerm.replaceAll("*", "")}
               />
+              <DataTypeSelector
+                onDataTypeChange={handleDataTypeChange}
+                dataType={selectedDataType}
+                key={selectedDataType}
+              />
             </div>
-            <DataTypeSelector
-              onDataTypeChange={handleDataTypeChange}
-              dataType={selectedDataType}
-              key={selectedDataType}
-            />
+            <ReloadButton onDataTypeChange={handleDataTypeChange} />
+            <AddDataDialog onNewDataAdd={onDataKeyChange} />
           </div>
-          <div className="w-full space-y-1">
-            {isLoading || error ? (
+          <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
+          <div className="w-full py-[8px]">
+            {error ? (
+              <SidebarMissingData />
+            ) : isLoading ? (
               <LoadingSkeleton />
             ) : dataKeys?.length ? (
               <DataKeyButtons dataKeys={dataKeys} selectedDataKey={selectedDataKey} onDataKeyChange={onDataKeyChange} />
@@ -66,27 +71,29 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           </div>
         </div>
       </div>
-      <Separator />
-      <div className="px-3 py-4">
+      <div className="px-3 pb-4">
+        <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
         <div className="flex items-center gap-2">
-          <ReloadButton onDataTypeChange={handleDataTypeChange} />
+          <DisplayDbSize />
           <Button
             variant="outline"
             size="icon"
-            className="ml-auto h-8 w-8 disabled:bg-[#8080803d]"
+            className="ml-auto h-8 w-8 disabled:bg-[#0000000D]"
             disabled={direction.prevNotAllowed || isLoading}
             onClick={() => handlePageChange("prev")}
+            data-testid="sidebar-prev"
           >
-            <ArrowLeftIcon />
+            <ChevronLeftIcon width="20px" height="20px" />
           </Button>
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 disabled:bg-[#8080803d]"
+            className="h-8 w-8 disabled:bg-[#0000000D]"
             disabled={direction.nextNotAllowed || isLoading}
             onClick={() => handlePageChange("next")}
+            data-testid="sidebar-next"
           >
-            <ArrowRightIcon />
+            <ChevronRightIcon width="20px" height="20px" />
           </Button>
         </div>
       </div>

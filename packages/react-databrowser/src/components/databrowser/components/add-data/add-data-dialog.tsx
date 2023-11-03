@@ -24,7 +24,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { RedisDataTypeUnion } from "@/types";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 import { FormEvent, useState } from "react";
 
@@ -81,10 +81,16 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="ml-auto h-8 border-dashed">
-          <PlusCircledIcon className="mr-2 h-4 w-4" />
-          Add
-        </Button>
+        <div>
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8 border-none bg-[#13B981] hover:bg-[#13B981]/90"
+            data-testid="add-new-data"
+          >
+            <PlusIcon className="h-4 w-4 text-white" />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -155,7 +161,11 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={addData.isLoading}>
+            <Button
+              type="submit"
+              disabled={addData.isLoading}
+              className="bg-[#16A34A] text-white hover:bg-[#16A34A]/90"
+            >
               <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
                 Save changes
               </Spinner>

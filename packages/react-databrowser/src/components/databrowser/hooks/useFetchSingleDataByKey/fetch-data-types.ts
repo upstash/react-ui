@@ -20,7 +20,11 @@ type FetchDataParams = {
 export const fetchDataOfType = {
   string: async ({ key, redis }: FetchDataParams) => {
     const content = await redis.get<string>(key);
-    return { content, type: "string" } satisfies { content: string | null; type: "string" };
+    return { content, type: "string", memory: roughSizeOfObject(content) } satisfies {
+      content: string | null;
+      type: "string";
+      memory: number;
+    };
   },
   zset: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
     const [nextCursor, zrangeValue] = await redis.zscan(key, cursor as number, {
@@ -29,7 +33,12 @@ export const fetchDataOfType = {
     if (index === cursorStack.current.length - 1) {
       cursorStack.current.push(nextCursor);
     }
-    return { content: transformArray(zrangeValue), type: "zset" } satisfies { content: ContentValue[]; type: "zset" };
+    const content = transformArray(zrangeValue);
+    return { content, type: "zset", memory: roughSizeOfObject(content) } satisfies {
+      content: ContentValue[];
+      type: "zset";
+      memory: number;
+    };
   },
   hash: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
     const [nextCursor, hashValues] = await redis.hscan(key, cursor as number, {
@@ -38,7 +47,12 @@ export const fetchDataOfType = {
     if (index === cursorStack.current.length - 1) {
       cursorStack.current.push(nextCursor);
     }
-    return { content: transformArray(hashValues), type: "hash" } satisfies { content: ContentValue[]; type: "hash" };
+    const content = transformArray(hashValues);
+    return { content: content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
+      content: ContentValue[];
+      type: "hash";
+      memory: number;
+    };
   },
   set: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
     const [nextCursor, setValues] = await redis.sscan(key, cursor as number, {
@@ -47,13 +61,16 @@ export const fetchDataOfType = {
     if (index === cursorStack.current.length - 1) {
       cursorStack.current.push(nextCursor);
     }
+    const content = setValues.map((item, _) => ({
+      value: null,
+      content: toJsonStringifiable(item, 0),
+    }));
+
     return {
-      content: setValues.map((item, _) => ({
-        value: null,
-        content: toJsonStringifiable(item, 0),
-      })),
+      content,
+      memory: roughSizeOfObject(content),
       type: "set",
-    } satisfies { content: ContentValue[]; type: "set" };
+    } satisfies { content: ContentValue[]; type: "set"; memory: number };
   },
   list: async ({ key, redis, index, listLength }: FetchDataParams) => {
     if (listLength && listLength.current === INITIAL_CURSOR_NUM) {
@@ -62,14 +79,16 @@ export const fetchDataOfType = {
     const start = index * DATA_PER_PAGE;
     const end = (index + 1) * DATA_PER_PAGE - 1;
     const list = await redis.lrange(key, start, end);
+    const content = list.map((item, idx) => {
+      const overallIdx = start + idx;
+      return { value: overallIdx, content: toJsonStringifiable(item, 0) };
+    });
+
     return {
-      content: list.map((item, idx) => {
-        const overallIdx = start + idx + 1;
-        const displayIdx = String(overallIdx).padStart(2, "0"); // '01', '02', ..., '50'
-        return { value: displayIdx, content: toJsonStringifiable(item, 0) };
-      }),
+      content,
       type: "list",
-    } satisfies { content: ContentValue[]; type: "list" };
+      memory: roughSizeOfObject(content),
+    } satisfies { content: ContentValue[]; type: "list"; memory: number };
   },
   stream: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
     const typedCursor = cursor as string | typeof INITIAL_CURSOR_NUM;
@@ -84,10 +103,32 @@ export const fetchDataOfType = {
       );
     }
 
-    return { content: transformedData, type: "stream" } satisfies { content: ContentValue[]; type: "stream" };
+    return { content: transformedData, type: "stream", memory: roughSizeOfObject(transformedData) } satisfies {
+      content: ContentValue[];
+      type: "stream";
+      memory: number;
+    };
   },
   json: async ({ key, redis }: FetchDataParams) => {
     const result = await redis.eval("return redis.call('JSON.GET', KEYS[1])", [key], []);
-    return { content: result as JSON, type: "json" } satisfies { content: JSON; type: "json" };
+    return { content: result as JSON, type: "json", memory: roughSizeOfObject(result) } satisfies {
+      content: JSON;
+      type: "json";
+      memory: number;
+    };
   },
+};
+
+const roughSizeOfObject = (obj: unknown) => {
+  let str = null;
+  if (typeof obj === "string") {
+    // If obj is a string, then use it
+    str = obj;
+  } else {
+    // Else, make obj into a string
+    str = JSON.stringify(obj);
+  }
+  // Get the length of the Uint8Array
+  const bytes = new TextEncoder().encode(str).length;
+  return bytes;
 };

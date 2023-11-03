@@ -11,30 +11,5 @@ export default function Home() {
     return <div>UPSTASH_REDIS_REST_TOKEN not set </div>;
   }
 
-  return (
-    <main
-      style={{
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        background: "rgb(250,250,250)",
-      }}
-    >
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          maxHeight: "32rem",
-          maxWidth: "48rem",
-          borderRadius: "0.5rem",
-          overflow: "hidden",
-        }}
-      >
-        <RedisCli url={upstashRedisRestUrl} token={upstashRedisRestToken} welcome={<div>Custom</div>} />
-      </div>
-    </main>
-  );
+  return <RedisCli url={upstashRedisRestUrl} token={upstashRedisRestToken} welcome={<div>Custom</div>} />;
 }

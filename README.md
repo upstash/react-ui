@@ -36,6 +36,13 @@ pnpm install
 pnpm build
 ```
 
+#### Run Test
+
+```bash
+cd examples/nextjs
+npx playwright install
+pnpm test
+```
 
 
 ## Release

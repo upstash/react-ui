@@ -1,0 +1,24 @@
+.nav-container {
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px;
+  background-color: #F5F5F5;
+  margin-bottom: 20px;
+  border-radius: 0 !important;;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  color: black;
+  text-decoration: none;
+  border-radius: 4px;
+  background-color:#cfceced0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #555;
+  color: #eee;
+}
