@@ -10,7 +10,7 @@
 
 - Updated dependencies [4d8d0a6]
   - @upstash/react-databrowser@0.2.0
-  - @upstash/react-cli@1.1.0
+  - @upstash/react-cli@1.0.11
 
 ## 0.1.27
 
