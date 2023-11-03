@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.1.0
+
+### Minor Changes
+
+- 4d8d0a6: Style changes to databrowser and disabling of sourcemap and allowing minimize in cli
+
 ## 1.0.10
 
 ### Patch Changes

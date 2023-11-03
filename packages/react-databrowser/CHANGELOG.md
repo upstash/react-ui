@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.0
+
+### Minor Changes
+
+- 4d8d0a6: Style changes to databrowser and disabling of sourcemap and allowing minimize in cli
+
 ## 0.1.1
 
 ### Patch Changes

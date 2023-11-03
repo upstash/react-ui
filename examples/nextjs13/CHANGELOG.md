@@ -1,5 +1,17 @@
 # nextjs13
 
+## 0.2.0
+
+### Minor Changes
+
+- 4d8d0a6: Style changes to databrowser and disabling of sourcemap and allowing minimize in cli
+
+### Patch Changes
+
+- Updated dependencies [4d8d0a6]
+  - @upstash/react-databrowser@0.2.0
+  - @upstash/react-cli@1.1.0
+
 ## 0.1.27
 
 ### Patch Changes
