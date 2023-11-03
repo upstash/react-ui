@@ -5,7 +5,6 @@ import formatHighlight from "@/lib/utils";
 
 export const DisplayScrollarea = ({ data }: { data: string | JSON | null }) => {
   const stringifiable = toJsonStringifiable(data);
-  console.log({ data });
 
   return (
     <ScrollArea className="flex h-[425px] shrink-0 items-center justify-center overflow-x-auto rounded-md p-3 ">
