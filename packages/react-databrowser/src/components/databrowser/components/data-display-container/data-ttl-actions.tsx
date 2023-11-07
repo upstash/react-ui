@@ -25,10 +25,10 @@ export const DataTTLActions = ({ selectedDataKey }: Props) => {
           <path
             d="M4 6L8 10L12 6"
             stroke="black"
-            stroke-opacity="0.6"
-            stroke-width="1.4"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeOpacity="0.6"
+            strokeWidth="1.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
         </svg>
       </div>

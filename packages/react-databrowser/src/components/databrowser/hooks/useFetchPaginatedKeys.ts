@@ -1,9 +1,10 @@
 import { partition, zip } from "@/lib/utils";
 import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
+import { queryClient } from "@/lib/clients";
 
 export const DEFAULT_FETCH_COUNT = 100;
 const INITIAL_CURSOR_NUM = 0;
@@ -13,12 +14,14 @@ const DEBOUNCE_TIME = 250;
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const { redis } = useDatabrowser();
   const allTypesIncluded = dataType === "All Types" ? undefined : dataType;
+
+  const [timestamp, setTimeStamp] = useState(Date.now());
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
   const [lastCursor, setLastCursor] = useState(INITIAL_CURSOR_NUM);
   const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
-  const compositeKey = `${allTypesIncluded}-${debouncedSearchTerm}`;
+  const compositeKey = `${allTypesIncluded}-${debouncedSearchTerm}-${timestamp}`;
   const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
 
   const handlePageChange = useCallback(
@@ -37,8 +40,14 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   };
 
   const reset = () => {
+    if (searchTerm !== SCAN_MATCH_ALL) {
+      setSearchTerm(SCAN_MATCH_ALL);
+    } else {
+      //Required for hard refresh, but only if search is not present or default
+      setTimeStamp(Date.now());
+    }
     setCurrentIndex(INITIAL_CURSOR_NUM);
-    setSearchTerm(SCAN_MATCH_ALL);
+    queryClient.invalidateQueries("useFetchDbSize");
   };
 
   const { error, isLoading } = useQuery({

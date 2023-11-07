@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { MinusCircledIcon } from "@radix-ui/react-icons";
+import { RedisDataTypeUnion } from "@/types";
 import { useDeleteKey } from "../../hooks/useDeleteKey";
 import { DeleteAlertDialog } from "./delete-alert-dialog";
-import { RedisDataTypeUnion } from "@/types";
 
 type Props = {
   selectedDataKey: string;
