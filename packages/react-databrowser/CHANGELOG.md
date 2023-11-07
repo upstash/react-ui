@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.1
+
+### Patch Changes
+
+- e3f2e38: Minor fixes for resetting states
+
 ## 0.2.0
 
 ### Minor Changes
