@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddDataDialog } from "../add-data/add-data-dialog";
 import { DataKeyButtons } from "./data-key-buttons";
 import { DataTypeSelector } from "./data-type-selector";
@@ -35,6 +35,18 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     setSelectedDataType(dataType);
   };
 
+  const handleDataAdd = (dataKey?: [string, RedisDataTypeUnion]) => {
+    onDataKeyChange(dataKey);
+    reset();
+  };
+
+  //Reset after delete
+  useEffect(() => {
+    if (!selectedDataKey) {
+      reset();
+    }
+  }, [selectedDataKey]);
+
   return (
     <div className="flex min-h-[543px] flex-col">
       <div className="flex-1 overflow-y-auto pt-[12px]">
@@ -55,7 +67,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
               />
             </div>
             <ReloadButton onDataTypeChange={handleDataTypeChange} />
-            <AddDataDialog onNewDataAdd={onDataKeyChange} />
+            <AddDataDialog onNewDataAdd={handleDataAdd} />
           </div>
           <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
           <div className="w-full py-[8px]">

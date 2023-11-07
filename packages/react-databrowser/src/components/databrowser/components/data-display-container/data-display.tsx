@@ -20,6 +20,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
   const isLoadingOrError = isLoading || error;
+
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4 ">

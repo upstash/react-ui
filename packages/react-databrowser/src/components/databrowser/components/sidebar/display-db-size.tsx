@@ -1,6 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDatabrowser } from "@/store";
-import React from "react";
 import { useQuery } from "react-query";
 
 export const DisplayDbSize = () => {

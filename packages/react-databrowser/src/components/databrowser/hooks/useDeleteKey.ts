@@ -10,9 +10,11 @@ export const useDeleteKey = () => {
       if (!dataKey) {
         throw new Error("Key is missing!");
       }
+
       return Boolean(await redis.del(dataKey));
     },
     { onSuccess: () => queryClient.invalidateQueries("useFetchPaginatedKeys") },
   );
+
   return deleteKey;
 };
