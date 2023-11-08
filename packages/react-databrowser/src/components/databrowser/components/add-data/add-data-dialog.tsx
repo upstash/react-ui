@@ -161,16 +161,15 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
+            <button
               type="submit"
               disabled={addData.isLoading}
-              className="bg-[#16A34A] text-white hover:bg-[#16A34A]/90 hover:text-white"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-neutral-200 bg-[#16A34A] px-4 py-2 text-sm font-medium text-white ring-offset-white transition-colors hover:bg-[#16A34A]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
               <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
                 Save changes
               </Spinner>
-            </Button>
+            </button>
           </DialogFooter>
         </form>
       </DialogContent>

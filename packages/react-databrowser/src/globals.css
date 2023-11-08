@@ -6,8 +6,4 @@
   .ttl-with-gray-bg {
     @apply flex h-[25px] w-[120px] items-center justify-center gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099];
   }
-
-  .btn-save-changes {
-    @apply bg-[#16A34A] text-white hover:bg-[#16A34A]/90;
-  }
 }
