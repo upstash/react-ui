@@ -47,6 +47,7 @@ export const fetchDataOfType = {
     if (index === cursorStack.current.length - 1) {
       cursorStack.current.push(nextCursor);
     }
+
     const content = transformArray(hashValues);
     return { content: content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
       content: ContentValue[];
