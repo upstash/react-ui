@@ -34,7 +34,7 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
             >
               {item.value !== null ? (
                 <TableCell
-                  className={cn("h-[38px] w-32 border-none px-3 py-[10px] text-[14px] font-normal", {
+                  className={cn("h-[38px] w-32 border-none px-3 text-[14px] font-normal", {
                     "rounded-l bg-[#00000008]": idx % 2 === 0,
                   })}
                 >
@@ -44,7 +44,7 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
               {item.content !== null ? (
                 <TableCell
                   className={cn(
-                    "relative flex h-[38px] items-center overflow-hidden truncate whitespace-break-spaces border-none px-3 py-[10px]  text-[14px] font-normal",
+                    "relative flex h-[38px] items-center overflow-hidden truncate whitespace-break-spaces border-none px-3  text-[14px] font-normal",
                     {
                       "rounded-r bg-[#00000008]": idx % 2 === 0,
                       "rounded-l": item.value === null,

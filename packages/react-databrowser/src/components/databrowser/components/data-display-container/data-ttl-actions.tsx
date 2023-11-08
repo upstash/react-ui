@@ -18,7 +18,7 @@ export const DataTTLActions = ({ selectedDataKey }: Props) => {
 
   return (
     <TTLPopover TTL={TTLData} dataKey={selectedDataKey}>
-      <div className="flex h-[25px] w-[120px] items-center justify-center gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
+      <div className="ttl-with-gray-bg">
         <span>TTL:</span>{" "}
         {isTTLLoading ? <Skeleton className="h-[20px] transition-all" /> : <span>{handleDisplayTTL()}</span>}
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
