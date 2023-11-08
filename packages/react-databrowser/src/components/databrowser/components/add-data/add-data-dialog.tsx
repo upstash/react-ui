@@ -161,7 +161,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <button type="submit" disabled={addData.isLoading} className="save-changes-btn">
+            <button disabled={addData.isLoading} className="save-changes-btn">
               <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
                 Save changes
               </Spinner>

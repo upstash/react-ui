@@ -72,7 +72,9 @@ export function TTLPopover({ children, TTL, dataKey }: PropsWithChildren<{ TTL?:
   };
   return (
     <Popover onOpenChange={(isOpen) => handleUpdateTTL(!isOpen, newTTL)}>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger asChild>
+        <button>{children}</button>
+      </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">

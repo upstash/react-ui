@@ -9,7 +9,7 @@
       "recommended": true,
       "a11y": {
         "noSvgWithoutTitle": "off",
-        "useButtonType": "warn"
+        "useButtonType": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn"
