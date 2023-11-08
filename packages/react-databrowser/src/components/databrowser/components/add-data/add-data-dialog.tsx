@@ -94,7 +94,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Add data</DialogTitle>
+          <DialogTitle>Insert</DialogTitle>
           <DialogDescription asChild>
             <div>
               <span>Data will be added as a</span>{" "}
