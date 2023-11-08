@@ -52,7 +52,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         <MissingDataDisplay />
       ) : null}
       <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
-      <div className="flex w-full px-4">
+      <div className="flex w-full items-center px-4">
         <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} />
         <div className="ml-2  flex h-[25px] items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
           Memory: ~{data?.memory} bytes

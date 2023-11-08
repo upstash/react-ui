@@ -92,13 +92,14 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle>Add data</DialogTitle>
           <DialogDescription asChild>
             <div>
-              <span>Data will be added as a</span> <RedisTypeTag value="string" isFull />. But, you can directly pass a{" "}
-              <RedisTypeTag value="json" isFull /> object to the value.
+              <span>Data will be added as a</span>{" "}
+              <RedisTypeTag className="pointer-events-none" value="string" isFull />. But, you can directly pass a{" "}
+              <RedisTypeTag value="json" isFull className="pointer-events-none" /> object to the value.
             </div>
           </DialogDescription>
         </DialogHeader>
@@ -141,11 +142,11 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             <div className="grid grid-cols-4 items-center gap-4">
               <Select name="exp-unit">
                 <SelectTrigger className="inline-flex h-10 w-full min-w-[90px] items-center justify-center gap-[5px] rounded border border-neutral-200 bg-white px-[15px] py-2 text-[13px] leading-none ring-offset-white">
-                  <SelectValue placeholder="Type" />
+                  <SelectValue placeholder="Expires" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Expiry(s)</SelectLabel>
+                    <SelectLabel>Expires</SelectLabel>
                     {expUnit.map((dataType) => (
                       <SelectItem value={dataType} key={dataType}>
                         {dataType}
