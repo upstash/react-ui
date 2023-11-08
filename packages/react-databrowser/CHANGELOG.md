@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.6
+
+### Patch Changes
+
+- ab48ae0: Increase the size of add modal and disable hover of type tags
+
 ## 0.2.5
 
 ### Patch Changes
