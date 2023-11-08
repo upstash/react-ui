@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.3
+
+### Patch Changes
+
+- e136904: Use plain button assign all the classes manually
+
 ## 0.2.2
 
 ### Patch Changes
