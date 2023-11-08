@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.2
+
+### Patch Changes
+
+- 609ab32: Remove typeof check from transform method used for parsing hashes
+
 ## 0.2.1
 
 ### Patch Changes
