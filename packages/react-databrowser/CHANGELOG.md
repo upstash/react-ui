@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.4
+
+### Patch Changes
+
+- e1c748c: Move save changes long css to global
+
 ## 0.2.3
 
 ### Patch Changes
