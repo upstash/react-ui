@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.5
+
+### Patch Changes
+
+- 9e43697: Delete type attr from buttons
+
 ## 0.2.4
 
 ### Patch Changes
