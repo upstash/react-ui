@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.8
+
+### Patch Changes
+
+- b3a50ab: Fixed search and added ability to edit values for string and json
+
 ## 0.2.7
 
 ### Patch Changes
