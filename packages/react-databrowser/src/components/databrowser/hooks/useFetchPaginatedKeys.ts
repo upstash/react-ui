@@ -1,10 +1,10 @@
+import { queryClient } from "@/lib/clients";
 import { partition, zip } from "@/lib/utils";
 import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
-import { queryClient } from "@/lib/clients";
 
 export const DEFAULT_FETCH_COUNT = 100;
 const INITIAL_CURSOR_NUM = 0;
@@ -15,6 +15,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const { redis } = useDatabrowser();
   const allTypesIncluded = dataType === "All Types" ? undefined : dataType;
 
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [timestamp, setTimeStamp] = useState(Date.now());
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
@@ -45,6 +46,9 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     } else {
       //Required for hard refresh, but only if search is not present or default
       setTimeStamp(Date.now());
+    }
+    if (searchInputRef.current?.value) {
+      searchInputRef.current.value = "";
     }
     setCurrentIndex(INITIAL_CURSOR_NUM);
     queryClient.invalidateQueries("useFetchDbSize");
@@ -103,10 +107,10 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     handlePageChange,
     handleSearch,
     reset,
-    searchTerm,
     direction: {
       prevNotAllowed: currentIndex === 0,
       nextNotAllowed: currentIndex === (data?.[compositeKey]?.length ?? 0) - 1,
     },
+    searchInputRef,
   };
 };

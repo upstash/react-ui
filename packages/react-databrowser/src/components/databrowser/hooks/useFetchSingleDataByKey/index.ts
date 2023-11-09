@@ -51,7 +51,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     queryFn: async () => {
       const [key, dataType] = selectedDataKeyTypePair;
       if (Object.keys(fetchDataOfType).includes(dataType)) {
-        return fetchDataOfType[dataType]({
+        return fetchDataOfType[dataType as Exclude<RedisDataTypeUnion, "All Types">]({
           key,
           redis,
           cursor: cursorStack.current[currentIndex],

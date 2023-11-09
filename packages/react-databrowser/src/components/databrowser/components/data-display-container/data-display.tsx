@@ -20,7 +20,6 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
   const isLoadingOrError = isLoading || error;
-
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4 ">
@@ -37,7 +36,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       {isLoadingOrError ? (
         <Skeleton className="h-[425px] rounded-none shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] " />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
-        <DisplayScrollarea data={data.content} />
+        <DisplayScrollarea data={data.content} selectedDataKeyTypePair={selectedDataKeyTypePair} />
       ) : keyType === "zset" && data?.type === "zset" ? (
         <DataTable data={data.content} tableHeaders={["SCORE", "MEMBERS"]} />
       ) : keyType === "hash" && data?.type === "hash" ? (
