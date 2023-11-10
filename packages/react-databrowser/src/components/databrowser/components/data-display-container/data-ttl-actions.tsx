@@ -1,14 +1,13 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { useFetchTTLByKey } from "../../hooks/useFetchTTLBy";
 import { TTLPopover } from "./ttl-popover";
 
 type Props = {
   selectedDataKey: string;
+  TTLData?: number;
+  isTTLLoading: boolean;
 };
 
-export const DataTTLActions = ({ selectedDataKey }: Props) => {
-  const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(selectedDataKey);
-
+export const DataTTLActions = ({ selectedDataKey, TTLData, isTTLLoading }: Props) => {
   const handleDisplayTTL = () => {
     if (TTLData === -1) {
       return "Forever";
