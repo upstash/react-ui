@@ -1,6 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { generateRandomString } from "./utils";
 
-test("should add JSON data from cli then try to navigate on databrowser", async ({ page }) => {
+test("should scroll to bottom and update the line at the bottom", async ({ page }) => {
   await page.goto("http://localhost:3000/");
 
   // Inputting the command to delete the key, to ensure the test starts clean
@@ -33,13 +34,19 @@ test("should add JSON data from cli then try to navigate on databrowser", async 
   await page.getByRole("textbox").fill(`JSON.SET my_json_object $ '${JSON.stringify(jsonObject)}'`);
   await page.getByRole("textbox").press("Enter");
 
+  const randomString = generateRandomString();
   await page.goto("http://localhost:3000/databrowser");
-  await page.getByPlaceholder("Search").click();
-  await page.getByPlaceholder("Search").fill("my_json_object");
-  await page.getByRole("button", { name: "j my_json_object" }).click();
 
-  // Expect some data from the JSON object to be visible on the screen
-  await expect(page.locator(':text-matches("John Doe")')).toBeVisible();
-  await expect(page.locator(':text-matches("30")')).toBeVisible();
-  await expect(page.locator(':text-matches("Ford")')).toBeVisible();
+  await page.getByRole("button", { name: "j my_json_object" }).click();
+  await page.getByTestId("edit-items-in-place").click();
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+  await page
+    .getByText('{ "age": 30, "brand": "Impression of Acqua Di Gio", "cars": [ "BMW", "Fiat", "Fo')
+    .fill(
+      `{\n  "age": 30,\n  "brand": "${randomString}",\n  "cars": [\n    "BMW",\n    "Fiat",\n    "Ford"\n  ],\n  "category": "fragrances",\n  "description": "Mega Discount, Impression of A...",\n  "discountPercentage": 8.4,\n  "id": 11,\n  "images": [\n    "https://i.dummyjson.com/data/products/11/1.jpg",\n    "https://i.dummyjson.com/data/products/11/2.jpg",\n    "https://i.dummyjson.com/data/products/11/3.jpg",\n    "https://i.dummyjson.com/data/products/11/thumbnail.jpg"\n  ],\n  "name": "John Doe",\n  "price": 13,\n  "rating": 4.26,\n  "stock": 65,\n  "thumbnail": "${randomString}",\n  "title": "perfume Oil"\n}`,
+    );
+  await page.getByTestId("save-items").click();
+  await expect(page.getByText(randomString)).toHaveCount(2);
 });

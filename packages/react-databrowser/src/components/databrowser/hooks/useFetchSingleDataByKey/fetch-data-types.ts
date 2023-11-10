@@ -5,6 +5,7 @@ import {
   INITIAL_CURSOR_NUM,
   toJsonStringifiable,
   transformArray,
+  transformHash,
   transformStream,
 } from "./utils";
 
@@ -47,8 +48,7 @@ export const fetchDataOfType = {
     if (index === cursorStack.current.length - 1) {
       cursorStack.current.push(nextCursor);
     }
-
-    const content = transformArray(hashValues);
+    const content = transformHash(hashValues);
     return { content: content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
       content: ContentValue[];
       type: "hash";

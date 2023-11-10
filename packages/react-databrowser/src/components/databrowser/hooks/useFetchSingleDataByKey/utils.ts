@@ -1,3 +1,5 @@
+import { partition } from "@/lib/utils";
+
 export const INITIAL_CURSOR_NUM = 0;
 export const DATA_PER_PAGE = 10;
 /**
@@ -52,6 +54,14 @@ export function transformArray(inputArray: (string | number)[]): ContentValue[] 
     }
     return acc;
   }, []);
+}
+
+export function transformHash(inputArray: (string | number)[]): ContentValue[] {
+  if (inputArray.length % 2 !== 0) {
+    throw new Error("The input array length must be even.");
+  }
+  const zippedHash = partition(inputArray, 2);
+  return zippedHash.map((item) => ({ value: item[0], content: item[1] }));
 }
 
 export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
