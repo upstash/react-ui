@@ -49,7 +49,6 @@ export function transformArray(inputArray: (string | number)[]): ContentValue[] 
   }
 
   return inputArray.reduce<ContentValue[]>((acc, curr, idx, src) => {
-    console.log({ curr, src });
     if (idx % 2 === 0) {
       acc.push({ content: toJsonStringifiable(curr, 0), value: src[idx + 1] });
     }
