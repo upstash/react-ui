@@ -27,7 +27,7 @@ test("should test reset button with pagination, search and data type selection",
   await page.getByRole("textbox").press("Enter");
   await page.waitForTimeout(500); // TODO: Consider using a more reliable wait condition
 
-  await page.goto("http://localhost:5173/");
+  await page.goto("http://localhost:3000/databrowser");
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("*long");
   await page.getByText("Data on a break").click();
