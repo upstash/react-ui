@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.9
+
+### Patch Changes
+
+- b36a874: Fixed hash set ordering and made data update easier
+
 ## 0.2.8
 
 ### Patch Changes
