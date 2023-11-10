@@ -61,7 +61,7 @@ export function transformHash(inputArray: (string | number)[]): ContentValue[] {
     throw new Error("The input array length must be even.");
   }
   const zippedHash = partition(inputArray, 2);
-  return zippedHash.map((item) => ({ value: item[0], content: item[1] }));
+  return zippedHash.map((item) => ({ value: item[0], content: toJsonStringifiable(item[1], 0) }));
 }
 
 export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
