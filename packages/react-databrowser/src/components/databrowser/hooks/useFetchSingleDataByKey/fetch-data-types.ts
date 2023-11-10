@@ -49,7 +49,7 @@ export const fetchDataOfType = {
       cursorStack.current.push(nextCursor);
     }
     const content = transformHash(hashValues);
-    return { content: content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
+    return { content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
       content: ContentValue[];
       type: "hash";
       memory: number;
