@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.2.10
+
+### Patch Changes
+
+- b077fd7: Fix HSET parsing issue
+
 ## 0.2.9
 
 ### Patch Changes
