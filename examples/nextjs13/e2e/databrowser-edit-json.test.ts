@@ -43,7 +43,7 @@ test("should scroll to bottom and update the line at the bottom", async ({ page 
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
 
   await page
-    .getByText('{ "age": 30, "brand": "Impression of Acqua Di Gio", "cars": [ "BMW", "Fiat", "Fo')
+    .getByLabel("Editor content;Press Alt+F1 for Accessibility Options.")
     .fill(
       `{\n  "age": 30,\n  "brand": "${randomString}",\n  "cars": [\n    "BMW",\n    "Fiat",\n    "Ford"\n  ],\n  "category": "fragrances",\n  "description": "Mega Discount, Impression of A...",\n  "discountPercentage": 8.4,\n  "id": 11,\n  "images": [\n    "https://i.dummyjson.com/data/products/11/1.jpg",\n    "https://i.dummyjson.com/data/products/11/2.jpg",\n    "https://i.dummyjson.com/data/products/11/3.jpg",\n    "https://i.dummyjson.com/data/products/11/thumbnail.jpg"\n  ],\n  "name": "John Doe",\n  "price": 13,\n  "rating": 4.26,\n  "stock": 65,\n  "thumbnail": "${randomString}",\n  "title": "perfume Oil"\n}`,
     );

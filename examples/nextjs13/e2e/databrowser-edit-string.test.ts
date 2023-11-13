@@ -20,7 +20,7 @@ test("test", async ({ page }) => {
   await page.goto("http://localhost:3000/databrowser");
   await page.getByRole("button", { name: "s my_string" }).click();
   await page.getByTestId("edit-items-in-place").click();
-  await page.getByText("Hello, this is a string!").fill(`"${randomString}"`);
+  await page.getByLabel("Editor content;Press Alt+F1 for Accessibility Options.").fill(`"${randomString}"`);
   await page.getByTestId("save-items").click();
 
   await page.getByText(`${randomString}`).click();

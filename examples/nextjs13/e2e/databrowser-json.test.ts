@@ -10,7 +10,7 @@ test("should add JSON data from cli then try to navigate on databrowser", async 
   await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
   // Inputting the JSON.SET command to set a JSON object
   const jsonObject = {
-    name: "John Doe",
+    name: "JohnDoe",
     age: 30,
     cars: ["Ford", "BMW", "Fiat"],
     id: 11,
@@ -39,7 +39,7 @@ test("should add JSON data from cli then try to navigate on databrowser", async 
   await page.getByRole("button", { name: "j my_json_object" }).click();
 
   // Expect some data from the JSON object to be visible on the screen
-  await expect(page.locator(':text-matches("John Doe")')).toBeVisible();
+  await expect(page.locator(':text-matches("JohnDoe")')).toBeVisible();
   await expect(page.locator(':text-matches("30")')).toBeVisible();
   await expect(page.locator(':text-matches("Ford")')).toBeVisible();
 });

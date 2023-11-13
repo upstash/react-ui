@@ -61,7 +61,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                 onFocus={() => setOnInputFocus(true)}
                 onBlur={() => setOnInputFocus(false)}
                 className={cn(
-                  "h-[32px] w-[140px] items-center justify-center border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] transition-all duration-500 ease-in-out focus-visible:ring-0 ",
+                  "h-[32px] w-[140px] items-center justify-center border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] transition-[width] duration-300 ease-in-out focus-visible:ring-0 ",
                   onInputFocus && "rounded- w-[320px] focus-visible:ring-0",
                 )}
                 onChange={(e) => handleSearch(e.target.value)}
