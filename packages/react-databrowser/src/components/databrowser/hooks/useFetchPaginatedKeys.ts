@@ -25,7 +25,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
   const compositeKey = useMemo(
     () => `${allTypesIncluded}-${debouncedSearchTerm}-${timestamp}`,
-    [allTypesIncluded, debouncedSearchTerm],
+    [allTypesIncluded, debouncedSearchTerm, timestamp],
   );
 
   const handlePageChange = useCallback(
