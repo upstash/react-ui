@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.1
+
+### Patch Changes
+
+- 079369b: Add timestamp to key fetcher to always keep in sycn with up to date data
+
 ## 0.3.0
 
 ### Minor Changes
