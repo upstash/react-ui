@@ -1,4 +1,3 @@
-import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Editor } from "@monaco-editor/react";
@@ -14,53 +13,45 @@ export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: 
   return (
     <ScrollArea
       className={cn(
-        "flex h-[425px] shrink-0 items-center justify-center overflow-x-auto break-all p-3",
+        "relative flex h-[425px] shrink-0 items-center justify-center overflow-x-auto break-all p-3",
         isContentEditable && "rounded-none",
       )}
     >
       {stringifiable ? (
-        <>
-          {!isContentEditable && (
-            <div className="absolute right-3 top-3">
-              <CopyToClipboardButton onCopy={() => handleCopyClick(stringifiable)} svgSize={{ w: 22, h: 22 }} />
-            </div>
-          )}
-
-          <Editor
-            height={400}
-            className="editable"
-            defaultLanguage="json"
-            value={stringifiable}
-            onChange={onContentChange}
-            options={{
-              wordWrap: "on",
-              overviewRulerBorder: false,
-              overviewRulerLanes: 0,
-              formatOnPaste: true,
-              formatOnType: true,
-              readOnlyMessage: { value: "You must enable editing first!" },
-              readOnly: !isContentEditable,
-              renderWhitespace: "all",
-              smoothScrolling: true,
-              minimap: { enabled: false },
-              autoIndent: "full",
-              fontSize: 13,
-              cursorBlinking: "smooth",
-              parameterHints: { enabled: false },
-              glyphMargin: false,
-              folding: false,
-              lineDecorationsWidth: 5,
-              automaticLayout: true,
-              scrollBeyondLastLine: false,
-            }}
-          />
-        </>
+        <Editor
+          height={400}
+          className="editable"
+          defaultLanguage="json"
+          value={stringifiable}
+          onChange={onContentChange}
+          options={{
+            wordWrap: "on",
+            overviewRulerBorder: false,
+            overviewRulerLanes: 0,
+            formatOnPaste: true,
+            formatOnType: true,
+            readOnlyMessage: { value: "You must enable editing first!" },
+            readOnly: !isContentEditable,
+            renderWhitespace: "all",
+            smoothScrolling: true,
+            minimap: { enabled: false },
+            autoIndent: "full",
+            fontSize: 13,
+            cursorBlinking: "smooth",
+            parameterHints: { enabled: false },
+            glyphMargin: false,
+            folding: false,
+            lineDecorationsWidth: 5,
+            automaticLayout: true,
+            scrollBeyondLastLine: false,
+          }}
+        />
       ) : null}
     </ScrollArea>
   );
 };
 
-const toJsonStringifiable = (content: string | JSON | null): string => {
+export const toJsonStringifiable = (content: string | JSON | null): string => {
   try {
     if (typeof content === "string") {
       return content;

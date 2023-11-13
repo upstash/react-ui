@@ -65,14 +65,15 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         <MissingDataDisplay />
       ) : null}
       <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
-      <div className="flex w-full items-center px-4">
+      <div className="flex h-8 w-full items-center px-4 ">
         <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} isTTLLoading={isTTLLoading} TTLData={TTLData} />
         <div className="ml-2 flex h-[25px] items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
           Memory: ~{data?.memory} bytes
         </div>
-        {(keyType === "string" || keyType === "json") && (
+        {((keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json")) && (
           <div className="ml-auto">
             <DataValueEdit
+              data={data?.content}
               onContentEditableToggle={handleContentEditableToggle}
               onContentEditableSave={() => handleContentUpdate()}
               isContentEditable={isContentEditable}

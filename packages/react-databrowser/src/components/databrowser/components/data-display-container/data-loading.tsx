@@ -1,10 +1,6 @@
 export const DataLoading = () => {
   return (
-    <div
-      className="flex h-[425px] items-center justify-center rounded-none shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] "
-      aria-label="Loading..."
-      role="status"
-    >
+    <div className="flex h-[425px] items-center justify-center rounded-none" aria-label="Loading..." role="status">
       <svg className="h-12 w-12 animate-spin fill-[#13B981]" viewBox="3 3 18 18">
         <path
           className="opacity-20"

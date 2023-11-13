@@ -1,12 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
+import { toJsonStringifiable } from "./display-scrollarea";
 
 type Props = {
   onContentEditableToggle: () => void;
   isContentEditable: boolean;
   onContentEditableSave: () => Promise<void>;
+  data: string | JSON | null;
 };
-export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onContentEditableSave }: Props) => {
+export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onContentEditableSave, data }: Props) => {
+  const stringifiable = toJsonStringifiable(data);
+
   return (
     <div className="flex gap-2 transition-all">
       {isContentEditable && (
@@ -34,6 +39,14 @@ export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onCo
           </svg>
         </Button>
       )}
+      {!isContentEditable && (
+        <CopyToClipboardButton
+          onCopy={() => handleCopyClick(stringifiable)}
+          svgSize={{ w: 20, h: 20 }}
+          className="h-8 w-8 rounded-md border border-[#D9D9D9]"
+        />
+      )}
+
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
