@@ -1,7 +1,6 @@
 import { useFetchSingleDataByKey, useFetchTTLByKey, useUpdateStringAndJSON } from "@/components/databrowser/hooks";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
@@ -11,6 +10,7 @@ import { DataTTLActions } from "./data-ttl-actions";
 import { DataValueEdit } from "./data-value-edit";
 import { DisplayScrollarea } from "./display-scrollarea";
 import { MissingDataDisplay } from "./missing-data-display";
+import { DataLoading } from "./data-loading";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -44,7 +44,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
       {isLoading || updateDataStatus === "loading" ? (
-        <Skeleton className="h-[425px] rounded-none shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] " />
+        <DataLoading />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea
           data={data.content}

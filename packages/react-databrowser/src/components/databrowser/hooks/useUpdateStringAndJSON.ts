@@ -9,7 +9,7 @@ export const useUpdateStringAndJSON = ([key, keyType]: [string, RedisDataTypeUni
   const [isContentEditable, setIsContentEditable] = useState(false);
   const [updatedContent, setUpdatedContent] = useState<string>();
 
-  const handleUpdatedContent = (text: string) => {
+  const handleUpdatedContent = (text?: string) => {
     setUpdatedContent(text);
   };
   const handleContentEditableToggle = () => {

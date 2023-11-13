@@ -10,7 +10,7 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
 
   // Inputting the SET command to set a string
-  const myString = "Hello, this is a string!";
+  const myString = "Hello,thisIsAString";
   await page.getByRole("textbox").fill(`SET my_string "${myString}"`);
   await page.getByRole("textbox").press("Enter");
 
@@ -19,5 +19,5 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.getByPlaceholder("Search").fill("my_string");
   await page.getByRole("button", { name: "S my_string" }).click();
 
-  await expect(page.locator(':text-matches("Hello, this is a string!")')).toBeVisible();
+  await expect(page.locator(`:text-matches('${myString}')`)).toBeVisible();
 });
