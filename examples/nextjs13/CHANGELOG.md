@@ -1,5 +1,18 @@
 # nextjs13
 
+## 0.3.0
+
+### Minor Changes
+
+- 1d59d01: Improved search bar by taking entire space for easier use,
+  Replace editor with monaco editor for better DX
+  Replaced skeleton loader with spinner
+
+### Patch Changes
+
+- Updated dependencies [1d59d01]
+  - @upstash/react-databrowser@0.3.0
+
 ## 0.2.10
 
 ### Patch Changes
