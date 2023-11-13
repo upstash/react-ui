@@ -1,6 +1,7 @@
 import { useFetchPaginatedKeys } from "@/components/databrowser/hooks/useFetchPaginatedKeys";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
+  const [onInputFocus, setOnInputFocus] = useState(false);
   const [selectedDataType, setSelectedDataType] = useState<RedisDataTypeUnion>();
   const {
     data: dataKeys,
@@ -50,30 +52,37 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   return (
     <div className="flex min-h-[543px] flex-col">
       <div className="flex-1 overflow-y-auto pt-[12px]">
-        <div className="px-3">
-          <div className="flex items-center gap-2 drop-shadow-sm">
+        <div className="overflow-x-hidden px-3">
+          <div className="flex w-[320px] items-center gap-2 drop-shadow-sm">
             <div className="flex">
               <Input
                 type="text"
                 placeholder="Search"
-                className="h-[32px] w-[140px] items-center justify-center border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] focus-visible:ring-0"
+                onFocus={() => setOnInputFocus(true)}
+                onBlur={() => setOnInputFocus(false)}
+                className={cn(
+                  "h-[32px] w-[140px] items-center justify-center border-[#D9D9D9] px-4 text-[14px] placeholder-[#1F1F1F66] transition-all duration-500 ease-in-out focus-visible:ring-0 ",
+                  onInputFocus && "rounded- w-[320px] focus-visible:ring-0",
+                )}
                 onChange={(e) => handleSearch(e.target.value)}
                 ref={searchInputRef}
                 style={{
                   borderTopLeftRadius: "8px",
                   borderBottomLeftRadius: "8px",
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
+                  borderTopRightRadius: onInputFocus ? "8px" : 0,
+                  borderBottomRightRadius: onInputFocus ? "8px" : 0,
                 }}
               />
-              <DataTypeSelector
-                onDataTypeChange={handleDataTypeChange}
-                dataType={selectedDataType}
-                key={selectedDataType}
-              />
+              <div className={cn("flex gap-2", onInputFocus ? "hidden" : "flex")}>
+                <DataTypeSelector
+                  onDataTypeChange={handleDataTypeChange}
+                  dataType={selectedDataType}
+                  key={selectedDataType}
+                />
+                <ReloadButton onDataTypeChange={handleDataTypeChange} />
+                <AddDataDialog onNewDataAdd={handleDataAdd} />
+              </div>
             </div>
-            <ReloadButton onDataTypeChange={handleDataTypeChange} />
-            <AddDataDialog onNewDataAdd={handleDataAdd} />
           </div>
           <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
           <div className="w-full py-[8px]">
