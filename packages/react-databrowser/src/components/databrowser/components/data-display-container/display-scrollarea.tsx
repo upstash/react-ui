@@ -1,13 +1,12 @@
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import formatHighlight, { cn } from "@/lib/utils";
-import parse from "html-react-parser";
-import ReactDOM from "react-dom/server";
+import { cn } from "@/lib/utils";
+import { Editor } from "@monaco-editor/react";
 
 type Props = {
   data: string | JSON | null;
   isContentEditable: boolean;
-  onContentChange: (text: string) => void;
+  onContentChange: (text?: string) => void;
 };
 export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: Props) => {
   const stringifiable = toJsonStringifiable(data);
@@ -27,19 +26,34 @@ export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: 
             </div>
           )}
 
-          <pre
-            id="editable"
-            suppressContentEditableWarning={true}
-            contentEditable={isContentEditable}
-            className={cn(
-              "whitespace-pre-wrap text-[14px]",
-              isContentEditable && "border-[0.5px] border-dashed border-[#00000063] p-1 transition-all",
-            )}
-            style={{ fontFamily: "monospace" }}
-            onBlur={(e) => e.currentTarget.textContent && onContentChange(e.currentTarget.textContent)}
-          >
-            {tryParse(data)}
-          </pre>
+          <Editor
+            height={400}
+            className="editable"
+            defaultLanguage="json"
+            value={stringifiable}
+            onChange={onContentChange}
+            options={{
+              wordWrap: "on",
+              overviewRulerBorder: false,
+              overviewRulerLanes: 0,
+              formatOnPaste: true,
+              formatOnType: true,
+              readOnlyMessage: { value: "You must enable editing first!" },
+              readOnly: !isContentEditable,
+              renderWhitespace: "all",
+              smoothScrolling: true,
+              minimap: { enabled: false },
+              autoIndent: "full",
+              fontSize: 13,
+              cursorBlinking: "smooth",
+              parameterHints: { enabled: false },
+              glyphMargin: false,
+              folding: false,
+              lineDecorationsWidth: 5,
+              automaticLayout: true,
+              scrollBeyondLastLine: false,
+            }}
+          />
         </>
       ) : null}
     </ScrollArea>
@@ -52,7 +66,7 @@ const toJsonStringifiable = (content: string | JSON | null): string => {
       return content;
     }
     if (typeof content === "object") {
-      return JSON.stringify(content, null, 2);
+      return JSON.stringify(sortObject(content, true), null, 2);
     }
   } catch (error) {
     console.error("Error stringifying content:", error);
@@ -61,24 +75,9 @@ const toJsonStringifiable = (content: string | JSON | null): string => {
   return "";
 };
 
-const tryParse = (data: string | JSON | null) => {
-  try {
-    const parseableHTML = ReactDOM.renderToStaticMarkup(parse(data as string) as JSX.Element);
-    return parseableHTML;
-  } catch {
-    if (typeof data === "string") {
-      return data;
-    }
-    if (data) {
-      return parse(formatHighlight(sortObject(data, true)));
-    }
-    return null;
-  }
-};
-
 // Answer found here: https://stackoverflow.com/a/62552623
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-const sortObject = (unordered: [] | Record<string, any>, sortArrays = false) => {
+const sortObject = (unordered: [] | Record<string, any> | null, sortArrays = false) => {
   if (!unordered || typeof unordered !== "object") {
     return unordered;
   }

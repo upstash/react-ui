@@ -36,7 +36,7 @@ export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onCo
       )}
       <TooltipProvider>
         <Tooltip delayDuration={200}>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Button
               onClick={onContentEditableToggle}
               variant="outline"
