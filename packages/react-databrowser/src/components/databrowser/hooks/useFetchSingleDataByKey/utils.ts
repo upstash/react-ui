@@ -61,18 +61,26 @@ export function transformHash(inputArray: (string | number)[]): ContentValue[] {
     throw new Error("The input array length must be even.");
   }
   const zippedHash = partition(inputArray, 2);
-  return zippedHash.map((item) => ({ value: item[0], content: toJsonStringifiable(item[1], 0) }));
+  return zippedHash.map((item) => ({
+    value: toJsonStringifiable(item[0], 0),
+    content: toJsonStringifiable(item[1], 0),
+  }));
 }
 
 export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
-  if (typeof content === "string") {
-    try {
-      const parsed = JSON.parse(content);
-      return JSON.stringify(parsed, null, spacing);
-    } catch {
-      return content;
+  try {
+    if (typeof content === "string") {
+      try {
+        const parsed = JSON.parse(content);
+        return JSON.stringify(parsed, null, spacing);
+      } catch {
+        return content;
+      }
     }
-  }
 
-  return JSON.stringify(content, null, spacing);
+    return JSON.stringify(content, null, spacing);
+  } catch (error) {
+    console.error("Error converting to JSON:", error);
+    throw error;
+  }
 };
