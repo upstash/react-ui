@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.2
+
+### Patch Changes
+
+- ab3c6a9: Fix key parsing issue when ratelimiter analytics active
+
 ## 0.3.1
 
 ### Patch Changes
