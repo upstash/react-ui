@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.3
+
+### Patch Changes
+
+- c747134: Fix json stringify logic
+
 ## 0.3.2
 
 ### Patch Changes
