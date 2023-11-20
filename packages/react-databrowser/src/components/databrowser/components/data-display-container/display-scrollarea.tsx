@@ -51,19 +51,21 @@ export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: 
   );
 };
 
-export const toJsonStringifiable = (content: string | JSON | null): string => {
+export const toJsonStringifiable = (content: string | JSON | Record<string, unknown> | null): string => {
   try {
-    if (typeof content === "string") {
-      return content;
+    if (typeof content === "object" && content !== null) {
+      try {
+        return JSON.stringify(sortObject(content, true), null, 2);
+      } catch (sortError) {
+        console.error("Error sorting object:", sortError);
+      }
     }
-    if (typeof content === "object") {
-      return JSON.stringify(sortObject(content, true), null, 2);
-    }
-  } catch (error) {
-    console.error("Error stringifying content:", error);
-  }
 
-  return "";
+    return JSON.stringify(content, null, 2) ?? content?.toString() ?? "";
+  } catch (error) {
+    console.error("Unexpected error stringifying content:", error);
+    return "";
+  }
 };
 
 // Answer found here: https://stackoverflow.com/a/62552623
