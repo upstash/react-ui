@@ -73,7 +73,9 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
         });
         //Serialize keys, and feed them to pipeline
         for (let i = 0; i < keys.length; i++) {
-          keys[i] = JSON.stringify(keys[i]);
+          if (typeof keys[i] === "object") {
+            keys[i] = JSON.stringify(keys[i]);
+          }
           rePipeline.type(keys[i]);
         }
 
