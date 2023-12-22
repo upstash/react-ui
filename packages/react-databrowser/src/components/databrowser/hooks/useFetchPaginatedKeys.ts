@@ -71,9 +71,10 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
           match: debouncedSearchTerm,
           type: allTypesIncluded,
         });
-        // Feed pipeline with keys
-        for (const key of keys) {
-          rePipeline.type(key);
+        //Serialize keys, and feed them to pipeline
+        for (let i = 0; i < keys.length; i++) {
+          keys[i] = JSON.stringify(keys[i]);
+          rePipeline.type(keys[i]);
         }
 
         const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
