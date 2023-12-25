@@ -1,3 +1,5 @@
+import { partition } from "@/lib/utils";
+
 export const INITIAL_CURSOR_NUM = 0;
 export const DATA_PER_PAGE = 10;
 /**
@@ -54,15 +56,31 @@ export function transformArray(inputArray: (string | number)[]): ContentValue[] 
   }, []);
 }
 
-export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
-  if (typeof content === "string") {
-    try {
-      const parsed = JSON.parse(content);
-      return JSON.stringify(parsed, null, spacing);
-    } catch {
-      return content;
-    }
+export function transformHash(inputArray: (string | number)[]): ContentValue[] {
+  if (inputArray.length % 2 !== 0) {
+    throw new Error("The input array length must be even.");
   }
+  const zippedHash = partition(inputArray, 2);
+  return zippedHash.map((item) => ({
+    value: toJsonStringifiable(item[0], 0),
+    content: toJsonStringifiable(item[1], 0),
+  }));
+}
 
-  return JSON.stringify(content, null, spacing);
+export const toJsonStringifiable = (content: unknown, spacing = 2): string => {
+  try {
+    if (typeof content === "string") {
+      try {
+        const parsed = JSON.parse(content);
+        return JSON.stringify(parsed, null, spacing);
+      } catch {
+        return content;
+      }
+    }
+
+    return JSON.stringify(content, null, spacing);
+  } catch (error) {
+    console.error("Error converting to JSON:", error);
+    throw error;
+  }
 };

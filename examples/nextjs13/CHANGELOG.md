@@ -1,5 +1,60 @@
 # nextjs13
 
+## 0.3.3
+
+### Patch Changes
+
+- Updated dependencies [c747134]
+  - @upstash/react-databrowser@0.3.3
+
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [ab3c6a9]
+  - @upstash/react-databrowser@0.3.2
+
+## 0.3.1
+
+### Patch Changes
+
+- Updated dependencies [079369b]
+  - @upstash/react-databrowser@0.3.1
+
+## 0.3.0
+
+### Minor Changes
+
+- 1d59d01: Improved search bar by taking entire space for easier use,
+  Replace editor with monaco editor for better DX
+  Replaced skeleton loader with spinner
+
+### Patch Changes
+
+- Updated dependencies [1d59d01]
+  - @upstash/react-databrowser@0.3.0
+
+## 0.2.10
+
+### Patch Changes
+
+- Updated dependencies [b077fd7]
+  - @upstash/react-databrowser@0.2.10
+
+## 0.2.9
+
+### Patch Changes
+
+- Updated dependencies [b36a874]
+  - @upstash/react-databrowser@0.2.9
+
+## 0.2.8
+
+### Patch Changes
+
+- Updated dependencies [b3a50ab]
+  - @upstash/react-databrowser@0.2.8
+
 ## 0.2.7
 
 ### Patch Changes

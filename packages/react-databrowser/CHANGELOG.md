@@ -1,5 +1,49 @@
 # @upstash/react-databrowser
 
+## 0.3.3
+
+### Patch Changes
+
+- c747134: Fix json stringify logic
+
+## 0.3.2
+
+### Patch Changes
+
+- ab3c6a9: Fix key parsing issue when ratelimiter analytics active
+
+## 0.3.1
+
+### Patch Changes
+
+- 079369b: Add timestamp to key fetcher to always keep in sycn with up to date data
+
+## 0.3.0
+
+### Minor Changes
+
+- 1d59d01: Improved search bar by taking entire space for easier use,
+  Replace editor with monaco editor for better DX
+  Replaced skeleton loader with spinner
+
+## 0.2.10
+
+### Patch Changes
+
+- b077fd7: Fix HSET parsing issue
+
+## 0.2.9
+
+### Patch Changes
+
+- b36a874: Fixed hash set ordering and made data update easier
+
+## 0.2.8
+
+### Patch Changes
+
+- b3a50ab: Fixed search and added ability to edit values for string and json
+
 ## 0.2.7
 
 ### Patch Changes

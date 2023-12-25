@@ -1,6 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test } from "@playwright/test";
+import { generateRandomString } from "./utils";
 
-test("should add String data from cli then try to navigate on databrowser", async ({ page }) => {
+test("test", async ({ page }) => {
   await page.goto("http://localhost:3000/");
 
   // Inputting the command to delete the key, to ensure the test starts clean
@@ -10,14 +11,17 @@ test("should add String data from cli then try to navigate on databrowser", asyn
   await page.waitForTimeout(500); //TODO: Dirty hack to wait after delete. Should be fixed later.
 
   // Inputting the SET command to set a string
-  const myString = "Hello,thisIsAString";
+  const myString = "Hello, this is a string!";
   await page.getByRole("textbox").fill(`SET my_string "${myString}"`);
   await page.getByRole("textbox").press("Enter");
 
-  await page.goto("http://localhost:3000/databrowser");
-  await page.getByPlaceholder("Search").click();
-  await page.getByPlaceholder("Search").fill("my_string");
-  await page.getByRole("button", { name: "S my_string" }).click();
+  const randomString = generateRandomString();
 
-  await expect(page.locator(`:text-matches('${myString}')`)).toBeVisible();
+  await page.goto("http://localhost:3000/databrowser");
+  await page.getByRole("button", { name: "s my_string" }).click();
+  await page.getByTestId("edit-items-in-place").click();
+  await page.getByLabel("Editor content;Press Alt+F1 for Accessibility Options.").fill(`"${randomString}"`);
+  await page.getByTestId("save-items").click();
+
+  await page.getByText(`${randomString}`).click();
 });

@@ -2,7 +2,7 @@ import { queryClient } from "@/lib/clients";
 import { partition, zip } from "@/lib/utils";
 import { useDatabrowser } from "@/store";
 import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { useDebounce } from "./useDebounce";
 
@@ -22,8 +22,11 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const [lastCursor, setLastCursor] = useState(INITIAL_CURSOR_NUM);
   const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
-  const compositeKey = `${allTypesIncluded}-${debouncedSearchTerm}-${timestamp}`;
   const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
+  const compositeKey = useMemo(
+    () => `${allTypesIncluded}-${debouncedSearchTerm}-${timestamp}`,
+    [allTypesIncluded, debouncedSearchTerm, timestamp],
+  );
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
@@ -68,9 +71,12 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
           match: debouncedSearchTerm,
           type: allTypesIncluded,
         });
-        // Feed pipeline with keys
-        for (const key of keys) {
-          rePipeline.type(key);
+        //Serialize keys, and feed them to pipeline
+        for (let i = 0; i < keys.length; i++) {
+          if (typeof keys[i] === "object") {
+            keys[i] = JSON.stringify(keys[i]);
+          }
+          rePipeline.type(keys[i]);
         }
 
         const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];

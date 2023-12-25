@@ -1,15 +1,16 @@
-import { useFetchSingleDataByKey } from "@/components/databrowser/hooks/useFetchSingleDataByKey";
+import { useFetchSingleDataByKey, useFetchTTLByKey, useUpdateStringAndJSON } from "@/components/databrowser/hooks";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { RedisDataTypeUnion } from "@/types";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
 import { DataDelete } from "./data-delete";
 import { DataTable } from "./data-table";
+import { DataTTLActions } from "./data-ttl-actions";
+import { DataValueEdit } from "./data-value-edit";
 import { DisplayScrollarea } from "./display-scrollarea";
 import { MissingDataDisplay } from "./missing-data-display";
-import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { DataTTLActions } from "./data-ttl-actions";
+import { DataLoading } from "./data-loading";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -19,7 +20,16 @@ type Props = {
 export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props) {
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
-  const isLoadingOrError = isLoading || error;
+
+  const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(key);
+  const {
+    handleContentEditableToggle,
+    handleContentUpdate,
+    handleUpdatedContent,
+    isContentEditable,
+    updateDataStatus,
+  } = useUpdateStringAndJSON(selectedDataKeyTypePair, TTLData);
+
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4 ">
@@ -33,10 +43,14 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         </div>
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
-      {isLoadingOrError ? (
-        <Skeleton className="h-[425px] rounded-none shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] " />
+      {isLoading || updateDataStatus === "loading" ? (
+        <DataLoading />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
-        <DisplayScrollarea data={data.content} selectedDataKeyTypePair={selectedDataKeyTypePair} />
+        <DisplayScrollarea
+          data={data.content}
+          isContentEditable={isContentEditable}
+          onContentChange={handleUpdatedContent}
+        />
       ) : keyType === "zset" && data?.type === "zset" ? (
         <DataTable data={data.content} tableHeaders={["SCORE", "MEMBERS"]} />
       ) : keyType === "hash" && data?.type === "hash" ? (
@@ -47,15 +61,26 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         <DataTable data={data.content} tableHeaders={[null, "MEMBERS"]} />
       ) : keyType === "stream" && data?.type === "stream" ? (
         <DataTable data={data.content} tableHeaders={["STREAMID", "FIELDS"]} />
-      ) : data?.type === "unknown" ? (
+      ) : data?.type === "unknown" || error ? (
         <MissingDataDisplay />
       ) : null}
       <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
-      <div className="flex w-full items-center px-4">
-        <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} />
-        <div className="ml-2  flex h-[25px] items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
+      <div className="flex h-8 w-full items-center px-4 ">
+        <DataTTLActions selectedDataKey={selectedDataKeyTypePair[0]} isTTLLoading={isTTLLoading} TTLData={TTLData} />
+        <div className="ml-2 flex h-[25px] items-center justify-center  gap-[2px] rounded-md bg-[#00000008] px-2 py-1 text-sm text-[#00000099]">
           Memory: ~{data?.memory} bytes
         </div>
+        {((keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json")) && (
+          <div className="ml-auto">
+            <DataValueEdit
+              data={data?.content}
+              onContentEditableToggle={handleContentEditableToggle}
+              onContentEditableSave={() => handleContentUpdate()}
+              isContentEditable={isContentEditable}
+            />
+          </div>
+        )}
+
         {keyType !== "json" && keyType !== "string" && (
           <div className="ml-auto flex items-center gap-2">
             <Button
