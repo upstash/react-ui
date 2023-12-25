@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.4
+
+### Patch Changes
+
+- 2e09e1c: Prevent databrowser to fail when listing redis key
+
 ## 0.3.3
 
 ### Patch Changes
