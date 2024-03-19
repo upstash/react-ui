@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.5
+
+### Patch Changes
+
+- Added button to copy object fields
+
 ## 0.3.4
 
 ### Patch Changes
