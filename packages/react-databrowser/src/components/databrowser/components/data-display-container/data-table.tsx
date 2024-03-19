@@ -34,11 +34,24 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
             >
               {item.value !== null ? (
                 <TableCell
-                  className={cn("h-[38px] w-32 border-none px-3 text-[14px] font-normal", {
-                    "rounded-l bg-[#00000008]": idx % 2 === 0,
-                  })}
+                  className={cn(
+                    " relative h-[38px] w-[10rem] flex-row overflow-hidden truncate whitespace-break-spaces border-none px-3 text-[14px] font-normal",
+                    {
+                      "rounded-l bg-[#00000008]": idx % 2 === 0,
+                    },
+                  )}
                 >
-                  <p className="w-32 overflow-hidden truncate whitespace-nowrap ">{item.value}</p>
+                  <p className="w-[120px] overflow-hidden truncate whitespace-nowrap ">{item.value}</p>
+                  {hoveredRow === idx && (
+                    <div className="absolute right-0 top-[5px]">
+                      <CopyToClipboardButton
+                        sizeVariant="icon-sm"
+                        variant="ghost"
+                        onCopy={() => handleCopyClick(item.value !== null ? item.value.toString() : "")}
+                        svgSize={{ h: 22, w: 22 }}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               ) : null}
               {item.content !== null ? (
