@@ -3,6 +3,7 @@ import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = {
   data: ContentValue[];
@@ -41,7 +42,19 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
                     },
                   )}
                 >
-                  <p className="w-[120px] overflow-hidden truncate whitespace-nowrap ">{item.value}</p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p className="w-[120px] cursor-default overflow-hidden truncate whitespace-nowrap">
+                          {item.value}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{item.value}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
                   {hoveredRow === idx && (
                     <div className="absolute right-0 top-[5px]">
                       <CopyToClipboardButton
