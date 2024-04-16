@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.7
+
+### Patch Changes
+
+- 67822e6: Add tooltip for long contents
+
 ## 0.3.6
 
 ### Patch Changes
