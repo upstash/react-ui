@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.6
+
+### Patch Changes
+
+- 76c50c5: Added tooltip for truncated labels.
+
 ## 0.3.5
 
 ### Patch Changes
