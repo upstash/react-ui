@@ -49,7 +49,7 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
                           {item.value}
                         </p>
                       </TooltipTrigger>
-                      <TooltipContent>
+                      <TooltipContent className="z-50 max-h-[200px] max-w-[300px] overflow-y-auto whitespace-normal break-words rounded-md border border-solid border-gray-200 bg-white p-3 text-black drop-shadow-md">
                         <p>{item.value}</p>
                       </TooltipContent>
                     </Tooltip>
@@ -77,7 +77,18 @@ export const DataTable = ({ data, tableHeaders }: Props) => {
                     },
                   )}
                 >
-                  <p className="w-[200px] overflow-hidden truncate whitespace-nowrap">{item.content}</p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <p className="w-[200px] cursor-default overflow-hidden truncate whitespace-nowrap">
+                          {item.content}
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent className="z-50 max-h-[200px] max-w-[300px] overflow-y-auto whitespace-normal break-words rounded-md border border-solid border-gray-200 bg-white p-3 text-black drop-shadow-md">
+                        {item.content}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                   {hoveredRow === idx && (
                     <div className="absolute right-[10px] top-[5px]">
                       <CopyToClipboardButton
