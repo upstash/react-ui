@@ -28,6 +28,8 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     [allTypesIncluded, debouncedSearchTerm, timestamp],
   );
 
+  const typeCache = useMemo(() => new Map<string, RedisDataTypeUnion>(), []);
+
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
       if (dir === "next") {
@@ -75,20 +77,41 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
           match: debouncedSearchTerm,
           type: allTypesIncluded,
         });
-        //Serialize keys, and feed them to pipeline
+        const pipelinedKeyIds: number[] = [];
+        const keysAndTypes: [string, RedisDataTypeUnion][] = [];
+
+        // Serialize keys, and feed them to pipeline
         for (let i = 0; i < keys.length; i++) {
           if (typeof keys[i] === "object") {
             keys[i] = JSON.stringify(keys[i]);
           }
-          rePipeline.type(keys[i]);
+          const cacheResult = typeCache.get(keys[i]);
+          if (cacheResult) {
+            keysAndTypes.push([keys[i], cacheResult]);
+          } else {
+            // If the key is not in cache, add it to pipeline
+            rePipeline.type(keys[i]);
+            pipelinedKeyIds.push(i);
+            // Giving the wrong type for now
+            keysAndTypes.push([keys[i], "string"]);
+          }
         }
 
         // Increase the scan count periodically with a max of 10k
         currScanCount += Math.min(currScanCount * 2, 10_000);
 
         const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
-        const zippedKeyValues: [string, RedisDataTypeUnion][] = zip(keys, types);
-        pageData.push(...zippedKeyValues);
+
+        // Update the types in the keysAndTypes array with the newly fetched types
+        types.forEach((type, index) => {
+          const id = pipelinedKeyIds[index];
+
+          console.log("NEW TYPE", type, keysAndTypes[id][0]);
+          keysAndTypes[id][1] = type as RedisDataTypeUnion;
+          typeCache.set(keys[id], type as RedisDataTypeUnion);
+        });
+
+        pageData.push(...keysAndTypes);
 
         // If page is full or cursor reached 0, stop fetching
         if (pageData.length >= 10 || nextCursor === 0) {
@@ -99,10 +122,14 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
         cursor = nextCursor;
       }
 
-      setData((prevState) => ({
-        ...prevState,
-        [compositeKey]: [...(prevState[compositeKey] || []), ...partition(pageData, 10)],
-      }));
+      setData((prevState) => {
+        const all = [...(prevState[compositeKey] || []), pageData].flat();
+
+        return {
+          ...prevState,
+          [compositeKey]: partition(all, 10),
+        };
+      });
     },
   });
 
