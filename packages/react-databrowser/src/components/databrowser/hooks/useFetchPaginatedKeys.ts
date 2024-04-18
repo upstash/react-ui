@@ -65,9 +65,13 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
       const pageData: [string, RedisDataTypeUnion][] = [];
       let cursor = lastCursor;
 
+      // The number of entries SCAN command returns is not
+      // exact, 12 is just a starting point
+      let currScanCount = 12;
+
       while (true) {
         const [nextCursor, keys] = await redis.scan(cursor, {
-          count: DEFAULT_FETCH_COUNT,
+          count: currScanCount,
           match: debouncedSearchTerm,
           type: allTypesIncluded,
         });
@@ -78,6 +82,9 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
           }
           rePipeline.type(keys[i]);
         }
+
+        // Increase the scan count periodically with a max of 10k
+        currScanCount += Math.min(currScanCount * 2, 10_000);
 
         const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
         const zippedKeyValues: [string, RedisDataTypeUnion][] = zip(keys, types);
