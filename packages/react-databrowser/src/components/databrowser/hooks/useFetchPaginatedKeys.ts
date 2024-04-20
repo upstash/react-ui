@@ -56,6 +56,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
       searchInputRef.current.value = "";
     }
     setCurrentIndex(INITIAL_CURSOR_NUM);
+    setLastCursor(INITIAL_CURSOR_NUM);
     queryClient.invalidateQueries("useFetchDbSize");
   };
 
@@ -100,13 +101,12 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
         // Increase the scan count periodically with a max of 10k
         currScanCount += Math.min(currScanCount * 2, 10_000);
 
-        const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
+        const types: RedisDataTypeUnion[] = pipelinedKeyIds.length ? await rePipeline.exec() : [];
 
         // Update the types in the keysAndTypes array with the newly fetched types
         types.forEach((type, index) => {
           const id = pipelinedKeyIds[index];
 
-          console.log("NEW TYPE", type, keysAndTypes[id][0]);
           keysAndTypes[id][1] = type as RedisDataTypeUnion;
           typeCache.set(keys[id], type as RedisDataTypeUnion);
         });
