@@ -48,13 +48,15 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
 
       const key = formData.get("key") as string;
       const value = formData.get("value") as string;
+
+      if (!(key && value)) {
+        throw new Error("Missing key or value data");
+      }
+
       const exp = Number(formData.get("exp"));
       const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined;
       const ttl = expUnit ? convertToSeconds(expUnit, exp) : null;
       const ok = await addData.mutateAsync([key, value, ttl]);
-      if (!(key && value)) {
-        throw new Error("Missing key or value data");
-      }
 
       if (ok) {
         toast({
