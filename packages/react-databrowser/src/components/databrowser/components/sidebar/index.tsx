@@ -44,7 +44,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
 
   //Reset after delete
   useEffect(() => {
-    if (!selectedDataKey) {
+    if (selectedDataKey === undefined) {
       reset();
     }
   }, [selectedDataKey]);

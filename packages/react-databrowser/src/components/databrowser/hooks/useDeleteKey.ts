@@ -7,7 +7,7 @@ export const useDeleteKey = () => {
 
   const deleteKey = useMutation(
     async (dataKey?: string) => {
-      if (!dataKey) {
+      if (dataKey === undefined) {
         throw new Error("Key is missing!");
       }
 

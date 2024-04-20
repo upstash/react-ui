@@ -7,7 +7,7 @@ export const useUpdateTTL = () => {
 
   const updateTTL = useMutation(
     async ({ dataKey, newTTLValue }: { dataKey?: string; newTTLValue: number }) => {
-      if (!dataKey) {
+      if (dataKey === undefined) {
         throw new Error("Key is missing!");
       }
       return Boolean(await redis.expire(dataKey, newTTLValue));
@@ -27,7 +27,7 @@ export const usePersistTTL = () => {
 
   const persistTTL = useMutation(
     async (dataKey?: string) => {
-      if (!dataKey) {
+      if (dataKey === undefined) {
         throw new Error("Key is missing!");
       }
       return Boolean(await redis.persist(dataKey));
