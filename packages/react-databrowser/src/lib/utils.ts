@@ -58,9 +58,7 @@ const entityMap: { [key: string]: string } = {
 };
 
 function escapeHtml(html: string): string {
-  return String(html).replace(/[&<>"'`=]/g, function (s) {
-    return entityMap[s] || s;
-  });
+  return String(html).replace(/[&<>"'`=]/g, (s) => entityMap[s] || s);
 }
 
 export default function formatHighlight(json: unknown, colorOptions: ColorOptions = {}): string {

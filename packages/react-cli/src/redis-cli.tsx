@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, ReactNode, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react"
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 import "./cli.css";
@@ -345,7 +346,7 @@ function splitArgs(input: string): string[] {
     if (element === "'" && !doubleQuoteOpen) {
       singleQuoteOpen = !singleQuoteOpen;
       continue;
-    } else if (element === '"' && !singleQuoteOpen) {
+    }if (element === '"' && !singleQuoteOpen) {
       doubleQuoteOpen = !doubleQuoteOpen;
       continue;
     }

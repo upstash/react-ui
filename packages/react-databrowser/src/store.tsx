@@ -1,5 +1,5 @@
-import { PropsWithChildren, createContext, useContext, useMemo } from "react";
-import { Redis } from "@upstash/redis";
+import { type PropsWithChildren, createContext, useContext, useMemo } from "react";
+import type { Redis } from "@upstash/redis";
 import { redisClient } from "./lib/clients";
 
 export type DatabrowserProps = {

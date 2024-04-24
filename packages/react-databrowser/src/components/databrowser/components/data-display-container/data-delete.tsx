@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { useDeleteKey } from "../../hooks/useDeleteKey";
 import { DeleteAlertDialog } from "./delete-alert-dialog";
 

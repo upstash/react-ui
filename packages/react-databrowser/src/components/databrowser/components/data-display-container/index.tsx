@@ -1,4 +1,4 @@
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { DataDisplay } from "./data-display";
 import { MissingDataDisplay } from "./missing-data-display";
 

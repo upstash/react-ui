@@ -1,5 +1,5 @@
 import { useDatabrowser } from "@/store";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "react-query";
 import { fetchDataOfType } from "./fetch-data-types";
@@ -59,14 +59,13 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           cursorStack,
           listLength: dataType === "list" ? listLength : undefined,
         });
-      } else {
+      }
         console.error(`Unsupported data type: ${dataType}`);
         return { content: null, type: "unknown", memory: null } satisfies {
           content: null;
           type: "unknown";
           memory: null;
         };
-      }
     },
   });
 

@@ -1,7 +1,7 @@
 import "@/globals.css";
 import { queryClient } from "@/lib/clients";
-import { DatabrowserProps, DatabrowserProvider } from "@/store";
-import { RedisDataTypeUnion } from "@/types";
+import { type DatabrowserProps, DatabrowserProvider } from "@/store";
+import type { RedisDataTypeUnion } from "@/types";
 import { useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { Toaster } from "../ui/toaster";
