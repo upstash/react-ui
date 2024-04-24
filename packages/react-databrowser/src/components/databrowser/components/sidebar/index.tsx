@@ -46,7 +46,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     if (selectedDataKey === undefined) {
       refreshSearch();
     }
-  }, [selectedDataKey]);
+  }, [selectedDataKey, refreshSearch]);
 
   return (
     <div className="flex min-h-[543px] flex-col">

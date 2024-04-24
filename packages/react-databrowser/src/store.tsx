@@ -18,7 +18,7 @@ interface DatabrowserProviderProps {
 }
 
 export const DatabrowserProvider = ({ children, databrowser }: PropsWithChildren<DatabrowserProviderProps>) => {
-  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser.token, databrowser.url]);
+  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser]);
   return <DatabrowserContext.Provider value={{ redis: redisInstances }}>{children}</DatabrowserContext.Provider>;
 };
 

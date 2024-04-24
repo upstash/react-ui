@@ -18,6 +18,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
   const { redis } = useDatabrowser();
 
   //Used for correctly resetting inner state of useQuery
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const timestamp = useMemo(() => Date.now(), [selectedDataKeyTypePair[0]]);
   const cursorStack = useRef<(string | number)[]>([INITIAL_CURSOR_NUM]);
   const listLength = useRef(INITIAL_CURSOR_NUM);
@@ -34,6 +35,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     [currentIndex],
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setCurrentIndex(INITIAL_CURSOR_NUM);
     cursorStack.current = [INITIAL_CURSOR_NUM];
@@ -60,12 +62,12 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           listLength: dataType === "list" ? listLength : undefined,
         });
       }
-        console.error(`Unsupported data type: ${dataType}`);
-        return { content: null, type: "unknown", memory: null } satisfies {
-          content: null;
-          type: "unknown";
-          memory: null;
-        };
+      console.error(`Unsupported data type: ${dataType}`);
+      return { content: null, type: "unknown", memory: null } satisfies {
+        content: null;
+        type: "unknown";
+        memory: null;
+      };
     },
   });
 

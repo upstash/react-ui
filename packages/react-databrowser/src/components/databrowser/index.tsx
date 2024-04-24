@@ -2,7 +2,7 @@ import "@/globals.css";
 import { queryClient } from "@/lib/clients";
 import { type DatabrowserProps, DatabrowserProvider } from "@/store";
 import type { RedisDataTypeUnion } from "@/types";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { QueryClientProvider } from "react-query";
 import { Toaster } from "../ui/toaster";
 import { DataDisplayContainer } from "./components/data-display-container";
@@ -15,8 +15,10 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
     setSelectedDataKey(dataKey);
   };
 
+  const databrowserCredentials = useMemo(() => ({ token, url }), [token, url]);
+
   return (
-    <DatabrowserProvider databrowser={{ token, url }}>
+    <DatabrowserProvider databrowser={databrowserCredentials}>
       <QueryClientProvider client={queryClient}>
         <div className="overflow-hidden rounded-xl bg-[#F5F5F5]">
           <div className="grid text-ellipsis lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">

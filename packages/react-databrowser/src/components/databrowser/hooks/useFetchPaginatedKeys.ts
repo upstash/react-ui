@@ -100,7 +100,9 @@ const useFetchRedisPage = () => {
 
     // How many keys we need to fetch minimum
     while (true) {
-      if (currKeys.length >= requiredLength || currCursor === -1) { break; }
+      if (currKeys.length >= requiredLength || currCursor === -1) {
+        break;
+      }
 
       console.log("> scan", "cursor", currCursor, "fetchCount", fetchCount, "term", searchTerm);
       const [nextCursor, newKeys] = await redis.scan(currCursor, {
@@ -177,13 +179,13 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     },
   });
 
-  const refreshSearch = () => {
+  const refreshSearch = useCallback(() => {
     setCurrentPage(0);
     resetPaginationCache();
     refetch();
 
     queryClient.invalidateQueries("useFetchDbSize");
-  };
+  }, [resetPaginationCache, refetch]);
 
   return {
     isLoading,
