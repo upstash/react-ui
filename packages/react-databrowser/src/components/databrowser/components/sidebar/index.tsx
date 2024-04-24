@@ -28,24 +28,23 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     handlePageChange,
     direction,
     handleSearch,
-    reset,
+    refreshSearch,
     searchInputRef,
   } = useFetchPaginatedKeys(selectedDataType);
 
   const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
-    reset();
     setSelectedDataType(dataType);
   };
 
   const handleDataAdd = (dataKey?: [string, RedisDataTypeUnion]) => {
     onDataKeyChange(dataKey);
-    reset();
+    refreshSearch();
   };
 
-  //Reset after delete
+  // Refresh after delete
   useEffect(() => {
     if (selectedDataKey === undefined) {
-      reset();
+      refreshSearch();
     }
   }, [selectedDataKey]);
 
