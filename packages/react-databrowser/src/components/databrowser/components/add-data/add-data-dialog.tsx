@@ -23,10 +23,10 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
 export type ExpUnitUnion = (typeof expUnit)[number];

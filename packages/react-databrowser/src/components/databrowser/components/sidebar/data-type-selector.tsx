@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RedisDataTypeUnion, RedisDataTypes } from "@/types";
+import { type RedisDataTypeUnion, RedisDataTypes } from "@/types";
 
 const RedisDataTypeMap = new Map(
   RedisDataTypes.map((type) => {

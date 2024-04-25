@@ -1,4 +1,4 @@
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import clsx from "clsx";
 import { Badge } from "@/components/ui/badge";
 

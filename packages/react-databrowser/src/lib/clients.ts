@@ -1,4 +1,4 @@
-import { DatabrowserProps } from "@/store";
+import type { DatabrowserProps } from "@/store";
 import { Redis } from "@upstash/redis";
 import { QueryClient } from "react-query";
 

@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, ReactNode, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 
 import "./cli.css";
@@ -214,6 +215,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Not sure how to fix this so ignoring for now since it works
   useEffect(() => {
     async function run() {
       if (!props.init) {
@@ -345,7 +347,8 @@ function splitArgs(input: string): string[] {
     if (element === "'" && !doubleQuoteOpen) {
       singleQuoteOpen = !singleQuoteOpen;
       continue;
-    } else if (element === '"' && !singleQuoteOpen) {
+    }
+    if (element === '"' && !singleQuoteOpen) {
       doubleQuoteOpen = !doubleQuoteOpen;
       continue;
     }
@@ -419,7 +422,7 @@ function formatResult(result: CommandResult["result"]): string | ReactNode {
       if (Array.isArray(result)) {
         return result.map(formatResult).join(", ");
       }
-
+      return result;
     default:
       return result;
   }

@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 export function DeleteAlertDialog({ children, onDeleteConfirm }: PropsWithChildren<{ onDeleteConfirm: () => void }>) {
   return (

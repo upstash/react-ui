@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 

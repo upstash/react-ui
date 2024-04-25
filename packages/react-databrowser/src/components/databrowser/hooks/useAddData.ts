@@ -17,10 +17,9 @@ export const useAddData = () => {
       if (isJSON) {
         const res = await redis.json.set(dataKey, "$", dataValue);
         return res === SUCCESS_MSG;
-      } else {
+      }
         const res = await redis.set(dataKey, dataValue, { ...(ex ? { ex } : { keepTtl: true }) });
         return res === SUCCESS_MSG;
-      }
     },
     { onSuccess: () => queryClient.invalidateQueries("useFetchPaginatedKeys") },
   );
