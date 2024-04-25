@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDatabrowser } from "@/store";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const DisplayDbSize = () => {
   const { redis } = useDatabrowser();

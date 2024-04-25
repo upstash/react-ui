@@ -3,7 +3,7 @@ import { queryClient } from "@/lib/clients";
 import { type DatabrowserProps, DatabrowserProvider } from "@/store";
 import type { RedisDataTypeUnion } from "@/types";
 import { useMemo, useState } from "react";
-import { QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "../ui/toaster";
 import { DataDisplayContainer } from "./components/data-display-container";
 import { Sidebar } from "./components/sidebar";

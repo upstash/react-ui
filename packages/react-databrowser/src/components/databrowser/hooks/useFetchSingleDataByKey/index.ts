@@ -1,7 +1,7 @@
 import { useDatabrowser } from "@/store";
 import type { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchDataOfType } from "./fetch-data-types";
 import { DATA_PER_PAGE, INITIAL_CURSOR_NUM } from "./utils";
 

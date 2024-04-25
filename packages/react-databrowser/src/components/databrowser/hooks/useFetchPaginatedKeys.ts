@@ -2,7 +2,7 @@ import { queryClient } from "@/lib/clients";
 import { useDatabrowser } from "@/store";
 import type { RedisDataTypeUnion } from "@/types";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 
 const SCAN_MATCH_ALL = "*";

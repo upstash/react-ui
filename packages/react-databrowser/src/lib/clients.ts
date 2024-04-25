@@ -1,6 +1,6 @@
 import type { DatabrowserProps } from "@/store";
 import { Redis } from "@upstash/redis";
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 export const redisClient = (databrowser?: DatabrowserProps) => {
   const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
