@@ -1,6 +1,7 @@
 import type { DatabrowserProps } from "@/store";
 import { Redis } from "@upstash/redis";
-import { QueryClient } from "@tanstack/react-query";
+import { QueryCache, QueryClient } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
 
 export const redisClient = (databrowser?: DatabrowserProps) => {
   const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
@@ -47,8 +48,30 @@ export const redisClient = (databrowser?: DatabrowserProps) => {
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 60 * 1000 * 2,
       refetchOnWindowFocus: true,
+      retry: false,
     },
   },
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error.name === "UpstashError") {
+        let desc = error.message;
+
+        // Because the message does not fit in the toast, we only take the
+        // first two sentences.
+        // Example: "ERR max daily request limit exceeded. Limit: 10000, Usage: 10000."
+        if (error.message.includes("max daily request limit exceeded.")) {
+          desc = error.message.split(".").slice(0, 2).join(".");
+        }
+
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: desc,
+        });
+
+        console.error(error);
+      }
+    },
+  }),
 });
