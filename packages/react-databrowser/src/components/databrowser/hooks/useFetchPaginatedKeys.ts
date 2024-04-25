@@ -1,121 +1,205 @@
 import { queryClient } from "@/lib/clients";
-import { partition, zip } from "@/lib/utils";
 import { useDatabrowser } from "@/store";
-import { RedisDataTypeUnion } from "@/types";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import type { RedisDataTypeUnion } from "@/types";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 
-export const DEFAULT_FETCH_COUNT = 100;
-const INITIAL_CURSOR_NUM = 0;
 const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
 
-export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
+const PAGE_SIZE = 10;
+const MAX_SCAN_COUNT = 10_000;
+
+type RedisKey = [string, RedisDataTypeUnion];
+
+const useFetchRedisPage = () => {
   const { redis } = useDatabrowser();
+
+  const [keys, setKeys] = useState<RedisKey[]>([]);
+
+  // A cursor of -1 means that the last scan returned a next cursor of 0
+  // meaning that there are no more keys to fetch
+  const [cursor, setCursor] = useState(0);
+
+  const [scanKey, setScanKey] = useState("");
+
+  const resetPaginationCache = useCallback(() => {
+    setCursor(0);
+    setKeys([]);
+  }, []);
+
+  const typeCache = useMemo(() => new Map<string, RedisDataTypeUnion>(), []);
+
+  const getPage = (keys: RedisKey[], page: number) => {
+    return keys.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  };
+
+  const fetchTypes = async (keys: string[]) => {
+    const rePipeline = redis.pipeline();
+    const pipelinedKeyIds: number[] = [];
+    const keysAndTypes: RedisKey[] = [];
+
+    // Serialize keys, and feed them to pipeline
+    for (let i = 0; i < keys.length; i++) {
+      if (typeof keys[i] === "object") {
+        keys[i] = JSON.stringify(keys[i]);
+      }
+      const cacheResult = typeCache.get(keys[i]);
+      if (cacheResult) {
+        keysAndTypes.push([keys[i], cacheResult]);
+      } else {
+        // If the key is not in cache, add it to pipeline
+        rePipeline.type(keys[i]);
+        pipelinedKeyIds.push(i);
+        // Giving the wrong type for now
+        keysAndTypes.push([keys[i], "string"]);
+      }
+    }
+
+    const types: RedisDataTypeUnion[] = pipelinedKeyIds.length ? await rePipeline.exec() : [];
+
+    // Update the types in the keysAndTypes array with the newly fetched types
+    types.forEach((type, index) => {
+      const id = pipelinedKeyIds[index];
+
+      keysAndTypes[id][1] = type;
+      typeCache.set(keys[id], type);
+    });
+    return keysAndTypes;
+  };
+
+  const fetchPage = async ({
+    page,
+    searchTerm,
+    typeFilter,
+  }: {
+    page: number;
+    searchTerm: string;
+    typeFilter?: RedisDataTypeUnion;
+  }) => {
+    const currScanKey = `${searchTerm}-${typeFilter}`;
+
+    let currKeys = keys;
+    let currCursor = cursor;
+
+    // If this is a new search, reset the pagination cache
+    if (scanKey !== currScanKey) {
+      resetPaginationCache();
+      setScanKey(currScanKey);
+
+      currCursor = 0;
+      currKeys = [];
+    }
+
+    const requiredLength = (page + 1) * PAGE_SIZE;
+
+    // It tries to fetch the remaining keys, but since this
+    // is unreliable, it is increased every time
+    let fetchCount = requiredLength - currKeys.length;
+
+    // How many keys we need to fetch minimum
+    while (true) {
+      if (currKeys.length >= requiredLength || currCursor === -1) {
+        break;
+      }
+
+      // console.log("> scan", "cursor", currCursor, "fetchCount", fetchCount, "term", searchTerm);
+
+      const [nextCursor, newKeys] = await redis.scan(currCursor, {
+        count: fetchCount,
+        match: searchTerm,
+        type: typeFilter,
+      });
+
+      // console.log("< scan", newKeys.length, "keys", nextCursor === 0 ? "LAST" : "MORE");
+
+      const keysAndTypes = await fetchTypes(newKeys);
+
+      currKeys = [...currKeys, ...keysAndTypes];
+
+      fetchCount = Math.min(fetchCount * 2, MAX_SCAN_COUNT);
+
+      if (nextCursor === 0) {
+        currCursor = -1;
+        break;
+      }
+
+      currCursor = nextCursor;
+    }
+
+    setCursor(currCursor);
+    setKeys(currKeys);
+
+    return { keys: getPage(currKeys, page), hasNextPage: currCursor !== -1 };
+  };
+
+  return { fetchPage, resetPaginationCache };
+};
+
+export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const allTypesIncluded = dataType === "All Types" ? undefined : dataType;
 
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [timestamp, setTimeStamp] = useState(Date.now());
-  const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
+
   const [searchTerm, setSearchTerm] = useState(SCAN_MATCH_ALL);
-  const [lastCursor, setLastCursor] = useState(INITIAL_CURSOR_NUM);
-  const [page, setPage] = useState(0);
   const debouncedSearchTerm = useDebounce<string>(searchTerm, DEBOUNCE_TIME);
-  const [data, setData] = useState<{ [key: string]: [string, RedisDataTypeUnion][][] }>({});
-  const compositeKey = useMemo(
-    () => `${allTypesIncluded}-${debouncedSearchTerm}-${timestamp}`,
-    [allTypesIncluded, debouncedSearchTerm, timestamp],
-  );
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { fetchPage, resetPaginationCache } = useFetchRedisPage();
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
       if (dir === "next") {
-        setCurrentIndex((prev) => prev + 1);
-      } else if (dir === "prev" && currentIndex > 0) {
-        setCurrentIndex((prev) => prev - 1);
+        setCurrentPage((prev) => prev + 1);
+      } else if (dir === "prev" && currentPage > 0) {
+        setCurrentPage((prev) => prev - 1);
       }
     },
-    [currentIndex],
+    [currentPage],
   );
-  //If user doesn't pass any asterisk we add two of them to end and start
+
+  // If user doesn't pass any asterisk we add two of them to end and start
   const handleSearch = (query: string) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
+    setCurrentPage(0);
   };
 
-  const reset = () => {
-    if (searchTerm !== SCAN_MATCH_ALL) {
-      setSearchTerm(SCAN_MATCH_ALL);
-    } else {
-      //Required for hard refresh, but only if search is not present or default
-      setTimeStamp(Date.now());
-    }
-    if (searchInputRef.current?.value) {
-      searchInputRef.current.value = "";
-    }
-    setCurrentIndex(INITIAL_CURSOR_NUM);
-    queryClient.invalidateQueries("useFetchDbSize");
-  };
-
-  const { error, isLoading } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", compositeKey, page],
+  const { error, isLoading, data } = useQuery({
+    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, allTypesIncluded, currentPage],
     queryFn: async () => {
-      const rePipeline = redis.pipeline();
-
-      const pageData: [string, RedisDataTypeUnion][] = [];
-      let cursor = lastCursor;
-
-      while (true) {
-        const [nextCursor, keys] = await redis.scan(cursor, {
-          count: DEFAULT_FETCH_COUNT,
-          match: debouncedSearchTerm,
-          type: allTypesIncluded,
-        });
-        //Serialize keys, and feed them to pipeline
-        for (let i = 0; i < keys.length; i++) {
-          if (typeof keys[i] === "object") {
-            keys[i] = JSON.stringify(keys[i]);
-          }
-          rePipeline.type(keys[i]);
-        }
-
-        const types: RedisDataTypeUnion[] = keys.length ? await rePipeline.exec() : [];
-        const zippedKeyValues: [string, RedisDataTypeUnion][] = zip(keys, types);
-        pageData.push(...zippedKeyValues);
-
-        // If page is full or cursor reached 0, stop fetching
-        if (pageData.length >= 10 || nextCursor === 0) {
-          setLastCursor(nextCursor);
-          break;
-        }
-
-        cursor = nextCursor;
-      }
-
-      setData((prevState) => ({
-        ...prevState,
-        [compositeKey]: [...(prevState[compositeKey] || []), ...partition(pageData, 10)],
-      }));
+      return await fetchPage({
+        page: currentPage,
+        searchTerm: debouncedSearchTerm,
+        typeFilter: allTypesIncluded,
+      });
     },
   });
 
-  useEffect(() => {
-    const isCurrentAtLastItem = currentIndex === (data?.[compositeKey]?.length ?? 0) - 1;
-    if (isCurrentAtLastItem && lastCursor !== 0) {
-      setPage((prevState) => prevState + 1);
-    }
-  }, [currentIndex, compositeKey, lastCursor, data]);
+  const refreshSearch = useCallback(() => {
+    setCurrentPage(0);
+    resetPaginationCache();
+
+    queryClient.removeQueries({
+      queryKey: ["useFetchPaginatedKeys"],
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: ["useFetchDbSize"],
+    });
+  }, [resetPaginationCache]);
 
   return {
     isLoading,
     error,
-    data: data?.[compositeKey]?.[currentIndex],
+    data: data?.keys,
     handlePageChange,
     handleSearch,
-    reset,
+    refreshSearch,
     direction: {
-      prevNotAllowed: currentIndex === 0,
-      nextNotAllowed: currentIndex === (data?.[compositeKey]?.length ?? 0) - 1,
+      prevNotAllowed: currentPage === 0,
+      nextNotAllowed: data ? !data.hasNextPage : true,
     },
     searchInputRef,
   };

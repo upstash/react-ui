@@ -1,5 +1,5 @@
-import { PropsWithChildren, createContext, useContext, useMemo } from "react";
-import { Redis } from "@upstash/redis";
+import { type PropsWithChildren, createContext, useContext, useMemo } from "react";
+import type { Redis } from "@upstash/redis";
 import { redisClient } from "./lib/clients";
 
 export type DatabrowserProps = {
@@ -18,7 +18,7 @@ interface DatabrowserProviderProps {
 }
 
 export const DatabrowserProvider = ({ children, databrowser }: PropsWithChildren<DatabrowserProviderProps>) => {
-  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser.token, databrowser.url]);
+  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser]);
   return <DatabrowserContext.Provider value={{ redis: redisInstances }}>{children}</DatabrowserContext.Provider>;
 };
 

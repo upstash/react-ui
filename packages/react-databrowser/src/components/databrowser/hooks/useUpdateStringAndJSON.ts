@@ -1,5 +1,5 @@
 import { queryClient } from "@/lib/clients";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { useState } from "react";
 import { useAddData } from "./useAddData";
 

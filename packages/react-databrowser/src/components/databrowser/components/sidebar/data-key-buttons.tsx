@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { Fragment } from "react";
 
 type Props = {

@@ -1,7 +1,7 @@
 import { useDatabrowser } from "@/store";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchDataOfType } from "./fetch-data-types";
 import { DATA_PER_PAGE, INITIAL_CURSOR_NUM } from "./utils";
 
@@ -18,6 +18,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
   const { redis } = useDatabrowser();
 
   //Used for correctly resetting inner state of useQuery
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const timestamp = useMemo(() => Date.now(), [selectedDataKeyTypePair[0]]);
   const cursorStack = useRef<(string | number)[]>([INITIAL_CURSOR_NUM]);
   const listLength = useRef(INITIAL_CURSOR_NUM);
@@ -34,6 +35,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     [currentIndex],
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setCurrentIndex(INITIAL_CURSOR_NUM);
     cursorStack.current = [INITIAL_CURSOR_NUM];
@@ -59,14 +61,13 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
           cursorStack,
           listLength: dataType === "list" ? listLength : undefined,
         });
-      } else {
-        console.error(`Unsupported data type: ${dataType}`);
-        return { content: null, type: "unknown", memory: null } satisfies {
-          content: null;
-          type: "unknown";
-          memory: null;
-        };
       }
+      console.error(`Unsupported data type: ${dataType}`);
+      return { content: null, type: "unknown", memory: null } satisfies {
+        content: null;
+        type: "unknown";
+        memory: null;
+      };
     },
   });
 

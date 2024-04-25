@@ -2,7 +2,7 @@ import { useFetchPaginatedKeys } from "@/components/databrowser/hooks/useFetchPa
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { AddDataDialog } from "../add-data/add-data-dialog";
@@ -28,26 +28,25 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     handlePageChange,
     direction,
     handleSearch,
-    reset,
+    refreshSearch,
     searchInputRef,
   } = useFetchPaginatedKeys(selectedDataType);
 
   const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
-    reset();
     setSelectedDataType(dataType);
   };
 
   const handleDataAdd = (dataKey?: [string, RedisDataTypeUnion]) => {
     onDataKeyChange(dataKey);
-    reset();
+    refreshSearch();
   };
 
-  //Reset after delete
+  // Refresh after delete
   useEffect(() => {
-    if (!selectedDataKey) {
-      reset();
+    if (selectedDataKey === undefined) {
+      refreshSearch();
     }
-  }, [selectedDataKey]);
+  }, [selectedDataKey, refreshSearch]);
 
   return (
     <div className="flex min-h-[543px] flex-col">

@@ -1,7 +1,7 @@
 import { useFetchSingleDataByKey, useFetchTTLByKey, useUpdateStringAndJSON } from "@/components/databrowser/hooks";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Button } from "@/components/ui/button";
-import { RedisDataTypeUnion } from "@/types";
+import type { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
 import { DataDelete } from "./data-delete";

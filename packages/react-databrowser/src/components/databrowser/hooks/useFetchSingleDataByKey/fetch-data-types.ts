@@ -1,6 +1,6 @@
 import type { Redis } from "@upstash/redis";
 import {
-  ContentValue,
+  type ContentValue,
   DATA_PER_PAGE,
   INITIAL_CURSOR_NUM,
   toJsonStringifiable,
