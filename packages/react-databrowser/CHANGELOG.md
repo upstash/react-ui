@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.8
+
+### Patch Changes
+
+- 61283d6: Fix problems with pagination logic, adding and the toaster
+
 ## 0.3.7
 
 ### Patch Changes
