@@ -24,10 +24,10 @@ const useFetchRedisPage = () => {
 
   const [scanKey, setScanKey] = useState("");
 
-  const resetPaginationCache = () => {
+  const resetPaginationCache = useCallback(() => {
     setCursor(0);
     setKeys([]);
-  };
+  }, []);
 
   const typeCache = useMemo(() => new Map<string, RedisDataTypeUnion>(), []);
 
@@ -104,14 +104,15 @@ const useFetchRedisPage = () => {
         break;
       }
 
-      console.log("> scan", "cursor", currCursor, "fetchCount", fetchCount, "term", searchTerm);
+      // console.log("> scan", "cursor", currCursor, "fetchCount", fetchCount, "term", searchTerm);
+
       const [nextCursor, newKeys] = await redis.scan(currCursor, {
         count: fetchCount,
         match: searchTerm,
         type: typeFilter,
       });
 
-      console.log("< scan", newKeys.length, "keys", nextCursor === 0 ? "LAST" : "MORE");
+      // console.log("< scan", newKeys.length, "keys", nextCursor === 0 ? "LAST" : "MORE");
 
       const keysAndTypes = await fetchTypes(newKeys);
 
@@ -165,10 +166,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setCurrentPage(0);
   };
 
-  const { error, isLoading, data, refetch } = useQuery({
-    cacheTime: 0,
-    retry: false,
-
+  const { error, isLoading, data } = useQuery({
     queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, allTypesIncluded, currentPage],
     queryFn: async () => {
       return await fetchPage({
@@ -182,10 +180,15 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
   const refreshSearch = useCallback(() => {
     setCurrentPage(0);
     resetPaginationCache();
-    refetch();
 
-    queryClient.invalidateQueries("useFetchDbSize");
-  }, [resetPaginationCache, refetch]);
+    queryClient.removeQueries({
+      queryKey: ["useFetchPaginatedKeys"],
+    });
+
+    queryClient.invalidateQueries({
+      queryKey: ["useFetchDbSize"],
+    });
+  }, [resetPaginationCache]);
 
   return {
     isLoading,
