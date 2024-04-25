@@ -56,7 +56,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
-    "@upstash/redis": "^1.23.3",
-    "react-query": "^3.39.3"
+    "@tanstack/react-query": "^5.32.0",
+    "@upstash/redis": "^1.23.3"
   }
 }
