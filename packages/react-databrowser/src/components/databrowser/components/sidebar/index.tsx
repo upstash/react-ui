@@ -42,11 +42,11 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   };
 
   // Refresh after delete
-  useEffect(() => {
-    if (selectedDataKey === undefined) {
-      refreshSearch();
-    }
-  }, [selectedDataKey, refreshSearch]);
+  // useEffect(() => {
+  //   if (selectedDataKey === undefined) {
+  //     refreshSearch();
+  //   }
+  // }, [selectedDataKey, refreshSearch]);
 
   return (
     <div className="flex min-h-[543px] flex-col">
@@ -78,7 +78,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                   dataType={selectedDataType}
                   key={selectedDataType}
                 />
-                <ReloadButton onDataTypeChange={handleDataTypeChange} />
+                <ReloadButton refreshSearch={refreshSearch} />
                 <AddDataDialog onNewDataAdd={handleDataAdd} />
               </div>
             </div>
@@ -97,7 +97,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           </div>
         </div>
       </div>
-      <div className="px-3 pb-4">
+      <div className="select-none px-3 pb-4">
         <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
         <div className="flex items-center gap-2">
           <DisplayDbSize />
