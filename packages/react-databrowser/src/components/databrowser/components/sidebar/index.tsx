@@ -42,11 +42,11 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   };
 
   // Refresh after delete
-  // useEffect(() => {
-  //   if (selectedDataKey === undefined) {
-  //     refreshSearch();
-  //   }
-  // }, [selectedDataKey, refreshSearch]);
+  useEffect(() => {
+    if (selectedDataKey === undefined) {
+      refreshSearch();
+    }
+  }, [selectedDataKey, refreshSearch]);
 
   return (
     <div className="flex min-h-[543px] flex-col">
