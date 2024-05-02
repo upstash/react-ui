@@ -25,7 +25,9 @@ class PaginatedRedis {
     private readonly redis: Redis,
     private readonly searchTerm: string,
     private readonly typeFilter: string | undefined,
-  ) {}
+  ) {
+    console.log("************** RESET");
+  }
 
   cache: Record<string, { cursor: number; keys: string[] }> = Object.fromEntries(
     RedisDataTypes.map((type) => [type, { cursor: 0, keys: [] }]),
@@ -60,7 +62,7 @@ class PaginatedRedis {
           type: type,
         });
 
-        // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
+        console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
 
         this.cache[type].keys = [...this.cache[type].keys, ...newKeys];
         this.cache[type].cursor = nextCursor === 0 ? -1 : nextCursor;
@@ -79,7 +81,7 @@ class PaginatedRedis {
   }
 
   async getPage(page: number) {
-    // console.log("------------- SCAN PAGE", page, "-------------");
+    console.log("------------- SCAN PAGE", page, "-------------");
     this.targetCount = (page + 1) * PAGE_SIZE;
 
     if (!this.isFetching) {
@@ -96,6 +98,7 @@ class PaginatedRedis {
       const interval = setInterval(() => {
         if (this.getLength() > this.targetCount || this.isAllEnded()) {
           clearInterval(interval);
+          console.log("resolving because", this.getLength(), ">", this.targetCount, "or", this.isAllEnded());
           resolve();
         }
       }, 100);
@@ -115,20 +118,23 @@ class PaginatedRedis {
 const useFetchRedisPage = ({ searchTerm, typeFilter }: { searchTerm: string; typeFilter?: RedisDataTypeUnion }) => {
   const { redis } = useDatabrowser();
 
-  const [resetTime, setResetTime] = useState(Date.now());
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: We use resetTime to force reset the cache
-  const cache = useMemo(
-    () => new PaginatedRedis(redis, searchTerm, typeFilter),
-    [redis, searchTerm, typeFilter, resetTime],
-  );
+  const [cache, setCache] = useState<PaginatedRedis | undefined>();
+  const [searchKey, setSearchKey] = useState<string | undefined>();
 
   const resetPaginationCache = useCallback(() => {
-    // Force reset the memoized cache
-    setResetTime(Date.now());
+    console.log("pagination cache resetted like this brodie");
+    setCache(undefined);
   }, []);
 
   const fetchPage = async (page: number) => {
+    const currSearchKey = `${searchTerm}-${typeFilter}`;
+    if (!cache || searchKey !== currSearchKey) {
+      const newCache = new PaginatedRedis(redis, searchTerm, typeFilter);
+
+      setCache(newCache);
+      setSearchKey(currSearchKey);
+      return newCache.getPage(page);
+    }
     return cache.getPage(page);
   };
 

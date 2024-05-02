@@ -42,11 +42,16 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
   };
 
   // Refresh after delete
-  useEffect(() => {
-    if (selectedDataKey === undefined) {
-      refreshSearch();
-    }
-  }, [selectedDataKey, refreshSearch]);
+  // useEffect(() => {
+  // if (selectedDataKey === undefined) {
+  // There is a weird bug here that causes the search to not refresh,
+  // it's something about the order react updates stuff and react query
+  // holding onto wrong paginated redis object promise. I couln't find
+  // a better way...
+  // refreshSearch();
+  // setTimeout(refreshSearch, 100);
+  //   }
+  // }, [selectedDataKey, refreshSearch]);
 
   return (
     <div className="flex min-h-[543px] flex-col">
