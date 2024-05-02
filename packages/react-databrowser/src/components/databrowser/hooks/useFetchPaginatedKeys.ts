@@ -26,7 +26,7 @@ class PaginatedRedis {
     private readonly searchTerm: string,
     private readonly typeFilter: string | undefined,
   ) {
-    console.log("************** RESET");
+    // console.log("************** RESET");
   }
 
   cache: Record<string, { cursor: number; keys: string[] }> = Object.fromEntries(
@@ -62,7 +62,7 @@ class PaginatedRedis {
           type: type,
         });
 
-        console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
+        // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
 
         this.cache[type].keys = [...this.cache[type].keys, ...newKeys];
         this.cache[type].cursor = nextCursor === 0 ? -1 : nextCursor;
@@ -81,7 +81,6 @@ class PaginatedRedis {
   }
 
   async getPage(page: number) {
-    console.log("------------- SCAN PAGE", page, "-------------");
     this.targetCount = (page + 1) * PAGE_SIZE;
 
     if (!this.isFetching) {
@@ -98,7 +97,6 @@ class PaginatedRedis {
       const interval = setInterval(() => {
         if (this.getLength() > this.targetCount || this.isAllEnded()) {
           clearInterval(interval);
-          console.log("resolving because", this.getLength(), ">", this.targetCount, "or", this.isAllEnded());
           resolve();
         }
       }, 100);
@@ -115,30 +113,43 @@ class PaginatedRedis {
   }
 }
 
-const useFetchRedisPage = ({ searchTerm, typeFilter }: { searchTerm: string; typeFilter?: RedisDataTypeUnion }) => {
+const useFetchRedisPage = ({
+  searchTerm,
+  typeFilter,
+  page,
+}: {
+  searchTerm: string;
+  typeFilter?: RedisDataTypeUnion;
+  page: number;
+}) => {
   const { redis } = useDatabrowser();
 
-  const [cache, setCache] = useState<PaginatedRedis | undefined>();
-  const [searchKey, setSearchKey] = useState<string | undefined>();
+  const cache = useRef<PaginatedRedis | undefined>(undefined);
+  const lastKey = useRef<string | undefined>(undefined);
 
-  const resetPaginationCache = useCallback(() => {
-    console.log("pagination cache resetted like this brodie");
-    setCache(undefined);
+  const context = useQuery({
+    queryKey: ["useFetchPaginatedKeys", searchTerm, typeFilter, page],
+    queryFn: async () => {
+      const newKey = `${searchTerm}-${typeFilter}`;
+
+      if (!cache.current || lastKey.current !== newKey) {
+        cache.current = new PaginatedRedis(redis, searchTerm, typeFilter);
+        lastKey.current = newKey;
+      }
+
+      return cache.current.getPage(page);
+    },
+  });
+
+  const resetCache = useCallback(() => {
+    cache.current = undefined;
+    lastKey.current = undefined;
   }, []);
 
-  const fetchPage = async (page: number) => {
-    const currSearchKey = `${searchTerm}-${typeFilter}`;
-    if (!cache || searchKey !== currSearchKey) {
-      const newCache = new PaginatedRedis(redis, searchTerm, typeFilter);
-
-      setCache(newCache);
-      setSearchKey(currSearchKey);
-      return newCache.getPage(page);
-    }
-    return cache.getPage(page);
+  return {
+    ...context,
+    resetCache,
   };
-
-  return { fetchPage, resetPaginationCache };
 };
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
@@ -151,9 +162,10 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { fetchPage, resetPaginationCache } = useFetchRedisPage({
+  const { resetCache, data, isLoading, error } = useFetchRedisPage({
     searchTerm: debouncedSearchTerm,
     typeFilter: allTypesIncluded,
+    page: currentPage,
   });
 
   const handlePageChange = useCallback(
@@ -173,15 +185,8 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setCurrentPage(0);
   };
 
-  const { error, isLoading, data } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, allTypesIncluded, currentPage],
-    queryFn: async () => {
-      return await fetchPage(currentPage);
-    },
-  });
-
   const refreshSearch = useCallback(() => {
-    resetPaginationCache();
+    resetCache();
     setCurrentPage(0);
 
     queryClient.resetQueries({
@@ -191,7 +196,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     queryClient.invalidateQueries({
       queryKey: ["useFetchDbSize"],
     });
-  }, [resetPaginationCache]);
+  }, [resetCache]);
 
   return {
     isLoading,
