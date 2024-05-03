@@ -97,7 +97,7 @@ class PaginatedRedis {
     // Wait until we have enough
     await new Promise<void>((resolve) => {
       const interval = setInterval(() => {
-        if (this.getLength() > this.targetCount || this.isAllEnded()) {
+        if (this.getLength() >= this.targetCount || this.isAllEnded()) {
           clearInterval(interval);
           resolve();
         }
