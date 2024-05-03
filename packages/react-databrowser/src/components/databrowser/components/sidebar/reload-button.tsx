@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
-import type { RedisDataTypeUnion } from "@/types";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
-export const ReloadButton = ({ onDataTypeChange }: { onDataTypeChange: (dataType?: RedisDataTypeUnion) => void }) => {
+export const ReloadButton = ({ refreshSearch }: { refreshSearch: () => void }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setIsLoading(true);
-    onDataTypeChange(undefined);
+    refreshSearch();
     setTimeout(() => {
       setIsLoading(false);
     }, 350);

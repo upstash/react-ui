@@ -1,140 +1,168 @@
 import { queryClient } from "@/lib/clients";
 import { useDatabrowser } from "@/store";
-import type { RedisDataTypeUnion } from "@/types";
+import { RedisDataTypes, type RedisDataTypeUnion } from "@/types";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
+import type { Redis } from "@upstash/redis";
 
 const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
 
 const PAGE_SIZE = 10;
-const MAX_SCAN_COUNT = 10_000;
+
+// Fetch 100 keys every single time
+const INITIAL_FETCH_COUNT = 100;
+const MAX_FETCH_COUNT = 1000;
 
 type RedisKey = [string, RedisDataTypeUnion];
 
-const useFetchRedisPage = () => {
+function slicePage(keys: RedisKey[], page: number) {
+  return keys.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+}
+
+const dataTypes = RedisDataTypes.filter((type) => type !== "All Types");
+
+class PaginatedRedis {
+  constructor(
+    private readonly redis: Redis,
+    private readonly searchTerm: string,
+    private readonly typeFilter: string | undefined,
+  ) {
+    // console.log("************** RESET");
+  }
+
+  cache: Record<string, { cursor: number; keys: string[] }> = Object.fromEntries(
+    dataTypes.map((type) => [type, { cursor: 0, keys: [] }]),
+  );
+  targetCount = 0;
+
+  private getLength() {
+    return Object.values(this.cache).reduce((acc, curr) => acc + curr.keys.length, 0);
+  }
+
+  private getKeys() {
+    const keys = Object.entries(this.cache).flatMap(([type, { keys }]) => {
+      return keys.map((key) => [key, type] as RedisKey);
+    });
+
+    const sorted = keys.sort((a, b) => a[0].localeCompare(b[0]));
+
+    return sorted;
+  }
+
+  private async fetch() {
+    const fetchType = async (type: string) => {
+      let fetchCount = INITIAL_FETCH_COUNT;
+
+      while (true) {
+        const cursor = this.cache[type].cursor;
+        if (cursor === -1 || this.getLength() >= this.targetCount) {
+          break;
+        }
+
+        const [nextCursor, newKeys] = await this.redis.scan(cursor, {
+          count: fetchCount,
+          match: this.searchTerm,
+          type: type,
+        });
+
+        fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT);
+
+        // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
+
+        // Dedupe here because redis can and will return duplicates for example when
+        // a key is deleted because of ttl etc.
+        const dedupedSet = new Set([...this.cache[type].keys, ...newKeys]);
+
+        this.cache[type].keys = [...dedupedSet];
+        this.cache[type].cursor = nextCursor === 0 ? -1 : nextCursor;
+      }
+    };
+
+    // Fetch pages of each type until they are enough
+    const types = this.typeFilter ? [this.typeFilter] : dataTypes;
+    await Promise.all(types.map(fetchType));
+  }
+
+  isFetching = false;
+
+  private isAllEnded() {
+    return (this.typeFilter ? [this.typeFilter] : dataTypes).every((type) => this.cache[type].cursor === -1);
+  }
+
+  async getPage(page: number) {
+    this.targetCount = (page + 1) * PAGE_SIZE;
+
+    if (!this.isFetching) {
+      try {
+        this.isFetching = true;
+        void this.fetch();
+      } finally {
+        this.isFetching = false;
+      }
+    }
+
+    // Wait until we have enough
+    await new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        if (this.getLength() >= this.targetCount || this.isAllEnded()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 100);
+    });
+
+    const hasEnoughForNextPage = this.getLength() > (page + 1) * PAGE_SIZE;
+
+    const hasNextPage = !this.isAllEnded() || hasEnoughForNextPage;
+
+    // console.log(slicePage(this.getKeys(), page));
+
+    return {
+      keys: slicePage(this.getKeys(), page),
+      hasNextPage,
+    };
+  }
+}
+
+const useFetchRedisPage = ({
+  searchTerm,
+  typeFilter,
+  page,
+}: {
+  searchTerm: string;
+  typeFilter?: RedisDataTypeUnion;
+  page: number;
+}) => {
   const { redis } = useDatabrowser();
 
-  const [keys, setKeys] = useState<RedisKey[]>([]);
+  const cache = useRef<PaginatedRedis | undefined>(undefined);
+  const lastKey = useRef<string | undefined>(undefined);
 
-  // A cursor of -1 means that the last scan returned a next cursor of 0
-  // meaning that there are no more keys to fetch
-  const [cursor, setCursor] = useState(0);
+  const context = useQuery({
+    queryKey: ["useFetchPaginatedKeys", searchTerm, typeFilter, page],
+    queryFn: async () => {
+      const newKey = `${searchTerm}-${typeFilter}`;
 
-  const [scanKey, setScanKey] = useState("");
+      if (!cache.current || lastKey.current !== newKey) {
+        cache.current = new PaginatedRedis(redis, searchTerm, typeFilter);
+        lastKey.current = newKey;
+      }
 
-  const resetPaginationCache = useCallback(() => {
-    setCursor(0);
-    setKeys([]);
+      return cache.current.getPage(page);
+    },
+  });
+
+  const resetCache = useCallback(() => {
+    cache.current = undefined;
+    lastKey.current = undefined;
   }, []);
 
-  const typeCache = useMemo(() => new Map<string, RedisDataTypeUnion>(), []);
-
-  const getPage = (keys: RedisKey[], page: number) => {
-    return keys.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+  return {
+    ...context,
+    resetCache,
   };
-
-  const fetchTypes = async (keys: string[]) => {
-    const rePipeline = redis.pipeline();
-    const pipelinedKeyIds: number[] = [];
-    const keysAndTypes: RedisKey[] = [];
-
-    // Serialize keys, and feed them to pipeline
-    for (let i = 0; i < keys.length; i++) {
-      if (typeof keys[i] === "object") {
-        keys[i] = JSON.stringify(keys[i]);
-      }
-      const cacheResult = typeCache.get(keys[i]);
-      if (cacheResult) {
-        keysAndTypes.push([keys[i], cacheResult]);
-      } else {
-        // If the key is not in cache, add it to pipeline
-        rePipeline.type(keys[i]);
-        pipelinedKeyIds.push(i);
-        // Giving the wrong type for now
-        keysAndTypes.push([keys[i], "string"]);
-      }
-    }
-
-    const types: RedisDataTypeUnion[] = pipelinedKeyIds.length ? await rePipeline.exec() : [];
-
-    // Update the types in the keysAndTypes array with the newly fetched types
-    types.forEach((type, index) => {
-      const id = pipelinedKeyIds[index];
-
-      keysAndTypes[id][1] = type;
-      typeCache.set(keys[id], type);
-    });
-    return keysAndTypes;
-  };
-
-  const fetchPage = async ({
-    page,
-    searchTerm,
-    typeFilter,
-  }: {
-    page: number;
-    searchTerm: string;
-    typeFilter?: RedisDataTypeUnion;
-  }) => {
-    const currScanKey = `${searchTerm}-${typeFilter}`;
-
-    let currKeys = keys;
-    let currCursor = cursor;
-
-    // If this is a new search, reset the pagination cache
-    if (scanKey !== currScanKey) {
-      resetPaginationCache();
-      setScanKey(currScanKey);
-
-      currCursor = 0;
-      currKeys = [];
-    }
-
-    const requiredLength = (page + 1) * PAGE_SIZE;
-
-    // It tries to fetch the remaining keys, but since this
-    // is unreliable, it is increased every time
-    let fetchCount = requiredLength - currKeys.length;
-
-    // How many keys we need to fetch minimum
-    while (true) {
-      if (currKeys.length >= requiredLength || currCursor === -1) {
-        break;
-      }
-
-      // console.log("> scan", "cursor", currCursor, "fetchCount", fetchCount, "term", searchTerm);
-
-      const [nextCursor, newKeys] = await redis.scan(currCursor, {
-        count: fetchCount,
-        match: searchTerm,
-        type: typeFilter,
-      });
-
-      // console.log("< scan", newKeys.length, "keys", nextCursor === 0 ? "LAST" : "MORE");
-
-      const keysAndTypes = await fetchTypes(newKeys);
-
-      currKeys = [...currKeys, ...keysAndTypes];
-
-      fetchCount = Math.min(fetchCount * 2, MAX_SCAN_COUNT);
-
-      if (nextCursor === 0) {
-        currCursor = -1;
-        break;
-      }
-
-      currCursor = nextCursor;
-    }
-
-    setCursor(currCursor);
-    setKeys(currKeys);
-
-    return { keys: getPage(currKeys, page), hasNextPage: currCursor !== -1 };
-  };
-
-  return { fetchPage, resetPaginationCache };
 };
 
 export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
@@ -147,7 +175,11 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
 
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { fetchPage, resetPaginationCache } = useFetchRedisPage();
+  const { resetCache, data, isLoading, error } = useFetchRedisPage({
+    searchTerm: debouncedSearchTerm,
+    typeFilter: allTypesIncluded,
+    page: currentPage,
+  });
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
@@ -166,29 +198,18 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     setCurrentPage(0);
   };
 
-  const { error, isLoading, data } = useQuery({
-    queryKey: ["useFetchPaginatedKeys", debouncedSearchTerm, allTypesIncluded, currentPage],
-    queryFn: async () => {
-      return await fetchPage({
-        page: currentPage,
-        searchTerm: debouncedSearchTerm,
-        typeFilter: allTypesIncluded,
-      });
-    },
-  });
-
   const refreshSearch = useCallback(() => {
+    resetCache();
     setCurrentPage(0);
-    resetPaginationCache();
 
-    queryClient.removeQueries({
+    queryClient.resetQueries({
       queryKey: ["useFetchPaginatedKeys"],
     });
 
     queryClient.invalidateQueries({
       queryKey: ["useFetchDbSize"],
     });
-  }, [resetPaginationCache]);
+  }, [resetCache]);
 
   return {
     isLoading,
@@ -198,7 +219,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     handleSearch,
     refreshSearch,
     direction: {
-      prevNotAllowed: currentPage === 0,
+      prevNotAllowed: currentPage <= 0,
       nextNotAllowed: data ? !data.hasNextPage : true,
     },
     searchInputRef,

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import type { RedisDataTypeUnion } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AddDataDialog } from "../add-data/add-data-dialog";
 import { DataKeyButtons } from "./data-key-buttons";
 import { DataTypeSelector } from "./data-type-selector";
@@ -16,6 +16,21 @@ import { LoadingSkeleton } from "./skeleton-buttons";
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
   selectedDataKey?: string;
+};
+
+const useRefreshOnDelete = ({ dataKey, refresh }: { dataKey?: string; refresh: () => void }) => {
+  const firstTime = useRef(true);
+
+  useEffect(() => {
+    if (firstTime.current) {
+      firstTime.current = false;
+      return;
+    }
+
+    if (dataKey === undefined) {
+      refresh();
+    }
+  }, [refresh, dataKey]);
 };
 
 export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
@@ -41,12 +56,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     refreshSearch();
   };
 
-  // Refresh after delete
-  useEffect(() => {
-    if (selectedDataKey === undefined) {
-      refreshSearch();
-    }
-  }, [selectedDataKey, refreshSearch]);
+  useRefreshOnDelete({ dataKey: selectedDataKey, refresh: refreshSearch });
 
   return (
     <div className="flex min-h-[543px] flex-col">
@@ -78,7 +88,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                   dataType={selectedDataType}
                   key={selectedDataType}
                 />
-                <ReloadButton onDataTypeChange={handleDataTypeChange} />
+                <ReloadButton refreshSearch={refreshSearch} />
                 <AddDataDialog onNewDataAdd={handleDataAdd} />
               </div>
             </div>
@@ -97,7 +107,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
           </div>
         </div>
       </div>
-      <div className="px-3 pb-4">
+      <div className="select-none px-3 pb-4">
         <div className="mb-[12px] h-[1px] w-full bg-[#0000000D]" />
         <div className="flex items-center gap-2">
           <DisplayDbSize />
