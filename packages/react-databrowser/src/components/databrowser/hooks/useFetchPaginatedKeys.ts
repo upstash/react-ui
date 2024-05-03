@@ -66,7 +66,11 @@ class PaginatedRedis {
 
         // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
 
-        this.cache[type].keys = [...this.cache[type].keys, ...newKeys];
+        // Dedupe here because redis can and will return duplicates for example when
+        // a key is deleted because of ttl etc.
+        const dedupedSet = new Set([...this.cache[type].keys, ...newKeys]);
+
+        this.cache[type].keys = [...dedupedSet];
         this.cache[type].cursor = nextCursor === 0 ? -1 : nextCursor;
       }
     };
@@ -107,6 +111,8 @@ class PaginatedRedis {
     const hasEnoughForNextPage = this.getLength() > (page + 1) * PAGE_SIZE;
 
     const hasNextPage = !this.isAllEnded() || hasEnoughForNextPage;
+
+    // console.log(slicePage(this.getKeys(), page));
 
     return {
       keys: slicePage(this.getKeys(), page),
