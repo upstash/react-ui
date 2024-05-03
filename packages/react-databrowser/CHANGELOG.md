@@ -1,5 +1,12 @@
 # @upstash/react-databrowser
 
+## 0.3.9
+
+### Patch Changes
+
+- e648094: fix pagination not resetting when type filter changes
+- 893eecc: Implement a better way for fetching keys and their types using less commands
+
 ## 0.3.8
 
 ### Patch Changes
