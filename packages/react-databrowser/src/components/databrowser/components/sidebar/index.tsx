@@ -44,10 +44,12 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
     direction,
     handleSearch,
     refreshSearch,
+    resetPagination,
     searchInputRef,
   } = useFetchPaginatedKeys(selectedDataType);
 
   const handleDataTypeChange = (dataType?: RedisDataTypeUnion) => {
+    resetPagination();
     setSelectedDataType(dataType);
   };
 

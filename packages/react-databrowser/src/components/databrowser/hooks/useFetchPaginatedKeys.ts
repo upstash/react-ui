@@ -1,7 +1,7 @@
 import { queryClient } from "@/lib/clients";
 import { useDatabrowser } from "@/store";
 import { RedisDataTypes, type RedisDataTypeUnion } from "@/types";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 import type { Redis } from "@upstash/redis";
@@ -192,6 +192,10 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     [currentPage],
   );
 
+  const resetPagination = () => {
+    setCurrentPage(0);
+  };
+
   // If user doesn't pass any asterisk we add two of them to end and start
   const handleSearch = (query: string) => {
     setSearchTerm(!query.includes("*") ? `*${query}*` : query);
@@ -215,6 +219,7 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     isLoading,
     error,
     data: data?.keys,
+    resetPagination,
     handlePageChange,
     handleSearch,
     refreshSearch,
