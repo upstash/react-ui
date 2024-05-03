@@ -20,6 +20,8 @@ function slicePage(keys: RedisKey[], page: number) {
   return keys.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 }
 
+const dataTypes = RedisDataTypes.filter((type) => type !== "All Types");
+
 class PaginatedRedis {
   constructor(
     private readonly redis: Redis,
@@ -30,7 +32,7 @@ class PaginatedRedis {
   }
 
   cache: Record<string, { cursor: number; keys: string[] }> = Object.fromEntries(
-    RedisDataTypes.map((type) => [type, { cursor: 0, keys: [] }]),
+    dataTypes.map((type) => [type, { cursor: 0, keys: [] }]),
   );
   targetCount = 0;
 
@@ -70,14 +72,14 @@ class PaginatedRedis {
     };
 
     // Fetch pages of each type until they are enough
-    const types = this.typeFilter ? [this.typeFilter] : RedisDataTypes;
+    const types = this.typeFilter ? [this.typeFilter] : dataTypes;
     await Promise.all(types.map(fetchType));
   }
 
   isFetching = false;
 
   private isAllEnded() {
-    return (this.typeFilter ? [this.typeFilter] : RedisDataTypes).every((type) => this.cache[type].cursor === -1);
+    return (this.typeFilter ? [this.typeFilter] : dataTypes).every((type) => this.cache[type].cursor === -1);
   }
 
   async getPage(page: number) {
