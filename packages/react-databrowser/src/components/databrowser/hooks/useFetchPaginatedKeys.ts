@@ -12,7 +12,8 @@ const DEBOUNCE_TIME = 250;
 const PAGE_SIZE = 10;
 
 // Fetch 100 keys every single time
-const FETCH_COUNT = 100;
+const INITIAL_FETCH_COUNT = 100;
+const MAX_FETCH_COUNT = 1000;
 
 type RedisKey = [string, RedisDataTypeUnion];
 
@@ -52,6 +53,8 @@ class PaginatedRedis {
 
   private async fetch() {
     const fetchType = async (type: string) => {
+      let fetchCount = INITIAL_FETCH_COUNT;
+
       while (true) {
         const cursor = this.cache[type].cursor;
         if (cursor === -1 || this.getLength() >= this.targetCount) {
@@ -59,10 +62,12 @@ class PaginatedRedis {
         }
 
         const [nextCursor, newKeys] = await this.redis.scan(cursor, {
-          count: FETCH_COUNT,
+          count: fetchCount,
           match: this.searchTerm,
           type: type,
         });
+
+        fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT);
 
         // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
 
