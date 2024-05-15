@@ -19,17 +19,13 @@ type Props = {
 };
 
 const useRefreshOnDelete = ({ dataKey, refresh }: { dataKey?: string; refresh: () => void }) => {
-  const firstRefresh = useRef<number | undefined>();
+  const firstTime = useRef(true);
 
   useEffect(() => {
-    if (!firstRefresh.current) {
-      firstRefresh.current = Date.now();
+    if (firstTime.current) {
+      firstTime.current = false;
       return;
     }
-
-    // If this is the second call and the time difference is less than 10ms, don't refresh
-    // This is to prevent react dev server from calling the hook 2 times initially
-    if (Date.now() - firstRefresh.current < 10) return;
 
     if (dataKey === undefined) {
       refresh();
