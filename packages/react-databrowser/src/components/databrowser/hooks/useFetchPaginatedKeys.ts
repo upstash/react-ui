@@ -96,7 +96,8 @@ class PaginatedRedis {
   }
 
   async getPage(page: number) {
-    this.targetCount = (page + 1) * PAGE_SIZE;
+    // +1 here to fetch one more than needed to check if there is a next page
+    this.targetCount = (page + 1) * PAGE_SIZE + 1;
 
     if (!this.isFetching) {
       try {
