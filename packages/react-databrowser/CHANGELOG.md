@@ -1,5 +1,13 @@
 # @upstash/react-databrowser
 
+## 0.3.10
+
+### Patch Changes
+
+- 078a577: Fix last page sometimes being empty
+- bb40047: Fix deserialization bug
+- 73aa996: Enable autoPipeline in the redis client
+
 ## 0.3.9
 
 ### Patch Changes
