@@ -28,11 +28,11 @@ export const fetchDataOfType = {
     };
   },
   zset: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
-    const [nextCursor, zrangeValue] = await redis.zscan(key, cursor as number, {
+    const [nextCursorStr, zrangeValue] = await redis.zscan(key, cursor as number, {
       count: DATA_PER_PAGE,
     });
     if (index === cursorStack.current.length - 1) {
-      cursorStack.current.push(nextCursor);
+      cursorStack.current.push(Number(nextCursorStr));
     }
     const content = transformArray(zrangeValue);
     return { content, type: "zset", memory: roughSizeOfObject(content) } satisfies {
@@ -42,11 +42,11 @@ export const fetchDataOfType = {
     };
   },
   hash: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
-    const [nextCursor, hashValues] = await redis.hscan(key, cursor as number, {
+    const [nextCursorStr, hashValues] = await redis.hscan(key, cursor as number, {
       count: DATA_PER_PAGE,
     });
     if (index === cursorStack.current.length - 1) {
-      cursorStack.current.push(nextCursor);
+      cursorStack.current.push(Number(nextCursorStr));
     }
     const content = transformHash(hashValues);
     return { content, type: "hash", memory: roughSizeOfObject(content) } satisfies {
@@ -56,11 +56,11 @@ export const fetchDataOfType = {
     };
   },
   set: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
-    const [nextCursor, setValues] = await redis.sscan(key, cursor as number, {
+    const [nextCursorStr, setValues] = await redis.sscan(key, cursor as number, {
       count: DATA_PER_PAGE,
     });
     if (index === cursorStack.current.length - 1) {
-      cursorStack.current.push(nextCursor);
+      cursorStack.current.push(Number(nextCursorStr));
     }
     const content = setValues.map((item, _) => ({
       value: null,

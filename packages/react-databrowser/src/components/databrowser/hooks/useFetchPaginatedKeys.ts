@@ -61,11 +61,13 @@ class PaginatedRedis {
           break;
         }
 
-        const [nextCursor, newKeys] = await this.redis.scan(cursor, {
+        const [nextCursorStr, newKeys] = await this.redis.scan(cursor, {
           count: fetchCount,
           match: this.searchTerm,
           type: type,
         });
+
+        const nextCursor = Number(nextCursorStr);
 
         const stringifiedKeys = (newKeys as unknown[]).map((key) =>
           typeof key === "string" ? key : JSON.stringify(key),
