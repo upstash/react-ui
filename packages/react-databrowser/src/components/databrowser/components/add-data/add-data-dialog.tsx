@@ -56,7 +56,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
       const exp = Number(formData.get("exp"));
       const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined;
       const ttl = expUnit ? convertToSeconds(expUnit, exp) : null;
-      const ok = await addData.mutateAsync([key, value, ttl]);
+      const ok = await addData.mutateAsync([key, value, ttl, false]);
 
       if (ok) {
         toast({
@@ -164,8 +164,8 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
             </div>
           </div>
           <DialogFooter>
-            <button disabled={addData.isLoading} className="save-changes-btn">
-              <Spinner isLoading={addData.isLoading} isLoadingText="Please wait">
+            <button disabled={addData.isPending} className="save-changes-btn">
+              <Spinner isLoading={addData.isPending} isLoadingText="Please wait">
                 Save changes
               </Spinner>
             </button>

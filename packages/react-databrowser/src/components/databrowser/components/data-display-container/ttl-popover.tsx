@@ -101,7 +101,7 @@ export function TTLPopover({ children, TTL, dataKey }: PropsWithChildren<{ TTL?:
                 </span>
 
                 <Button size="sm" onClick={handlePersistTTL}>
-                  <Spinner isLoading={persistTTL.isLoading} isLoadingText="Please wait">
+                  <Spinner isLoading={persistTTL.isPending} isLoadingText="Please wait">
                     Persist Key
                   </Spinner>
                 </Button>

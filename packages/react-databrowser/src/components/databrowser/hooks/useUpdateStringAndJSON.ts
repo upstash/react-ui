@@ -24,8 +24,12 @@ export const useUpdateStringAndJSON = ([key, keyType]: [string, RedisDataTypeUni
     }
 
     await replaceData([key, updatedContent, isPersistedTTL || !TTLData ? null : TTLData, isDataTypeJSON]);
-    queryClient.invalidateQueries("useFetchSingleDataByKey");
-    queryClient.invalidateQueries("useFetchTTLByKey");
+    queryClient.invalidateQueries({
+      queryKey: ["useFetchSingleDataByKey"],
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["useFetchTTLByKey"],
+    });
     setIsContentEditable(false);
     setUpdatedContent(undefined);
   };
