@@ -24,18 +24,20 @@ export const DataValueEdit = ({
 }: Props) => {
   return (
     <div className="flex gap-2 transition-all">
-      <TooltipProvider>
-        <Tooltip delayDuration={200}>
-          <TooltipTrigger>
-            <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
-              <IconBraces />
-            </Checkbox>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{isRawView ? "Raw view" : "Pretty print"}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {!isContentEditable && (
+        <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
+          <TooltipProvider>
+            <Tooltip delayDuration={200}>
+              <TooltipTrigger>
+                <IconBraces />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{isRawView ? "Raw view" : "Pretty print"}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </Checkbox>
+      )}
 
       {isContentEditable && (
         <Button
