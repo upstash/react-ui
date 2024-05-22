@@ -75,7 +75,9 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
   const isNextNotAllowedForListType = () => (currentIndex + 1) * DATA_PER_PAGE >= listLength.current;
   const isNextNotAllowedForOtherTypes = () => cursorStack.current[currentIndex + 1] === 0;
   const isNextNotAllowed = () =>
-    selectedDataKeyTypePair[1] === "list" ? isNextNotAllowedForListType() : isNextNotAllowedForOtherTypes();
+    isLoading || selectedDataKeyTypePair[1] === "list"
+      ? isNextNotAllowedForListType()
+      : isNextNotAllowedForOtherTypes();
 
   return {
     isLoading,
