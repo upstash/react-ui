@@ -1,19 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
-import { toJsonStringifiable } from "./display-scrollarea";
+import { prettifyData } from "./display-scrollarea";
+import { IconBraces } from "../icons/icon-braces";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {
   onContentEditableToggle: () => void;
   isContentEditable: boolean;
   onContentEditableSave: () => Promise<void>;
   data: string | JSON | null;
-};
-export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onContentEditableSave, data }: Props) => {
-  const stringifiable = toJsonStringifiable(data);
 
+  isRawView: boolean;
+  setRawView: (value: boolean) => void;
+};
+export const DataValueEdit = ({
+  isContentEditable,
+  onContentEditableToggle,
+  onContentEditableSave,
+  data,
+  isRawView,
+  setRawView,
+}: Props) => {
   return (
     <div className="flex gap-2 transition-all">
+      <TooltipProvider>
+        <Tooltip delayDuration={200}>
+          <TooltipTrigger>
+            <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
+              <IconBraces />
+            </Checkbox>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{isRawView ? "Raw view" : "Pretty print"}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       {isContentEditable && (
         <Button
           variant="outline"
@@ -39,9 +62,10 @@ export const DataValueEdit = ({ isContentEditable, onContentEditableToggle, onCo
           </svg>
         </Button>
       )}
+
       {!isContentEditable && (
         <CopyToClipboardButton
-          onCopy={() => handleCopyClick(stringifiable)}
+          onCopy={() => handleCopyClick(typeof data === "string" ? data : JSON.stringify(data))}
           svgSize={{ w: 20, h: 20 }}
           className="h-8 w-8 rounded-md border border-[#D9D9D9]"
         />

@@ -11,6 +11,7 @@ import { DataValueEdit } from "./data-value-edit";
 import { DisplayScrollarea } from "./display-scrollarea";
 import { MissingDataDisplay } from "./missing-data-display";
 import { DataLoading } from "./data-loading";
+import { useState } from "react";
 
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
@@ -30,6 +31,8 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
     updateDataStatus,
   } = useUpdateStringAndJSON(selectedDataKeyTypePair, TTLData);
 
+  const [isRawView, setRawView] = useState(false);
+
   return (
     <div className="h-full flex-col pt-2">
       <div className="flex w-full items-center justify-between px-4 ">
@@ -45,9 +48,17 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
       {isLoading || updateDataStatus === "pending" ? (
         <DataLoading />
-      ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
+      ) : keyType === "string" && data?.type === "string" ? (
         <DisplayScrollarea
-          data={data.content}
+          isRawView={isRawView}
+          rawData={data.content ?? ""}
+          isContentEditable={isContentEditable}
+          onContentChange={handleUpdatedContent}
+        />
+      ) : keyType === "json" && data?.type === "json" ? (
+        <DisplayScrollarea
+          isRawView={false}
+          rawData={JSON.stringify(data.content)}
           isContentEditable={isContentEditable}
           onContentChange={handleUpdatedContent}
         />
@@ -73,6 +84,8 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         {((keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json")) && (
           <div className="ml-auto">
             <DataValueEdit
+              isRawView={isRawView}
+              setRawView={setRawView}
               data={data?.content}
               onContentEditableToggle={handleContentEditableToggle}
               onContentEditableSave={() => handleContentUpdate()}
