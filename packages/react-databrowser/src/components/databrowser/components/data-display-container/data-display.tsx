@@ -43,7 +43,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
         </div>
       </div>
       <div className="mt-[12px] h-[1px] w-full bg-[#0000000D]" />
-      {isLoading || updateDataStatus === "loading" ? (
+      {isLoading || updateDataStatus === "pending" ? (
         <DataLoading />
       ) : (keyType === "string" && data?.type === "string") || (keyType === "json" && data?.type === "json") ? (
         <DisplayScrollarea
