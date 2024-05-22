@@ -86,6 +86,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
             <DataValueEdit
               isRawView={isRawView}
               setRawView={setRawView}
+              showRawCheckbox={keyType === "string"}
               data={data?.content}
               onContentEditableToggle={handleContentEditableToggle}
               onContentEditableSave={() => handleContentUpdate()}

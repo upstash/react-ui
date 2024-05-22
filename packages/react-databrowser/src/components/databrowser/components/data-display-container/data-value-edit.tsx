@@ -13,6 +13,7 @@ type Props = {
 
   isRawView: boolean;
   setRawView: (value: boolean) => void;
+  showRawCheckbox?: boolean;
 };
 export const DataValueEdit = ({
   isContentEditable,
@@ -21,24 +22,27 @@ export const DataValueEdit = ({
   data,
   isRawView,
   setRawView,
+  showRawCheckbox,
 }: Props) => {
   return (
     <div className="flex gap-2 transition-all">
-      {!isContentEditable && (
-        <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
-          <TooltipProvider>
-            <Tooltip delayDuration={200}>
-              <TooltipTrigger>
+      {/* Raw view checkbox */}
+      {!isContentEditable && showRawCheckbox && (
+        <TooltipProvider>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger>
+              <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
                 <IconBraces />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>{isRawView ? "Raw view" : "Pretty print"}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </Checkbox>
+              </Checkbox>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isRawView ? "Raw view" : "Pretty print"}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
 
+      {/* Save button */}
       {isContentEditable && (
         <Button
           variant="outline"
@@ -65,6 +69,7 @@ export const DataValueEdit = ({
         </Button>
       )}
 
+      {/* Copy button */}
       {!isContentEditable && (
         <CopyToClipboardButton
           onCopy={() => handleCopyClick(typeof data === "string" ? data : JSON.stringify(data))}
@@ -73,6 +78,7 @@ export const DataValueEdit = ({
         />
       )}
 
+      {/* Edit button */}
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
