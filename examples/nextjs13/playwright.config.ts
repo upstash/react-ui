@@ -10,11 +10,15 @@ const baseURL = `http://localhost:${PORT}`;
 // Reference: https://playwright.dev/docs/test-configuration
 export default defineConfig({
   // Timeout per test
-  timeout: 30 * 1000,
+  timeout: 8 * 1000,
   // Test directory
   testDir: path.join(__dirname, "e2e"),
-  // If a test fails, retry it additional 2 times
-  retries: 2,
+
+  retries: 1,
+
+  // There are flushdb commands in the tests, so we need to run them serially
+  workers: 1,
+
   // Run your local dev server before starting the tests:
   // https://playwright.dev/docs/test-advanced#launching-a-development-web-server-during-the-tests
   webServer: {
