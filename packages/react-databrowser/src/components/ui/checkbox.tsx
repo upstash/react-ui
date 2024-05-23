@@ -9,9 +9,10 @@ type Props = PropsWithChildren<{
 }>;
 
 export const Checkbox = React.forwardRef<HTMLButtonElement, Props>(
-  ({ checked, onChange, className, children }, ref) => {
+  ({ checked, onChange, className, children, ...props }, ref) => {
     return (
       <Button
+        {...props}
         ref={ref}
         variant="outline"
         size="icon"

@@ -30,7 +30,7 @@ export const DataValueEdit = ({
       {!isContentEditable && showRawCheckbox && (
         <TooltipProvider>
           <Tooltip delayDuration={200}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <Checkbox checked={!isRawView} onChange={(check) => setRawView(!check)}>
                 <IconBraces />
               </Checkbox>
@@ -82,13 +82,7 @@ export const DataValueEdit = ({
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
-            <Button
-              onClick={onContentEditableToggle}
-              variant="outline"
-              size="icon"
-              className="h-8 w-8 rounded-md border border-[#D9D9D9]"
-              data-testid="edit-items-in-place"
-            >
+            <Checkbox checked={isContentEditable} onChange={onContentEditableToggle}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -104,7 +98,7 @@ export const DataValueEdit = ({
                 <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
                 <path d="m15 5 3 3" />
               </svg>
-            </Button>
+            </Checkbox>
           </TooltipTrigger>
           <TooltipContent>
             <p>You can edit items in-place</p>
