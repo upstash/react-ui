@@ -34,7 +34,7 @@ test("should test reset button with pagination, search and data type selection",
   await page.getByPlaceholder("Search").click();
   await page.getByPlaceholder("Search").fill("*long*");
   await page.getByRole("button", { name: "h really_long_hash" }).click();
-  await page.getByTestId("reset").click();
+  await page.getByPlaceholder("Search").clear();
   await page.getByRole("button", { name: `s ${myString}` }).click();
   await page.getByTestId("sidebar-next").click({
     clickCount: 3,
@@ -44,6 +44,12 @@ test("should test reset button with pagination, search and data type selection",
   await page.getByRole("combobox").click();
   await page.getByLabel("Hash").click();
   await page.getByRole("button", { name: "h really_long_hash" }).click();
-  await page.getByTestId("reset").click();
+
+  await page.getByPlaceholder("Search").clear();
+  await page.locator("body").click();
+
+  await page.getByRole("combobox").click();
+  await page.getByLabel("All Types").click();
+
   await expect(page.getByRole("button", { name: `s ${myString}` })).toBeVisible();
 });

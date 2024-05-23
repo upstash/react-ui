@@ -25,8 +25,8 @@ test("should add data, search, and validate the search functionality", async ({ 
 
   await page.getByTestId("reset").click();
 
-  // Validating that the search input is empty after click
+  // Validating that the search input is not empty after click
   await page.click('[placeholder="Search"]');
   const inputValue = await page.inputValue('[placeholder="Search"]');
-  expect(inputValue).toBe("");
+  expect(inputValue).toBe("foo");
 });

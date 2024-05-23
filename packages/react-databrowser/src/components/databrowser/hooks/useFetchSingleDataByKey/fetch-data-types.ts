@@ -111,7 +111,7 @@ export const fetchDataOfType = {
     };
   },
   json: async ({ key, redis }: FetchDataParams) => {
-    const result = await redis.eval("return redis.call('JSON.GET', KEYS[1])", [key], []);
+    const result = await redis.json.get(key);
     return { content: result as JSON, type: "json", memory: roughSizeOfObject(result) } satisfies {
       content: JSON;
       type: "json";
