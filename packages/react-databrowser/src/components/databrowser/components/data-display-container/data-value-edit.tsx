@@ -82,7 +82,7 @@ export const DataValueEdit = ({
       <TooltipProvider>
         <Tooltip delayDuration={200}>
           <TooltipTrigger asChild>
-            <Checkbox checked={isContentEditable} onChange={onContentEditableToggle}>
+            <Checkbox data-testid="edit-items-in-place" checked={isContentEditable} onChange={onContentEditableToggle}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
