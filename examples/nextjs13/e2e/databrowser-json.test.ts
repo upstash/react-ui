@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-// Skip until json issue is fixed
-test.skip("should add JSON data from cli then try to navigate on databrowser", async ({ page }) => {
+test("should add JSON data from cli then try to navigate on databrowser", async ({ page }) => {
   await page.goto("http://localhost:3000/");
 
   // Inputting the command to delete the key, to ensure the test starts clean
