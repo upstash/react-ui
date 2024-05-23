@@ -3,12 +3,13 @@ import { cn } from "@/lib/utils";
 import { Editor } from "@monaco-editor/react";
 
 type Props = {
-  data: string | JSON | null;
+  isRawView: boolean;
+  rawData: string;
   isContentEditable: boolean;
   onContentChange: (text?: string) => void;
 };
-export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: Props) => {
-  const stringifiable = toJsonStringifiable(data);
+export const DisplayScrollarea = ({ rawData, isRawView, isContentEditable, onContentChange }: Props) => {
+  const stringifiable = isRawView ? rawData : prettifyData(rawData);
 
   return (
     <ScrollArea
@@ -49,6 +50,20 @@ export const DisplayScrollarea = ({ data, isContentEditable, onContentChange }: 
       ) : null}
     </ScrollArea>
   );
+};
+
+export const prettifyData = (data: string) => {
+  const object = rawToObject(data);
+
+  return toJsonStringifiable(object);
+};
+
+const rawToObject = (rawData: string) => {
+  try {
+    return JSON.parse(rawData);
+  } catch (_error) {
+    return rawData;
+  }
 };
 
 export const toJsonStringifiable = (content: string | JSON | Record<string, unknown> | null): string => {

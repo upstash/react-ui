@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 
 test("should test reset button with pagination, search and data type selection", async ({ page }) => {
+  // This is a long test, so we increase the timeout
+  test.setTimeout(20 * 1000);
+
   //FLUSH DB
   await page.goto("http://localhost:3000/");
 

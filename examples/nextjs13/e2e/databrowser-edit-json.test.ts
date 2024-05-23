@@ -1,8 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { generateRandomString } from "./utils";
 
-// TODO: Skip until the pipeline json issue is resolved
-test.skip("should scroll to bottom and update the line at the bottom", async ({ page }) => {
+test("should scroll to bottom and update the line at the bottom", async ({ page }) => {
   await page.goto("http://localhost:3000/");
 
   // Inputting the command to delete the key, to ensure the test starts clean
