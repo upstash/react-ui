@@ -1,5 +1,12 @@
 # @upstash/react-databrowser
 
+## 0.3.11
+
+### Patch Changes
+
+- 12dfe68: fix small bug with pagination of zset, set, hash and lists
+- a8181db: fix bug with json editing not working because of pipeline
+
 ## 0.3.10
 
 ### Patch Changes
