@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.12
+
+### Patch Changes
+
+- 3663026: Fix JSON serialization issue
+
 ## 0.3.11
 
 ### Patch Changes

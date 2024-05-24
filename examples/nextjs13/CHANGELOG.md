@@ -1,5 +1,12 @@
 # nextjs13
 
+## 0.3.12
+
+### Patch Changes
+
+- Updated dependencies [3663026]
+  - @upstash/react-databrowser@0.3.12
+
 ## 0.3.11
 
 ### Patch Changes
