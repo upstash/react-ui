@@ -60,7 +60,7 @@ export const prettifyData = (data: string) => {
 
 const rawToObject = (rawData: string) => {
   try {
-    return JSON.parse(JSON.parse(rawData));
+    return JSON.parse(rawData);
   } catch (_error) {
     return rawData;
   }

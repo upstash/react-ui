@@ -111,9 +111,10 @@ export const fetchDataOfType = {
     };
   },
   json: async ({ key, redis }: FetchDataParams) => {
-    const result = await redis.json.get(key);
-    return { content: result as JSON, type: "json", memory: roughSizeOfObject(result) } satisfies {
-      content: JSON;
+    const result = (await redis.json.get(key)) as string | null;
+
+    return { content: result, type: "json", memory: roughSizeOfObject(result) } satisfies {
+      content: string | null;
       type: "json";
       memory: number;
     };

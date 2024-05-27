@@ -58,7 +58,7 @@ export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props)
       ) : keyType === "json" && data?.type === "json" ? (
         <DisplayScrollarea
           isRawView={false}
-          rawData={JSON.stringify(data.content)}
+          rawData={data.content ?? ""}
           isContentEditable={isContentEditable}
           onContentChange={handleUpdatedContent}
         />
