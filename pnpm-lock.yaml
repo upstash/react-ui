@@ -164,8 +164,8 @@ importers:
         specifier: ^5.32.0
         version: 5.32.0(react@18.2.0)
       '@upstash/redis':
-        specifier: ^1.31.2
-        version: 1.31.2
+        specifier: 1.31.3
+        version: 1.31.3
     devDependencies:
       '@types/node':
         specifier: ^18.15.11
@@ -1256,8 +1256,8 @@ packages:
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
 
-  '@upstash/redis@1.31.2':
-    resolution: {integrity: sha512-2u7LBzHHMVE8Ou+ZE3hZJKkvlbYv1pAlZ1NSDIS1fF77bT0CdozouzCS/fCVfOnz1orxPY4v+9swZ+ZKDGtNhA==}
+  '@upstash/redis@1.31.3':
+    resolution: {integrity: sha512-KtVgWBUEx/LGbR8oRwYexwzHh3s5DNqYW0bjkD+gjFZVOnREJITvK+hC4PjSSD+8D4qJ+Xbkfmy8ANADZ9EUFg==}
 
   '@vitejs/plugin-react@4.2.1':
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
@@ -4107,7 +4107,7 @@ snapshots:
 
   '@types/semver@7.5.8': {}
 
-  '@upstash/redis@1.31.2':
+  '@upstash/redis@1.31.3':
     dependencies:
       crypto-js: 4.2.0
 
