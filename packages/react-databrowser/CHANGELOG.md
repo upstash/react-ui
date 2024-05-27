@@ -1,5 +1,12 @@
 # @upstash/react-databrowser
 
+## 0.3.13
+
+### Patch Changes
+
+- 5d761ff: fix bug with json data not getting prettified
+- 76aff24: Bumping upstash/redis to version 1.31.3
+
 ## 0.3.12
 
 ### Patch Changes
