@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDebounce } from "./useDebounce";
 import type { Redis } from "@upstash/redis";
+import { toast } from "@/components/ui/use-toast";
 
 const SCAN_MATCH_ALL = "*";
 const DEBOUNCE_TIME = 250;
@@ -187,6 +188,14 @@ export const useFetchPaginatedKeys = (dataType?: RedisDataTypeUnion) => {
     typeFilter: allTypesIncluded,
     page: currentPage,
   });
+
+  if (error) {
+    toast({
+      variant: "destructive",
+      title: "Uh oh! Something went wrong.",
+      description: `There was a problem when loading Redis data. Received Error: ${error}`,
+    });
+  }
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
