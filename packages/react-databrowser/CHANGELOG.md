@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.14
+
+### Patch Changes
+
+- a3caa2b: Log all fetch errors to console
+
 ## 0.3.13
 
 ### Patch Changes
