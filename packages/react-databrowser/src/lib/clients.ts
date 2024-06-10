@@ -71,9 +71,8 @@ export const queryClient = new QueryClient({
           title: "Error",
           description: desc,
         });
-
-        console.error(error);
       }
+      console.error(error);
     },
   }),
 });
