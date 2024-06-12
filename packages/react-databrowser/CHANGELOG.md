@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.15
+
+### Patch Changes
+
+- 58df4bc: fix bug with cursor parsing
+
 ## 0.3.14
 
 ### Patch Changes
