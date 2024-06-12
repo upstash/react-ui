@@ -62,8 +62,7 @@ class PaginatedRedis {
           break;
         }
 
-        // @ts-expect-error - This will be fixed in the sdk, this is temporary
-        const [nextCursor, newKeys]: [string, string[]] = await this.redis.scan(cursor, {
+        const [nextCursor, newKeys] = await this.redis.scan(cursor, {
           count: fetchCount,
           match: this.searchTerm,
           type: type,
