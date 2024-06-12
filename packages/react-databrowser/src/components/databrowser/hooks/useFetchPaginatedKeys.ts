@@ -32,8 +32,9 @@ class PaginatedRedis {
     // console.log("************** RESET");
   }
 
-  cache: Record<string, { cursor: number; keys: string[] }> = Object.fromEntries(
-    dataTypes.map((type) => [type, { cursor: 0, keys: [] }]),
+  // Cursor is 0 initially, then it is set to -1 when we reach the end
+  cache: Record<string, { cursor: string; keys: string[] }> = Object.fromEntries(
+    dataTypes.map((type) => [type, { cursor: "0", keys: [] }]),
   );
   targetCount = 0;
 
@@ -57,21 +58,15 @@ class PaginatedRedis {
 
       while (true) {
         const cursor = this.cache[type].cursor;
-        if (cursor === -1 || this.getLength() >= this.targetCount) {
+        if (cursor === "-1" || this.getLength() >= this.targetCount) {
           break;
         }
 
-        const [nextCursorStr, newKeys] = await this.redis.scan(cursor, {
+        const [nextCursor, newKeys] = await this.redis.scan(cursor, {
           count: fetchCount,
           match: this.searchTerm,
           type: type,
         });
-
-        const nextCursor = Number(nextCursorStr);
-
-        const stringifiedKeys = (newKeys as unknown[]).map((key) =>
-          typeof key === "string" ? key : JSON.stringify(key),
-        );
 
         fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT);
 
@@ -79,10 +74,10 @@ class PaginatedRedis {
 
         // Dedupe here because redis can and will return duplicates for example when
         // a key is deleted because of ttl etc.
-        const dedupedSet = new Set([...this.cache[type].keys, ...stringifiedKeys]);
+        const dedupedSet = new Set([...this.cache[type].keys, ...newKeys]);
 
         this.cache[type].keys = [...dedupedSet];
-        this.cache[type].cursor = nextCursor === 0 ? -1 : nextCursor;
+        this.cache[type].cursor = nextCursor === "0" ? "-1" : nextCursor;
       }
     };
 
@@ -94,7 +89,7 @@ class PaginatedRedis {
   isFetching = false;
 
   private isAllEnded() {
-    return (this.typeFilter ? [this.typeFilter] : dataTypes).every((type) => this.cache[type].cursor === -1);
+    return (this.typeFilter ? [this.typeFilter] : dataTypes).every((type) => this.cache[type].cursor === "-1");
   }
 
   async getPage(page: number) {
