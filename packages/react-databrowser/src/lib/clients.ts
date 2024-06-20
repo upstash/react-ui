@@ -19,6 +19,7 @@ export const redisClient = (databrowser?: DatabrowserProps) => {
     token,
     enableAutoPipelining: true,
     automaticDeserialization: false,
+    keepAlive: false,
   });
 
   return redis;
