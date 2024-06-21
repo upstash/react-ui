@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.16
+
+### Patch Changes
+
+- 6dd82f0: disable keepAlive
+
 ## 0.3.15
 
 ### Patch Changes
