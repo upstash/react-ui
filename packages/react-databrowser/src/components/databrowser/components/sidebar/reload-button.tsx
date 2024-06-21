@@ -2,12 +2,19 @@ import { Button } from "@/components/ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
-export const ReloadButton = ({ refreshSearch }: { refreshSearch: () => void }) => {
+export const ReloadButton = ({
+  refreshSearch,
+  refetchData,
+}: {
+  refreshSearch: () => void;
+  refetchData: () => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     setIsLoading(true);
     refreshSearch();
+    refetchData();
     setTimeout(() => {
       setIsLoading(false);
     }, 350);

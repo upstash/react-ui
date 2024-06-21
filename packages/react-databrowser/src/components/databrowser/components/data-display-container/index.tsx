@@ -5,9 +5,10 @@ import { MissingDataDisplay } from "./missing-data-display";
 type Props = {
   selectedDataKeyTypePair?: [string, RedisDataTypeUnion];
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
+  dataFetchTimestamp: number;
 };
 
-export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange }: Props) => {
+export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange, dataFetchTimestamp }: Props) => {
   if (!selectedDataKeyTypePair) {
     return <MissingDataDisplay />;
   }
@@ -20,6 +21,7 @@ export const DataDisplayContainer = ({ selectedDataKeyTypePair, onDataKeyChange 
             selectedDataKeyTypePair={selectedDataKeyTypePair}
             key={selectedDataKeyTypePair[0]}
             onDataKeyChange={onDataKeyChange}
+            dataFetchTimestamp={dataFetchTimestamp}
           />
         </div>
       </div>

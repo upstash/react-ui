@@ -16,6 +16,7 @@ import { LoadingSkeleton } from "./skeleton-buttons";
 type Props = {
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
   selectedDataKey?: string;
+  refetchData: () => void;
 };
 
 const useRefreshOnDelete = ({ dataKey, refresh }: { dataKey?: string; refresh: () => void }) => {
@@ -33,7 +34,7 @@ const useRefreshOnDelete = ({ dataKey, refresh }: { dataKey?: string; refresh: (
   }, [refresh, dataKey]);
 };
 
-export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
+export function Sidebar({ onDataKeyChange, selectedDataKey, refetchData }: Props) {
   const [onInputFocus, setOnInputFocus] = useState(false);
   const [selectedDataType, setSelectedDataType] = useState<RedisDataTypeUnion>();
   const {
@@ -90,7 +91,7 @@ export function Sidebar({ onDataKeyChange, selectedDataKey }: Props) {
                   dataType={selectedDataType}
                   key={selectedDataType}
                 />
-                <ReloadButton refreshSearch={refreshSearch} />
+                <ReloadButton refreshSearch={refreshSearch} refetchData={refetchData} />
                 <AddDataDialog onNewDataAdd={handleDataAdd} />
               </div>
             </div>

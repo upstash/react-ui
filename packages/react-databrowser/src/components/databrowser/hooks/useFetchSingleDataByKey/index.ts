@@ -14,12 +14,14 @@ export type Navigation = {
   nextNotAllowed: boolean;
 };
 
-export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisDataTypeUnion]) => {
+export const useFetchSingleDataByKey = (
+  selectedDataKeyTypePair: [string, RedisDataTypeUnion],
+  dataFetchTimestamp: number,
+) => {
   const { redis } = useDatabrowser();
 
   //Used for correctly resetting inner state of useQuery
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const timestamp = useMemo(() => Date.now(), [selectedDataKeyTypePair[0]]);
   const cursorStack = useRef<(string | number)[]>([INITIAL_CURSOR_NUM]);
   const listLength = useRef(INITIAL_CURSOR_NUM);
   const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
@@ -40,7 +42,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
     setCurrentIndex(INITIAL_CURSOR_NUM);
     cursorStack.current = [INITIAL_CURSOR_NUM];
     listLength.current = INITIAL_CURSOR_NUM;
-  }, [selectedDataKeyTypePair[0]]);
+  }, [selectedDataKeyTypePair[0], dataFetchTimestamp]);
 
   const { isLoading, error, data } = useQuery({
     queryKey: [
@@ -48,7 +50,7 @@ export const useFetchSingleDataByKey = (selectedDataKeyTypePair: [string, RedisD
       selectedDataKeyTypePair[0],
       cursorStack.current[currentIndex],
       currentIndex,
-      timestamp,
+      dataFetchTimestamp,
     ],
     queryFn: async () => {
       const [key, dataType] = selectedDataKeyTypePair;
