@@ -91,11 +91,7 @@ const sortObject = (unordered: [] | Record<string, any> | null, sortArrays = fal
   }
 
   if (Array.isArray(unordered)) {
-    const newArr: unknown[] = unordered.map((item) => sortObject(item, sortArrays));
-    if (sortArrays) {
-      newArr.sort();
-    }
-    return newArr;
+    return unordered;
   }
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
