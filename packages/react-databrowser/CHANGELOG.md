@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.17
+
+### Patch Changes
+
+- 64df54a: Disable sorting arrays when pretty printing
+
 ## 0.3.16
 
 ### Patch Changes
