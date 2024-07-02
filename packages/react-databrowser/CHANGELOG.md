@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.18
+
+### Patch Changes
+
+- 9ffa44d: Refresh data display when the same key or reload button is clicked
+
 ## 0.3.17
 
 ### Patch Changes
