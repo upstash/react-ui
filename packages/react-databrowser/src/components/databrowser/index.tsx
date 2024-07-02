@@ -10,9 +10,15 @@ import { Sidebar } from "./components/sidebar";
 
 export const Databrowser = ({ token, url }: DatabrowserProps) => {
   const [selectedDataKey, setSelectedDataKey] = useState<[string, RedisDataTypeUnion] | undefined>();
+  const [dataFetchTimestamp, setDataFetchTimestamp] = useState<number>(Date.now());
+
+  const refetchData = () => {
+    setDataFetchTimestamp(Date.now());
+  };
 
   const handleDataKeySelect = (dataKey?: [string, RedisDataTypeUnion]) => {
     setSelectedDataKey(dataKey);
+    refetchData();
   };
 
   const databrowserCredentials = useMemo(() => ({ token, url }), [token, url]);
@@ -22,8 +28,16 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
       <QueryClientProvider client={queryClient}>
         <div className="overflow-hidden rounded-xl bg-[#F5F5F5]">
           <div className="grid text-ellipsis lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
-            <Sidebar selectedDataKey={selectedDataKey?.[0]} onDataKeyChange={handleDataKeySelect} />
-            <DataDisplayContainer selectedDataKeyTypePair={selectedDataKey} onDataKeyChange={handleDataKeySelect} />
+            <Sidebar
+              selectedDataKey={selectedDataKey?.[0]}
+              onDataKeyChange={handleDataKeySelect}
+              refetchData={refetchData}
+            />
+            <DataDisplayContainer
+              selectedDataKeyTypePair={selectedDataKey}
+              onDataKeyChange={handleDataKeySelect}
+              dataFetchTimestamp={dataFetchTimestamp}
+            />
             <Toaster />
           </div>
         </div>

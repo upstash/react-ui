@@ -16,11 +16,12 @@ import { useState } from "react";
 type Props = {
   selectedDataKeyTypePair: [string, RedisDataTypeUnion];
   onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
+  dataFetchTimestamp: number;
 };
 
-export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange }: Props) {
+export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange, dataFetchTimestamp }: Props) {
   const [key, keyType] = selectedDataKeyTypePair;
-  const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair);
+  const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair, dataFetchTimestamp);
 
   const { data: TTLData, isLoading: isTTLLoading } = useFetchTTLByKey(key);
   const {
