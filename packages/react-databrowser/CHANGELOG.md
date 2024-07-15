@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.19
+
+### Patch Changes
+
+- f6872f5: fix alignment of cancel button in delete modal
+
 ## 0.3.18
 
 ### Patch Changes
