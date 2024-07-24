@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.13
+
+### Patch Changes
+
+- f1fc2f8: fix typo
+
 ## 1.0.12
 
 ### Patch Changes
