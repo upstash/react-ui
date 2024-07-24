@@ -1,5 +1,11 @@
 # @upstash/react-cli
 
+## 1.0.12
+
+### Patch Changes
+
+- 3bed065: added new help text to cli
+
 ## 1.0.11
 
 ### Minor Changes
