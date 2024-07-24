@@ -259,7 +259,15 @@ export const RedisCli: React.FC<CliProps> = (props) => {
     >
       <ScrollArea.Root style={{ overflow: "hidden" }}>
         <ScrollArea.Viewport className="upstash-cli-viewport">
-          <span style={{ color: "#00e9a3" }}>{props.welcome ?? "Welcome to Upstash CLI"}</span>
+          <span style={{ color: "#00e9a3" }}>
+            {props.welcome ?? (
+              <>
+                Welcome to Upstash CLI!
+                <br />
+                Execute Redis commands online (e.g. 'SET key value') type 'help' for more.
+              </>
+            )}
+          </span>
           {results.map((r) => (
             <Result key={r.time} result={r} />
           ))}
@@ -273,7 +281,6 @@ export const RedisCli: React.FC<CliProps> = (props) => {
                 resize: "none",
               }}
               ref={ref}
-              // rows={Math.max(stdin.split("\n").length, Math.ceil(stdin.length / 80), 1)}
               value={stdin}
               onChange={(e) => setStdin(e.currentTarget.value)}
               onKeyDown={async (e) => {
