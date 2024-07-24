@@ -264,7 +264,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
               <>
                 Welcome to Upstash CLI!
                 <br />
-                Execute Redis commands online (e.g. 'SET key value') type 'help' for more.
+                Execute Redis commands online (e.g. 'SET key value'). Type 'help' for more.
               </>
             )}
           </span>
