@@ -1,5 +1,11 @@
 # @upstash/react-databrowser
 
+## 0.3.20
+
+### Patch Changes
+
+- 8df8484: add keepAlive:false back
+
 ## 0.3.19
 
 ### Patch Changes
