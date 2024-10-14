@@ -27,7 +27,7 @@ export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolea
   return (
     <div
       className={cn(
-        "inline-flex h-5 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
+        "inline-flex h-5 shrink-0 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
         isIcon ? "w-5" : "px-1 uppercase",
       )}
       style={{

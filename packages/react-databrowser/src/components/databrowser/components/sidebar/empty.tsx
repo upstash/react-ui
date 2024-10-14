@@ -1,4 +1,4 @@
-export const SidebarMissingData = () => {
+export const Empty = () => {
   return (
     <div className="flex h-[436px] items-center rounded-md border border-dashed">
       <div className="px-4 py-6">

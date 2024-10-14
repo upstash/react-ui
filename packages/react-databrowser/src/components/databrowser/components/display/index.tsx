@@ -22,3 +22,7 @@ export const DataDisplay = () => {
 
   return <div>Selected key: {selectedKey}</div>;
 };
+
+export const EditorDisplay = () =>{
+  return 
+}

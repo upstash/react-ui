@@ -1,18 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AddDataDialog } from "../add-data/add-data-dialog";
-import { KeysList } from "./data-key-buttons";
-import { DataTypeSelector } from "./data-type-selector";
-import { DisplayDbSize } from "./display-db-size";
-import { SidebarMissingData } from "./sidebar-missing-data";
+import { KeysList } from "./keys-list";
+import { DataTypeSelector } from "./type-selector";
+import { DisplayDbSize } from "./db-size";
+import { Empty } from "./empty";
 import { LoadingSkeleton } from "./skeleton-buttons";
 import { useKeys } from "../../hooks/useKeys";
-import { IconMaximize } from "@tabler/icons-react";
+import { IconLoader2, IconMaximize } from "@tabler/icons-react";
 import { useDatabrowserStore } from "@/store";
 
 export function Sidebar() {
   const { keys, query } = useKeys();
   const { setSearchKey, search } = useDatabrowserStore();
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
+    if (scrollTop + clientHeight > scrollHeight - 100) {
+      if (query.isFetching || !query.hasNextPage) return;
+      query.fetchNextPage();
+    }
+  };
 
   return (
     <div className="w-[350px]">
@@ -42,7 +50,20 @@ export function Sidebar() {
           />
         </div>
       </div>
-      <div>{query.isLoading ? <LoadingSkeleton /> : keys.length > 0 ? <KeysList /> : <SidebarMissingData />}</div>
+      <div>
+        {query.isLoading ? (
+          <LoadingSkeleton />
+        ) : keys.length > 0 ? (
+          <div className="max-h-[500px] w-full overflow-y-scroll" onScroll={handleScroll}>
+            <KeysList />
+            <div className="flex h-[100px] justify-center py-2 text-zinc-300">
+              {query.isFetching && <IconLoader2 className="animate-spin" size={16} />}
+            </div>
+          </div>
+        ) : (
+          <Empty />
+        )}
+      </div>
     </div>
   );
 }

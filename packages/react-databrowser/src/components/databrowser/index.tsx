@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "../ui/toaster";
 import { Sidebar } from "./components/sidebar";
-import { DataDisplay } from "./components/data-display";
+import { DataDisplay } from "./components/display";
 import { KeysProvider } from "./hooks/useKeys";
 
 export const Databrowser = ({ token, url }: DatabrowserProps) => {

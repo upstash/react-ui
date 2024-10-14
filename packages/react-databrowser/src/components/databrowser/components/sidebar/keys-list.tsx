@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { useDatabrowserStore } from "@/store";
 import { useKeys } from "../../hooks/useKeys";
+import { cn } from "@/lib/utils";
 
 export const KeysList = () => {
   const { selectedKey, setSelectedKey } = useDatabrowserStore();
@@ -9,15 +10,17 @@ export const KeysList = () => {
 
   return (
     <>
-      {keys.map(([dataKey, dataType], index) => {
+      {keys.map(([dataKey, dataType]) => {
         const isSelected = selectedKey === dataKey;
         return (
           <Button
             key={dataKey}
-            className="flex w-full items-center justify-start gap-[8px]"
+            className={cn(
+              "flex w-full items-center justify-start gap-[8px] border",
+              isSelected ? "border-emerald-400 bg-emerald-50 shadow-sm hover:bg-emerald-100/60" : "border-transparent",
+            )}
             variant={isSelected ? "default" : "ghost"}
             onClick={() => setSelectedKey(dataKey)}
-            style={isSelected ? { boxShadow: "0px 1px 2px 0px #0000001A" } : {}}
           >
             <RedisTypeTag type={dataType} isIcon />
             <p className="truncate whitespace-nowrap text-left text-[14px] font-medium text-[#000000]">{dataKey}</p>

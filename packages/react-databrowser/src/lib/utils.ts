@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { bytes } from "bytes";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -99,3 +100,10 @@ export default function formatHighlight(json: unknown, colorOptions: ColorOption
     },
   );
 }
+
+export const formatBytes = (byteCount: number) =>
+  bytes(byteCount, {
+    unitSeparator: " ",
+    decimalPlaces: 0,
+    fixedDecimals: true,
+  });
