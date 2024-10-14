@@ -1,12 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import type { RedisDataTypeUnion } from "@/types";
+import type { DataType } from "@/types";
 import { useDeleteKey } from "../../hooks/useDeleteKey";
 import { DeleteAlertDialog } from "./delete-alert-dialog";
 
 type Props = {
   selectedDataKey: string;
-  onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
+  onDataKeyChange: (dataKey?: [string, DataType]) => void;
 };
 
 export const DataDelete = ({ onDataKeyChange, selectedDataKey }: Props) => {

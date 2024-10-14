@@ -61,6 +61,10 @@ function escapeHtml(html: string): string {
   return String(html).replace(/[&<>"'`=]/g, (s) => entityMap[s] || s);
 }
 
+export function formatNumberWithCommas(value: number) {
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 export default function formatHighlight(json: unknown, colorOptions: ColorOptions = {}): string {
   let jsonStr: string;
   if (typeof json === "string") {

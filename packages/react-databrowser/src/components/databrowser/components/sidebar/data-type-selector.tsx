@@ -1,46 +1,28 @@
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { type RedisDataTypeUnion, RedisDataTypes } from "@/types";
+import { useDatabrowserStore } from "@/store";
+import { KEY_NAMES, DataType } from "@/types";
 
-const RedisDataTypeMap = new Map(
-  RedisDataTypes.map((type) => {
-    switch (type) {
-      case "zset":
-        return [type, "ZSet"];
-      case "json":
-        return [type, "JSON"];
-      default:
-        return [type, type];
-    }
-  }),
-);
+const ALL_TYPES_KEY = "all";
 
-type Props = {
-  onDataTypeChange: (dataType?: RedisDataTypeUnion) => void;
-  dataType?: RedisDataTypeUnion;
-};
-
-export function DataTypeSelector({ onDataTypeChange, dataType }: Props) {
-  const handleValueChange = (data: string) => {
-    onDataTypeChange(data as RedisDataTypeUnion);
-  };
+export function DataTypeSelector() {
+  const { search, setSearchType } = useDatabrowserStore();
 
   return (
-    <Select onValueChange={handleValueChange} value={dataType}>
-      <SelectTrigger
-        className="inline-flex h-[32px] min-w-[100px] items-center justify-start gap-[5px] border-[#D9D9D9] text-[14px] capitalize text-[#1F1F1F]"
-        style={{
-          borderTopRightRadius: "8px",
-          borderBottomRightRadius: "8px",
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-        }}
-      >
+    <Select
+      onValueChange={(type: DataType | typeof ALL_TYPES_KEY) => {
+        console.log(type);
+        if (type === ALL_TYPES_KEY) setSearchType(undefined);
+        else setSearchType(type);
+      }}
+      value={search.type === undefined ? ALL_TYPES_KEY : search.type}
+    >
+      <SelectTrigger className="h-[32px] !w-auto whitespace-nowrap rounded-lg rounded-r-none border-r-0 border-zinc-300 pr-7">
         <SelectValue placeholder="All Types" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {Array.from(RedisDataTypeMap).map(([key, value]) => (
-            <SelectItem value={key} key={key} className="capitalize">
+          {[[ALL_TYPES_KEY, "All Types"], ...Object.entries(KEY_NAMES)].map(([key, value]) => (
+            <SelectItem value={key} key={key}>
               {value}
             </SelectItem>
           ))}

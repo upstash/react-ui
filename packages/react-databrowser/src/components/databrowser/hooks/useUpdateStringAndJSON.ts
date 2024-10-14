@@ -1,9 +1,9 @@
 import { queryClient } from "@/lib/clients";
-import type { RedisDataTypeUnion } from "@/types";
+import type { DataType } from "@/types";
 import { useState } from "react";
 import { useAddData } from "./useAddData";
 
-export const useUpdateStringAndJSON = ([key, keyType]: [string, RedisDataTypeUnion], TTLData: number | undefined) => {
+export const useUpdateStringAndJSON = ([key, keyType]: [string, DataType], TTLData: number | undefined) => {
   const { mutateAsync: replaceData, status: updateDataStatus } = useAddData();
 
   const [isContentEditable, setIsContentEditable] = useState(false);

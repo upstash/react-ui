@@ -1,47 +1,27 @@
 import "@/globals.css";
 import { queryClient } from "@/lib/clients";
 import { type DatabrowserProps, DatabrowserProvider } from "@/store";
-import type { RedisDataTypeUnion } from "@/types";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "../ui/toaster";
-import { DataDisplayContainer } from "./components/data-display-container";
 import { Sidebar } from "./components/sidebar";
+import { DataDisplay } from "./components/data-display";
+import { KeysProvider } from "./hooks/useKeys";
 
 export const Databrowser = ({ token, url }: DatabrowserProps) => {
-  const [selectedDataKey, setSelectedDataKey] = useState<[string, RedisDataTypeUnion] | undefined>();
-  const [dataFetchTimestamp, setDataFetchTimestamp] = useState<number>(Date.now());
-
-  const refetchData = () => {
-    setDataFetchTimestamp(Date.now());
-  };
-
-  const handleDataKeySelect = (dataKey?: [string, RedisDataTypeUnion]) => {
-    setSelectedDataKey(dataKey);
-    refetchData();
-  };
-
-  const databrowserCredentials = useMemo(() => ({ token, url }), [token, url]);
+  const credentials = useMemo(() => ({ token, url }), [token, url]);
 
   return (
-    <DatabrowserProvider databrowser={databrowserCredentials}>
-      <QueryClientProvider client={queryClient}>
-        <div className="overflow-hidden rounded-xl bg-[#F5F5F5]">
-          <div className="grid text-ellipsis lg:grid-cols-[1.5fr,1.2fr,1fr,1fr,1fr]">
-            <Sidebar
-              selectedDataKey={selectedDataKey?.[0]}
-              onDataKeyChange={handleDataKeySelect}
-              refetchData={refetchData}
-            />
-            <DataDisplayContainer
-              selectedDataKeyTypePair={selectedDataKey}
-              onDataKeyChange={handleDataKeySelect}
-              dataFetchTimestamp={dataFetchTimestamp}
-            />
+    <QueryClientProvider client={queryClient}>
+      <DatabrowserProvider databrowser={credentials}>
+        <KeysProvider>
+          <div className="flex overflow-hidden rounded-xl border border-zinc-200 p-1">
+            <Sidebar />
+            <DataDisplay />
             <Toaster />
           </div>
-        </div>
-      </QueryClientProvider>
-    </DatabrowserProvider>
+        </KeysProvider>
+      </DatabrowserProvider>
+    </QueryClientProvider>
   );
 };

@@ -23,7 +23,8 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import type { RedisDataTypeUnion } from "@/types";
+import { useDatabrowserStore } from "@/store";
+import type { DataType } from "@/types";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Label } from "@radix-ui/react-label";
 import { type FormEvent, useState } from "react";
@@ -31,12 +32,9 @@ import { type FormEvent, useState } from "react";
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
 export type ExpUnitUnion = (typeof expUnit)[number];
 
-type Props = {
-  onNewDataAdd: (dataKey?: [string, RedisDataTypeUnion]) => void;
-};
-//TODO: Should be extended in the future to accept other data types.
-export function AddDataDialog({ onNewDataAdd }: Props) {
+export function AddDataDialog() {
   const { toast } = useToast();
+  const { setSelectedKey } = useDatabrowserStore();
   const [open, setOpen] = useState(false);
 
   const addData = useAddData();
@@ -62,7 +60,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
         toast({
           description: "Data Set Successfully!",
         });
-        onNewDataAdd([key, "string"]);
+        setSelectedKey(key);
       } else {
         toast({
           variant: "destructive",
@@ -99,9 +97,7 @@ export function AddDataDialog({ onNewDataAdd }: Props) {
           <DialogTitle>Insert</DialogTitle>
           <DialogDescription asChild>
             <div>
-              <span>Data will be added as a</span>{" "}
-              <RedisTypeTag className="pointer-events-none" value="string" isFull />. But, you can directly pass a{" "}
-              <RedisTypeTag value="json" isFull className="pointer-events-none" /> object to the value.
+              <span>Data will be added as a</span> <RedisTypeTag type="string" />.
             </div>
           </DialogDescription>
         </DialogHeader>

@@ -6,6 +6,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     style={{
       height: "100vh",
       width: "100vw",
+      paddingTop: "50px",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",

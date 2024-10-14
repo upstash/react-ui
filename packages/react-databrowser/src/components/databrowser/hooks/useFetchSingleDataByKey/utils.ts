@@ -1,6 +1,6 @@
 import { partition } from "@/lib/utils";
 
-export const INITIAL_CURSOR_NUM = 0;
+export const INITIAL_CURSOR = "0";
 export const DATA_PER_PAGE = 10;
 /**
  * Transforms a data object into a specific desired array format.

@@ -1,7 +1,7 @@
 import { useFetchSingleDataByKey, useFetchTTLByKey, useUpdateStringAndJSON } from "@/components/databrowser/hooks";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Button } from "@/components/ui/button";
-import type { RedisDataTypeUnion } from "@/types";
+import type { DataType } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
 import { DataDelete } from "./data-delete";
@@ -13,13 +13,7 @@ import { MissingDataDisplay } from "./missing-data-display";
 import { DataLoading } from "./data-loading";
 import { useState } from "react";
 
-type Props = {
-  selectedDataKeyTypePair: [string, RedisDataTypeUnion];
-  onDataKeyChange: (dataKey?: [string, RedisDataTypeUnion]) => void;
-  dataFetchTimestamp: number;
-};
-
-export function DataDisplay({ selectedDataKeyTypePair, onDataKeyChange, dataFetchTimestamp }: Props) {
+export function DataDisplay() {
   const [key, keyType] = selectedDataKeyTypePair;
   const { data, isLoading, navigation, error } = useFetchSingleDataByKey(selectedDataKeyTypePair, dataFetchTimestamp);
 

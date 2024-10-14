@@ -1,32 +1,41 @@
-import type { RedisDataTypeUnion } from "@/types";
-import clsx from "clsx";
-import { Badge } from "@/components/ui/badge";
+import { KEY_NAMES, type DataType } from "@/types";
+import colors from "tailwindcss/colors";
+import { IconArrowsSort, IconCodeDots, IconHash, IconLayersIntersect, IconList, IconQuote } from "@tabler/icons-react";
+import { cn } from "@/lib/utils";
 
-export interface RedisTypeTagProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: RedisDataTypeUnion;
-  isFull?: boolean;
-}
+const colorsMap = {
+  string: colors.sky,
+  set: colors.indigo,
+  hash: colors.amber,
+  json: colors.purple,
+  zset: colors.pink,
+  list: colors.orange,
+  stream: colors.orange,
+} as const;
 
-export function RedisTypeTag({ value, isFull = false, className }: RedisTypeTagProps) {
+const iconsMap = {
+  string: <IconQuote size={16} />,
+  set: <IconLayersIntersect size={16} />,
+  hash: <IconHash size={16} />,
+  json: <IconCodeDots size={16} />,
+  zset: <IconArrowsSort size={16} />,
+  list: <IconList size={16} />,
+  stream: <IconList size={16} />,
+} as const;
+
+export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolean }) {
   return (
-    <Badge
-      className={clsx(
-        className,
-        "!inline-flex items-center justify-center rounded-[26px]",
-        {
-          "bg-[#16A34A]": value === "string",
-          "bg-[#F97316]": value === "list",
-          "bg-[#8B5CF6]": value === "hash",
-          "bg-[#3B82F6]": value === "set",
-          "bg-[#F59E0B]": value === "json",
-          "bg-[#EF4444]": value === "zset",
-          "bg-[#EC4899]": value === "stream",
-        },
-        "text-[10px] font-medium uppercase leading-none tracking-wide ",
-        isFull ? "h-5 rounded-md p-[6px]" : "h-5 w-5 p-0",
+    <div
+      className={cn(
+        "inline-flex h-5 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
+        isIcon ? "w-5" : "px-1 uppercase",
       )}
+      style={{
+        backgroundColor: colorsMap[type][200],
+        color: colorsMap[type][800],
+      }}
     >
-      {isFull ? value : value[0]}
-    </Badge>
+      {isIcon ? iconsMap[type] : KEY_NAMES[type]}
+    </div>
   );
 }

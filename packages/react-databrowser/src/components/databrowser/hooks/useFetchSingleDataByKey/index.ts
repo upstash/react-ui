@@ -1,30 +1,17 @@
 import { useDatabrowser } from "@/store";
-import type { RedisDataTypeUnion } from "@/types";
+import type { DataType } from "@/types";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDataOfType } from "./fetch-data-types";
-import { DATA_PER_PAGE, INITIAL_CURSOR_NUM } from "./utils";
+import { DATA_PER_PAGE, INITIAL_CURSOR } from "./utils";
 
-//TODO: Address the issue of useEffect taking additional time to reset the cursor when switching between identical data types, which results in unnecessary,
-// erroneous calls to the database. This needs to be resolved later.
-
-export type Navigation = {
-  handlePageChange: (dir: "next" | "prev") => void;
-  prevNotAllowed: boolean;
-  nextNotAllowed: boolean;
-};
-
-export const useFetchSingleDataByKey = (
-  selectedDataKeyTypePair: [string, RedisDataTypeUnion],
-  dataFetchTimestamp: number,
-) => {
+export const useFetchSingleDataByKey = (key: string, type: DataType) => {
   const { redis } = useDatabrowser();
 
   //Used for correctly resetting inner state of useQuery
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const cursorStack = useRef<(string | number)[]>([INITIAL_CURSOR_NUM]);
-  const listLength = useRef(INITIAL_CURSOR_NUM);
-  const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR_NUM);
+  const cursorStack = useRef<string[]>([INITIAL_CURSOR]);
+  const listLength = useRef(INITIAL_CURSOR);
+  const [currentIndex, setCurrentIndex] = useState(INITIAL_CURSOR);
 
   const handlePageChange = useCallback(
     (dir: "next" | "prev") => {
@@ -39,9 +26,9 @@ export const useFetchSingleDataByKey = (
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    setCurrentIndex(INITIAL_CURSOR_NUM);
-    cursorStack.current = [INITIAL_CURSOR_NUM];
-    listLength.current = INITIAL_CURSOR_NUM;
+    setCurrentIndex(INITIAL_CURSOR);
+    cursorStack.current = [INITIAL_CURSOR];
+    listLength.current = INITIAL_CURSOR;
   }, [selectedDataKeyTypePair[0], dataFetchTimestamp]);
 
   const { isLoading, error, data } = useQuery({
@@ -55,7 +42,7 @@ export const useFetchSingleDataByKey = (
     queryFn: async () => {
       const [key, dataType] = selectedDataKeyTypePair;
       if (Object.keys(fetchDataOfType).includes(dataType)) {
-        return fetchDataOfType[dataType as Exclude<RedisDataTypeUnion, "All Types">]({
+        return fetchDataOfType[dataType as Exclude<DataType, "All Types">]({
           key,
           redis,
           cursor: cursorStack.current[currentIndex],

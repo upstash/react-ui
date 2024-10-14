@@ -2,7 +2,7 @@ import type { Redis } from "@upstash/redis";
 import {
   type ContentValue,
   DATA_PER_PAGE,
-  INITIAL_CURSOR_NUM,
+  INITIAL_CURSOR,
   toJsonStringifiable,
   transformArray,
   transformHash,
@@ -20,6 +20,10 @@ type FetchDataParams = {
 
 export const fetchDataOfType = {
   string: async ({ key, redis }: FetchDataParams) => {
+
+    const res = await redis.scan
+
+
     const content = await redis.get<string>(key);
     return { content, type: "string", memory: roughSizeOfObject(content) } satisfies {
       content: string | null;
@@ -42,7 +46,7 @@ export const fetchDataOfType = {
     };
   },
   hash: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
-    const [nextCursorStr, hashValues] = await redis.hscan(key, cursor as number, {
+    const [nextCursorStr, hashValues] = await redis.lget(key, cursor as number, {
       count: DATA_PER_PAGE,
     });
     if (index === cursorStack.current.length - 1) {
@@ -74,7 +78,7 @@ export const fetchDataOfType = {
     } satisfies { content: ContentValue[]; type: "set"; memory: number };
   },
   list: async ({ key, redis, index, listLength }: FetchDataParams) => {
-    if (listLength && listLength.current === INITIAL_CURSOR_NUM) {
+    if (listLength && listLength.current === INITIAL_CURSOR) {
       listLength.current = await redis.llen(key);
     }
     const start = index * DATA_PER_PAGE;
@@ -92,16 +96,14 @@ export const fetchDataOfType = {
     } satisfies { content: ContentValue[]; type: "list"; memory: number };
   },
   stream: async ({ key, redis, cursor, index, cursorStack }: FetchDataParams) => {
-    const typedCursor = cursor as string | typeof INITIAL_CURSOR_NUM;
-    const result = await redis.xrange(key, typedCursor === INITIAL_CURSOR_NUM ? "-" : typedCursor, "+", DATA_PER_PAGE);
+    const typedCursor = cursor as string | typeof INITIAL_CURSOR;
+    const result = await redis.xrange(key, typedCursor === INITIAL_CURSOR ? "-" : typedCursor, "+", DATA_PER_PAGE);
 
     const transformedData = transformStream(result);
     //Last items timestamp is being used as next cursor
     const nextCursor = transformedData.at(-1)?.value;
     if (index === cursorStack.current.length - 1) {
-      cursorStack.current.push(
-        transformedData.length === DATA_PER_PAGE && nextCursor ? nextCursor : INITIAL_CURSOR_NUM,
-      );
+      cursorStack.current.push(transformedData.length === DATA_PER_PAGE && nextCursor ? nextCursor : INITIAL_CURSOR);
     }
 
     return { content: transformedData, type: "stream", memory: roughSizeOfObject(transformedData) } satisfies {
