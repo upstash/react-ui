@@ -27,8 +27,8 @@ export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolea
   return (
     <div
       className={cn(
-        "inline-flex h-5 shrink-0 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
-        isIcon ? "w-5" : "px-1 uppercase",
+        "inline-flex shrink-0 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
+        isIcon ? "h-5 w-5" : "h-6 px-1 uppercase",
       )}
       style={{
         backgroundColor: colorsMap[type][200],

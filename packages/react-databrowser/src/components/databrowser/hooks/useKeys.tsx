@@ -64,3 +64,11 @@ export const useKeys = () => {
   }
   return context;
 };
+
+export const useKeyType = (key?: string) => {
+  const { keys } = useKeys();
+
+  const type = useMemo(() => keys.find(([k, _]) => k === key), [keys, key]);
+
+  return type?.[1];
+};

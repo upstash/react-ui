@@ -59,8 +59,10 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tabler/icons-react": "^3.19.0",
     "@tanstack/react-query": "^5.32.0",
+    "@types/bytes": "^3.1.4",
     "@upstash/redis": "^1.31.6",
     "bytes": "^3.1.2",
+    "react-resizable-panels": "^2.1.4",
     "zustand": "5.0.0-rc.2"
   }
 }

@@ -1,28 +1,23 @@
 import { useDatabrowserStore } from "@/store";
-
-// export const DataDisplayContainer = () => {
-//   return (
-//     <div className="col-span-4">
-//       <div className="h-full py-1 pr-1">
-//         <div className="h-full space-y-6 rounded-lg bg-white" style={{ boxShadow: "0px 0px 6px 0px #0000001A" }}>
-//           <DataDisplay
-//             selectedDataKeyTypePair={selectedDataKeyTypePair}
-//             key={selectedDataKeyTypePair[0]}
-//             onDataKeyChange={onDataKeyChange}
-//             dataFetchTimestamp={dataFetchTimestamp}
-//           />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+import { useKeyType } from "../../hooks/useKeys";
+import { DisplayHeader } from "./display-header";
+import { DataType } from "@/types";
 
 export const DataDisplay = () => {
   const { selectedKey } = useDatabrowserStore();
+  const type = useKeyType(selectedKey);
 
-  return <div>Selected key: {selectedKey}</div>;
+  return (
+    <div className="h-full rounded-xl border p-1">
+      {!selectedKey || !type ? <div /> : <EditorDisplay dataKey={selectedKey} type={type} />}
+    </div>
+  );
 };
 
-export const EditorDisplay = () =>{
-  return 
-}
+export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
+  return (
+    <div className="h-full w-full">
+      <DisplayHeader dataKey={dataKey} type={type} size={10000} length={1234} />
+    </div>
+  );
+};
