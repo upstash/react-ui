@@ -2,17 +2,19 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useMemo } from "react";
 import { checkIsValidJSON } from "./use-field";
 
-const contentTypes = ["JSON", "Text"] as const;
+const contentTypes = ["Text", "JSON"] as const;
 export type ContentType = (typeof contentTypes)[number];
 
-export const ContentTypeSelector = ({
+export const ContentTypeSelect = ({
   value,
   onChange,
+  data,
 }: {
   value: ContentType;
   onChange: (value: ContentType) => void;
+  data: string;
 }) => {
-  const isValidJSON = useMemo(() => checkIsValidJSON(value), [value]);
+  const isValidJSON = useMemo(() => checkIsValidJSON(data), [data]);
 
   return (
     <Select value={value} onValueChange={onChange}>

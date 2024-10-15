@@ -11,7 +11,7 @@ export const useFetchSimpleKey = (dataKey: string, type: DataType) => {
     queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
     queryFn: async () => {
       if (type === "string") {
-        return (await redis.get(dataKey)) as string;
+        return (await redis.get(dataKey)) as string | null;
       } else if (type === "json") {
         return JSON.stringify(await redis.json.get(dataKey));
       } else {

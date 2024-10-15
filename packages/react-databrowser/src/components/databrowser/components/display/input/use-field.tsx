@@ -1,12 +1,16 @@
 import { Dispatch, SetStateAction, useState, useMemo, useEffect, useCallback } from "react";
-import { ContentType, ContentTypeSelector } from "./content-type-select";
+import { ContentType, ContentTypeSelect } from "./content-type-select";
 import { CustomEditor } from "./custom-editor";
 
 export const useField = ({ value, setValue }: { value: string; setValue: Dispatch<SetStateAction<string>> }) => {
+  const [initialValue, setInitialValue] = useState(value);
   const [isChanged, setIsChanged] = useState(false);
-  const resetIsChanged = useCallback(() => setIsChanged(false), [setIsChanged]);
-
   const [contentType, setContentType] = useState<ContentType>(() => (checkIsValidJSON(value) ? "JSON" : "Text"));
+
+  const onUpdate = useCallback(() => {
+    setInitialValue(value);
+    setIsChanged(false);
+  }, [value, setInitialValue]);
 
   // Attempt to format JSON on initial load
   useEffect(() => {
@@ -15,12 +19,10 @@ export const useField = ({ value, setValue }: { value: string; setValue: Dispatc
 
   const handleTypeChange = useCallback(
     (type: ContentType) => {
-      if (type === "JSON" && !checkIsValidJSON(value))
-        throw new Error("Invalid JSON when attempting to change type to JSON");
       setContentType(type);
-      setValue(type === "JSON" ? formatJSON(value) : value);
+      setValue(type === "JSON" ? formatJSON(value) : initialValue);
     },
-    [value, setValue],
+    [value, initialValue, setValue],
   );
 
   const handleChange = useCallback(
@@ -34,7 +36,7 @@ export const useField = ({ value, setValue }: { value: string; setValue: Dispatc
   const isValidJSON = useMemo(() => checkIsValidJSON(value), [value]);
 
   return {
-    selector: <ContentTypeSelector value={contentType} onChange={handleTypeChange} />,
+    selector: <ContentTypeSelect value={contentType} onChange={handleTypeChange} data={value} />,
     editor: (
       <CustomEditor
         language={contentType === "JSON" ? "json" : "plaintext"}
@@ -44,7 +46,8 @@ export const useField = ({ value, setValue }: { value: string; setValue: Dispatc
       />
     ),
     isChanged,
-    resetIsChanged,
+    initialValue,
+    onUpdate,
     /** Is valid for submitting */
     isValid: contentType === "JSON" ? isValidJSON : true,
   };

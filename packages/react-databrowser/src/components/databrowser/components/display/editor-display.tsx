@@ -16,6 +16,8 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataTy
       <DisplayHeader dataKey={dataKey} type={type} size={10000} length={1234} />
       {data === undefined ? (
         <>Loading...</>
+      ) : data === null ? (
+        <>Missing key</>
       ) : (
         <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
       )}
@@ -25,23 +27,23 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataTy
 
 const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: DataType; data: string }) => {
   const [value, setValue] = useState(data);
-  const { editor, selector, isChanged, resetIsChanged, isValid } = useField({ value, setValue });
+  const { editor, selector, isChanged, onUpdate, isValid } = useField({ value, setValue });
 
   const { mutateAsync: setKey, isPending: isSettingKey } = useSetSimpleKey(dataKey, type);
 
   const handleSave = async () => {
     await setKey(value);
-    resetIsChanged();
+    onUpdate();
   };
 
   const handleCancel = () => {
     setValue(data);
-    resetIsChanged();
+    onUpdate();
   };
 
   return (
     <>
-      <div className="flex-grow rounded-md border border-zinc-300 p-1">{editor}</div>
+      <div className="flex-grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
       <div className="flex flex-shrink-0 justify-between px-3 pb-2 pt-1">
         {selector}
         {isChanged && (
