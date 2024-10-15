@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useMemo } from "react";
-import { RedisKey, useFetchKeys } from "./useFetchKeys";
+import { RedisKey, useFetchKeys } from "./use-fetch-keys";
 import { useDatabrowserStore } from "@/store";
 import { useInfiniteQuery } from "@tanstack/react-query";
 

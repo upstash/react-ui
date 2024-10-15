@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import type { DataType } from "@/types";
-import { useDeleteKey } from "../../hooks/useDeleteKey";
-import { DeleteAlertDialog } from "./delete-alert-dialog";
+import { useDeleteKey } from "../../../hooks/useDeleteKey";
+import { DeleteAlertDialog } from "../delete-alert-dialog";
 
 type Props = {
   selectedDataKey: string;

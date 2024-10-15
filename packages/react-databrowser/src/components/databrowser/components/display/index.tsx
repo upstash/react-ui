@@ -1,7 +1,7 @@
 import { useDatabrowserStore } from "@/store";
-import { useKeyType } from "../../hooks/useKeys";
-import { DisplayHeader } from "./display-header";
-import { DataType } from "@/types";
+import { useKeyType } from "../../hooks/use-keys";
+import { EditorDisplay } from "./editor-display";
+import { ListDisplay } from "./list-display";
 
 export const DataDisplay = () => {
   const { selectedKey } = useDatabrowserStore();
@@ -9,15 +9,13 @@ export const DataDisplay = () => {
 
   return (
     <div className="h-full rounded-xl border p-1">
-      {!selectedKey || !type ? <div /> : <EditorDisplay dataKey={selectedKey} type={type} />}
-    </div>
-  );
-};
-
-export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
-  return (
-    <div className="h-full w-full">
-      <DisplayHeader dataKey={dataKey} type={type} size={10000} length={1234} />
+      {!selectedKey || !type ? (
+        <div />
+      ) : type === "string" || type === "json" ? (
+        <EditorDisplay dataKey={selectedKey} type={type} />
+      ) : (
+        <ListDisplay dataKey={selectedKey} type={type} />
+      )}
     </div>
   );
 };

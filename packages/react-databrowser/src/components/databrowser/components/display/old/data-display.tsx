@@ -3,7 +3,7 @@ import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { Button } from "@/components/ui/button";
 import type { DataType } from "@/types";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
+import { CopyToClipboardButton, handleCopyClick } from "../../../copy-to-clipboard-button";
 import { DataDelete } from "./data-delete";
 import { DataTable } from "./data-table";
 import { DataTTLActions } from "./data-ttl-actions";

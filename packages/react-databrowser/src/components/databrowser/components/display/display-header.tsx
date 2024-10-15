@@ -1,7 +1,7 @@
 import { DataType } from "@/types";
 import { RedisTypeTag } from "../../type-tag";
 import { formatBytes } from "@/lib/utils";
-import { TTLPopover } from "./ttl-popover";
+import { TTLPopover } from "./old/ttl-popover";
 import { useFetchTTLByKey } from "../../hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IconChevronDown } from "@tabler/icons-react";

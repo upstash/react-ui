@@ -6,7 +6,7 @@ import { DataTypeSelector } from "./type-selector";
 import { DisplayDbSize } from "./db-size";
 import { Empty } from "./empty";
 import { LoadingSkeleton } from "./skeleton-buttons";
-import { useKeys } from "../../hooks/useKeys";
+import { useKeys } from "../../hooks/use-keys";
 import { IconLoader2, IconMaximize } from "@tabler/icons-react";
 import { useDatabrowserStore } from "@/store";
 

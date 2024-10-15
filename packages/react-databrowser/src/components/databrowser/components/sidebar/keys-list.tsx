@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { RedisTypeTag } from "@/components/databrowser/type-tag";
 import { useDatabrowserStore } from "@/store";
-import { useKeys } from "../../hooks/useKeys";
+import { useKeys } from "../../hooks/use-keys";
 import { cn } from "@/lib/utils";
 
 export const KeysList = () => {

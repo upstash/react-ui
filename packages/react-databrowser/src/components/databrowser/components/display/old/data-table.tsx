@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CopyToClipboardButton, handleCopyClick } from "@/components/databrowser/copy-to-clipboard-button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import type { ContentValue } from "../../hooks/useFetchSingleDataByKey/utils";
+import type { ContentValue } from "../../../hooks/useFetchSingleDataByKey/utils";
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 type Props = {

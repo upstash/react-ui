@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CopyToClipboardButton, handleCopyClick } from "../../copy-to-clipboard-button";
+import { CopyToClipboardButton, handleCopyClick } from "../../../copy-to-clipboard-button";
 import { prettifyData } from "./display-scrollarea";
-import { IconBraces } from "../icons/icon-braces";
+import { IconBraces } from "../../icons/icon-braces";
 import { Checkbox } from "@/components/ui/checkbox";
 
 type Props = {

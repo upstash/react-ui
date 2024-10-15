@@ -6,7 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "../ui/toaster";
 import { Sidebar } from "./components/sidebar";
 import { DataDisplay } from "./components/display";
-import { KeysProvider } from "./hooks/useKeys";
+import { KeysProvider } from "./hooks/use-keys";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { IconDotsVertical } from "@tabler/icons-react";
 
@@ -17,7 +17,6 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
     <QueryClientProvider client={queryClient}>
       <DatabrowserProvider databrowser={credentials}>
         <KeysProvider>
-          
           <PanelGroup direction="horizontal">
             <Panel defaultSize={30} minSize={20}>
               <Sidebar />
