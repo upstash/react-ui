@@ -1,55 +1,49 @@
-import { Dispatch, SetStateAction, useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ContentType, ContentTypeSelect } from "./content-type-select";
 import { CustomEditor } from "./custom-editor";
+import { useController, UseFormReturn } from "react-hook-form";
 
-export const useField = ({ value, setValue }: { value: string; setValue: Dispatch<SetStateAction<string>> }) => {
-  const [initialValue, setInitialValue] = useState(value);
-  const [isChanged, setIsChanged] = useState(false);
-  const [contentType, setContentType] = useState<ContentType>(() => (checkIsValidJSON(value) ? "JSON" : "Text"));
+export const useField = ({ name, form }: { name: string; form: UseFormReturn<any> }) => {
+  const { field, fieldState } = useController<Record<string, string>>({
+    name,
+    control: form.control,
+  });
 
-  const onUpdate = useCallback(() => {
-    setInitialValue(value);
-    setIsChanged(false);
-  }, [value, setInitialValue]);
+  const [contentType, setContentType] = useState<ContentType>(() => (checkIsValidJSON(field.value) ? "JSON" : "Text"));
 
   // Attempt to format JSON on initial load
   useEffect(() => {
-    setValue((old) => (checkIsValidJSON(old) ? formatJSON(old) : old));
-  }, [setValue]);
+    if (!checkIsValidJSON(field.value)) return;
 
-  const handleTypeChange = useCallback(
-    (type: ContentType) => {
-      setContentType(type);
-      setValue(type === "JSON" ? formatJSON(value) : initialValue);
-    },
-    [value, initialValue, setValue],
-  );
+    form.setValue(name, formatJSON(field.value), {
+      shouldDirty: false,
+    });
+  }, []);
 
-  const handleChange = useCallback(
-    (newValue: string) => {
-      setValue(newValue);
-      setIsChanged(true);
-    },
-    [setValue],
-  );
-
-  const isValidJSON = useMemo(() => checkIsValidJSON(value), [value]);
+  const handleTypeChange = (type: ContentType) => {
+    setContentType(type);
+    if (type === "JSON")
+      form.setValue(name, formatJSON(field.value), {
+        shouldDirty: false,
+      });
+    else {
+      if (fieldState.isDirty && !confirm("Changes made will be lost")) return;
+      form.resetField(name);
+    }
+  };
 
   return {
-    selector: <ContentTypeSelect value={contentType} onChange={handleTypeChange} data={value} />,
+    selector: <ContentTypeSelect value={contentType} onChange={handleTypeChange} data={field.value} />,
     editor: (
-      <CustomEditor
-        language={contentType === "JSON" ? "json" : "plaintext"}
-        value={value}
-        onChange={handleChange}
-        maxDynamicHeight={200}
-      />
+      <>
+        <CustomEditor
+          language={contentType === "JSON" ? "json" : "plaintext"}
+          value={field.value}
+          onChange={field.onChange}
+          maxDynamicHeight={200}
+        />
+      </>
     ),
-    isChanged,
-    initialValue,
-    onUpdate,
-    /** Is valid for submitting */
-    isValid: contentType === "JSON" ? isValidJSON : true,
   };
 };
 
