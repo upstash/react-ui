@@ -57,7 +57,7 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
           <TTLPopover dataKey={dataKey} TTL={ttl}>
             <div className="flex gap-[2px]">
               {ttl === -1 ? "Forever" : `${ttl}s`}
-              <IconChevronDown className="mt-[1px] text-zinc-400" size={16} />
+              <IconChevronDown className="mt-[1px] text-zinc-400" size={12} />
             </div>
           </TTLPopover>
         </>

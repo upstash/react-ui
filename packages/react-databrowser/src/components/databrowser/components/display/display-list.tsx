@@ -3,37 +3,39 @@ import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
 import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query"
 
+import { cn } from "@/lib/utils"
+
 import { useFetchListItems } from "../../hooks/use-fetch-list-items"
 import { InfiniteScroll } from "../sidebar/infinite-scroll"
 import { DisplayHeader } from "./display-header"
-import { ListEditDisplay } from "./list-edit-display"
+import { ListEditDisplay } from "./display-list-edit"
+
+export const headerLabels = {
+  list: ["Index", "Content"],
+  hash: ["Field", "Value"],
+  zset: ["Value", "Score"],
+  stream: ["ID", "Value"],
+  set: ["Value", ""],
+} as const
 
 export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { selectedListItem } = useDatabrowserStore()
   const query = useFetchListItems({ dataKey, type })
 
-  const headers = {
-    list: ["Index", "Content"],
-    hash: ["Field", "Value"],
-    zset: ["Value", "Score"],
-    stream: ["ID", "Value"],
-  } as const
+  const [keyHeader, valueHeader] = headerLabels[type]
 
   return (
     <div className="flex h-full flex-col gap-2">
       <DisplayHeader dataKey={dataKey} type={type} hideBadges={selectedListItem !== undefined} />
-      {selectedListItem ? (
-        <ListEditDisplay dataKey={dataKey} type={type} />
-      ) : (
+      {selectedListItem && <ListEditDisplay dataKey={dataKey} type={type} />}
+      <div className={cn("h-full", selectedListItem && "hidden")}>
         <InfiniteScroll query={query}>
           <table className="w-full flex-grow  text-sm text-zinc-700">
             {type !== "set" && (
               <thead>
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium">{headers[type][0]}</th>
-                  {headers[type][1] && (
-                    <th className="px-3 py-2 text-left font-medium">{headers[type][1]}</th>
-                  )}
+                  <th className="px-3 py-2 text-left font-medium">{keyHeader}</th>
+                  <th className="px-3 py-2 text-left font-medium">{valueHeader}</th>
                 </tr>
               </thead>
             )}
@@ -42,7 +44,7 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
             </tbody>
           </table>
         </InfiniteScroll>
-      )}
+      </div>
     </div>
   )
 }

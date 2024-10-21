@@ -1,11 +1,12 @@
 import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
-import { FormProvider, useForm, useFormContext } from "react-hook-form"
+import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
 import { useEditListItem } from "../../hooks/use-edit-list-item"
+import { headerLabels } from "./display-list"
 import { useField } from "./input/use-field"
 
 export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
@@ -49,6 +50,8 @@ const ListEditForm = ({
   const { mutateAsync, isPending } = useEditListItem()
   const { setSelectedListItem } = useDatabrowserStore()
 
+  const [keyLabel, valueLabel] = headerLabels[type]
+
   return (
     <FormProvider {...form}>
       <form
@@ -64,9 +67,13 @@ const ListEditForm = ({
         })}
         className="flex flex-col gap-2"
       >
-        <div className="flex-grow">
-          <FormItem name="key" label="Key" />
-          <FormItem name="value" label="Value" />
+        <div className="flex flex-grow flex-col gap-2">
+          {type !== "list" && <FormItem name="key" label={keyLabel} />}
+          {type === "zset" ? (
+            <NumberFormItem name="value" label={valueLabel} />
+          ) : (
+            type !== "set" && <FormItem name="value" label={valueLabel} />
+          )}
         </div>
 
         <div className="flex justify-end gap-1">
@@ -94,7 +101,27 @@ const ListEditForm = ({
   )
 }
 
-const FormItem = ({ name, label }: { name: string; label: string }) => {
+const NumberFormItem = ({ name, label }: { name: string; label: string }) => {
+  return (
+    <div className="flex flex-col gap-1">
+      <div className="flex">
+        <span className="text-xs font-medium text-zinc-700">{label}</span>
+      </div>
+      <Controller
+        name={name}
+        render={({ field }) => (
+          <input
+            className="rounded-md border border-zinc-300 px-3 py-1 shadow-sm"
+            type="number"
+            {...field}
+          />
+        )}
+      />
+    </div>
+  )
+}
+
+const FormItem = ({ name, label }: { name: string; label: string; isNumber?: boolean }) => {
   const form = useFormContext()
   const { editor, selector } = useField({
     name,
@@ -104,12 +131,14 @@ const FormItem = ({ name, label }: { name: string; label: string }) => {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex">
+      <div className="flex items-center gap-1 text-xs">
         <span className="font-medium text-zinc-700">{label}</span>{" "}
         <span className="text-zinc-300">/</span>
         {selector}
       </div>
-      {editor}
+      <div className="overflow-hidden rounded-md border border-zinc-300 bg-white py-1 shadow-sm">
+        {editor}
+      </div>
     </div>
   )
 }
