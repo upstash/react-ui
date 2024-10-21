@@ -35,8 +35,7 @@ export const useField = ({
         shouldDirty: false,
       });
     else {
-      if (fieldState.isDirty && !confirm("Changes made will be lost")) return;
-      form.resetField(name);
+      if (!fieldState.isDirty) form.resetField(name);
     }
   };
 

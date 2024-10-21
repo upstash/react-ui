@@ -93,6 +93,7 @@ const ListEditForm = ({
             newKey: key,
             newValue: value,
           });
+          setSelectedListItem(undefined);
         })}
         className="flex flex-col gap-2"
       >
@@ -114,7 +115,7 @@ const ListEditForm = ({
           <Button
             type="submit"
             className="h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || !form.formState.isDirty}
           >
             <Spinner isLoading={isPending} isLoadingText={"Saving"}>
               Save

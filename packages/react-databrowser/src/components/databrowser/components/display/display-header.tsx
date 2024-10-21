@@ -24,7 +24,7 @@ export const DisplayHeader = ({
       <h2 className="my-2 mb-4">
         {dataKey.trim() === "" ? (
           <>
-            <span className="font-mono">{`"${dataKey}"`}</span>
+            {`"${dataKey}"`}
             <span className="ml-3 text-sm text-zinc-500">(empty key)</span>
           </>
         ) : (

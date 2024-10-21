@@ -23,11 +23,10 @@ export const ContentTypeSelect = ({
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {(isValidJSON || value === "JSON" ? contentTypes : ["Text"]).map((type) => (
-            <SelectItem value={type} key={type}>
-              {type}
-            </SelectItem>
-          ))}
+          <SelectItem value={"Text"}>Text</SelectItem>
+          <SelectItem disabled={!isValidJSON} value={"JSON"}>
+            JSON
+          </SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -54,29 +54,29 @@ const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: Dat
       <div className="flex flex-shrink-0 justify-between px-3 pb-2 pt-1">
         {selector}
 
-        {form.formState.isDirty && (
-          <div className="flex gap-1">
+        <div className="flex gap-1">
+          {form.formState.isDirty && (
             <Button
               onClick={handleCancel}
               className="h-6 rounded-md border bg-white px-3 font-normal text-zinc-700 hover:bg-zinc-100"
             >
               Cancel
             </Button>
-            <Button
-              onClick={form.handleSubmit(async ({ value }) => {
-                await setKey(value);
-              })}
-              className={cn(
-                "h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50",
-              )}
-              disabled={!form.formState.isValid}
-            >
-              <Spinner isLoading={isSettingKey} isLoadingText={"Saving"}>
-                Save
-              </Spinner>
-            </Button>
-          </div>
-        )}
+          )}
+          <Button
+            onClick={form.handleSubmit(async ({ value }) => {
+              await setKey(value);
+            })}
+            className={cn(
+              "h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50",
+            )}
+            disabled={!form.formState.isValid || !form.formState.isDirty}
+          >
+            <Spinner isLoading={isSettingKey} isLoadingText={"Saving"}>
+              Save
+            </Spinner>
+          </Button>
+        </div>
       </div>
     </>
   );

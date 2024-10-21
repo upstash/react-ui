@@ -2,10 +2,9 @@ import { useDatabrowserStore } from "@/store";
 import { useKeyType } from "../../hooks/use-keys";
 import { EditorDisplay } from "./editor-display";
 import { ListDisplay } from "./list-display";
-import { ListEditDisplay } from "./list-edit-display";
 
 export const DataDisplay = () => {
-  const { selectedKey, selectedListItemKey } = useDatabrowserStore();
+  const { selectedKey } = useDatabrowserStore();
   const type = useKeyType(selectedKey);
 
   return (
