@@ -1,4 +1,4 @@
-import { KEY_NAMES, type DataType } from "@/types"
+import { DATA_TYPE_NAMES, type DataType } from "@/types"
 import {
   IconArrowsSort,
   IconCodeDots,
@@ -35,7 +35,7 @@ export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolea
   return (
     <div
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
+        "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-md text-xs font-medium leading-none tracking-wide",
         isIcon ? "h-5 w-5" : "h-6 px-1 uppercase"
       )}
       style={{
@@ -43,7 +43,7 @@ export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolea
         color: colorsMap[type][800],
       }}
     >
-      {isIcon ? iconsMap[type] : KEY_NAMES[type]}
+      {isIcon ? iconsMap[type] : DATA_TYPE_NAMES[type]}
     </div>
   )
 }

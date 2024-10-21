@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react"
 import { useDatabrowser, type SearchFilter } from "@/store"
-import { KEY_TYPES, type DataType } from "@/types"
+import { DATA_TYPES, type DataType } from "@/types"
 import type { Redis } from "@upstash/redis"
 
 const PAGE_SIZE = 30
@@ -52,14 +52,14 @@ class PaginationCache {
     private readonly searchTerm: string,
     private readonly typeFilter: string | undefined
   ) {
-    if (typeFilter && !KEY_TYPES.includes(typeFilter as DataType)) {
+    if (typeFilter && !DATA_TYPES.includes(typeFilter as DataType)) {
       throw new Error(`Invalid type filter: ${typeFilter}`)
     }
   }
 
   // Cursor is 0 initially, then it is set to -1 when we reach the end
   cache: Record<string, { cursor: string; keys: string[] }> = Object.fromEntries(
-    KEY_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
+    DATA_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
   )
   targetCount = 0
 
@@ -120,12 +120,12 @@ class PaginationCache {
     }
 
     // Fetch pages of each type until they are enough
-    const types = this.typeFilter ? [this.typeFilter] : KEY_TYPES
+    const types = this.typeFilter ? [this.typeFilter] : DATA_TYPES
     await Promise.all(types.map(fetchType))
   }
 
   private isAllEnded() {
-    return (this.typeFilter ? [this.typeFilter] : KEY_TYPES).every(
+    return (this.typeFilter ? [this.typeFilter] : DATA_TYPES).every(
       (type) => this.cache[type].cursor === "-1"
     )
   }

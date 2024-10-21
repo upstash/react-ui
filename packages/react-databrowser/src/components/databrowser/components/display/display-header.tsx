@@ -1,43 +1,53 @@
 import type { DataType } from "@/types"
-import { IconChevronDown } from "@tabler/icons-react"
+import { ButtonIcon } from "@radix-ui/react-icons"
+import { IconChevronDown, IconDots, IconDotsVertical, IconPlus } from "@tabler/icons-react"
 
 import { formatBytes } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
 import { useFetchTTL } from "../../hooks"
 import { RedisTypeTag } from "../type-tag"
+import { KeyActions } from "./key-actions"
 import { TTLPopover } from "./ttl-popover"
 
 export const DisplayHeader = ({
-  size,
-  length,
   dataKey,
   type,
   hideBadges,
+  content,
 }: {
-  size?: number
-  length?: number
+  content?: string
   dataKey: string
   type: DataType
   hideBadges?: boolean
 }) => {
+  const size = content?.length
+  const length = content?.length
+
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
-      <h2 className="my-2 mb-4">
-        {dataKey.trim() === "" ? (
-          <>
-            {`"${dataKey}"`}
-            <span className="ml-3 text-sm text-zinc-500">(empty key)</span>
-          </>
-        ) : (
-          dataKey
-        )}
-      </h2>
+      <div className="flex items-center justify-between gap-1">
+        <h2 className="my-2 mb-4 flex-grow truncate">
+          {dataKey.trim() === "" ? (
+            <>
+              {`"${dataKey}"`}
+              <span className="ml-3 text-sm text-zinc-500">(empty key)</span>
+            </>
+          ) : (
+            dataKey
+          )}
+        </h2>
+        <Button className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm">
+          <IconPlus className="text-zinc-400" size={20} />
+        </Button>
+        <KeyActions dataKey={dataKey} type={type} content={content} />
+      </div>
       {!hideBadges && (
         <div className="flex flex-wrap gap-1">
           <RedisTypeTag type={type} isIcon={false} />
           {size && <Badge label="Size:">{formatBytes(size)}</Badge>}
-          {length && <Badge label="Size:">{size}</Badge>}
+          {length && <Badge label="Length:">{size}</Badge>}
           <TTLBadge dataKey={dataKey} />
         </div>
       )}

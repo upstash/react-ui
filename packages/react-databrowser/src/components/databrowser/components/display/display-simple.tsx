@@ -16,7 +16,7 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
-      <DisplayHeader dataKey={dataKey} type={type} size={10000} length={1234} />
+      <DisplayHeader dataKey={dataKey} type={type} content={data ?? undefined} />
       {data === undefined ? (
         <>Loading...</>
       ) : data === null ? (

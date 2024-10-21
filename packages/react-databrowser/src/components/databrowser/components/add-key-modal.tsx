@@ -1,15 +1,13 @@
-import { useState, type FormEvent } from "react"
+import { useState } from "react"
 import { useDatabrowserStore } from "@/store"
-import type { DataType } from "@/types"
+import { DATA_TYPES, type DataType } from "@/types"
 import { PlusIcon } from "@radix-ui/react-icons"
-import { Label } from "@radix-ui/react-label"
+import { Controller, useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -20,13 +18,11 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
 import { Spinner } from "@/components/ui/spinner"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "@/components/ui/use-toast"
 import { RedisTypeTag } from "@/components/databrowser/components/type-tag"
 import { useAddKey } from "@/components/databrowser/hooks/use-add-key"
 
@@ -42,53 +38,41 @@ const expUnit = [
 export type ExpUnitUnion = (typeof expUnit)[number]
 
 export function AddKeyModal() {
-  const { toast } = useToast()
   const { setSelectedKey } = useDatabrowserStore()
   const [open, setOpen] = useState(false)
 
   const { mutateAsync: addKey, isPending } = useAddKey()
+  const { control, handleSubmit, formState, reset } = useForm<{
+    key: string
+    type: DataType
+  }>({
+    defaultValues: {
+      key: "",
+      type: "string",
+    },
+  })
 
-  const handleAddData = async (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = handleSubmit(async ({ key, type }) => {
     try {
-      e.preventDefault()
-      const formData = new FormData(e.currentTarget)
-
-      const key = formData.get("key") as string
-      const value = formData.get("value") as string
-
-      if (!(key && value)) {
-        throw new Error("Missing key or value data")
-      }
-
-      const exp = Number(formData.get("exp"))
-      const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined
-      const ttl = expUnit ? convertToSeconds(expUnit, exp) : undefined
-      const ok = await addKey({ key, value, ex: ttl })
-
-      if (ok) {
-        toast({
-          description: "Data Set Successfully!",
-        })
-        setSelectedKey(key)
-      } else {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: "There was a problem with your request.",
-        })
-      }
+      await addKey({ key, type })
       setOpen(false)
+      setSelectedKey(key)
     } catch (error) {
       toast({
+        description: error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: (error as Error).message,
       })
     }
-  }
+  })
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        if (open) reset()
+        setOpen(open)
+      }}
+    >
       <DialogTrigger asChild>
         <div>
           <Button
@@ -103,84 +87,64 @@ export function AddKeyModal() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle>Insert</DialogTitle>
-          <DialogDescription asChild>
-            <div>
-              <span>Data will be added as a</span> <RedisTypeTag type="string" />.
-            </div>
-          </DialogDescription>
+          <DialogTitle>Create new key</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleAddData}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label
-                htmlFor="key"
-                className="inline-flex h-10 w-full min-w-[90px] items-center justify-center gap-[5px] rounded border border-neutral-200 bg-white px-[15px] py-2 text-[13px] leading-none ring-offset-white"
-              >
-                Key
-              </Label>
-              <Input id="key" name="key" placeholder="Foo" className="col-span-3" />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <div className="flex h-full">
-                <Label
-                  htmlFor="value"
-                  className="inline-flex h-10 w-full min-w-[90px] items-center justify-center gap-[5px] rounded border border-neutral-200 bg-white px-[15px] py-2 text-[13px] leading-none ring-offset-white"
-                >
-                  Value
-                </Label>
-              </div>
-              <Textarea
-                onBlur={(e) => {
-                  try {
-                    const value = JSON.parse(e.target.value)
-                    const prettified = JSON.stringify(value, null, 4)
-                    e.target.value = prettified
-                  } catch {}
-                }}
-                cols={5}
-                rows={5}
-                id="value"
-                name="value"
-                placeholder="Bar"
-                className="col-span-3 overflow-x-auto"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Select name="exp-unit">
-                <SelectTrigger className="inline-flex h-10 w-full min-w-[90px] items-center justify-center gap-[5px] rounded border border-neutral-200 bg-white px-[15px] py-2 text-[13px] leading-none ring-offset-white">
-                  <SelectValue placeholder="Expires" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Expires</SelectLabel>
-                    {expUnit.map((dataType) => (
-                      <SelectItem value={dataType} key={dataType}>
-                        {dataType}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Input
-                name="exp"
-                type="number"
-                id="exp"
-                placeholder="1H is 3600 seconds"
-                className="col-span-3"
-              />
-              <p className="w-100 col-span-4 text-sm text-gray-500">
-                Leave it empty if you want to make the key permanent.
-              </p>
-            </div>
+        <form className="mt-4" onSubmit={onSubmit}>
+          <div className="flex gap-1">
+            <Controller
+              control={control}
+              name="type"
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="h-8 w-auto pl-[3px] pr-10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {DATA_TYPES.map((type) => (
+                        <SelectItem key={type} value={type}>
+                          <RedisTypeTag type={type as DataType} />
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <Controller
+              rules={{
+                required: "Please enter a key",
+              }}
+              control={control}
+              name="key"
+              render={({ field }) => (
+                <Input placeholder="mykey" {...field} className="h-8 flex-grow " />
+              )}
+            />
           </div>
-          <DialogFooter>
-            <button disabled={isPending} className="save-changes-btn">
-              <Spinner isLoading={isPending} isLoadingText="Please wait">
-                Save changes
+          {formState.errors.key && (
+            <div className="mb-3 mt-1 text-xs text-red-500">{formState.errors.key?.message}</div>
+          )}
+          <div className="mt-1 text-xs text-zinc-500">
+            After creating the key, you can edit the value
+          </div>
+          <div className="mt-6 flex justify-end gap-2">
+            <Button
+              type="button"
+              onClick={() => {
+                setOpen(false)
+              }}
+              variant={"outline"}
+              className="font-normal"
+            >
+              Cancel
+            </Button>
+            <Button variant={"primary"} type="submit">
+              <Spinner isLoading={isPending} isLoadingText={"Creating"}>
+                Create
               </Spinner>
-            </button>
-          </DialogFooter>
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

@@ -1,5 +1,5 @@
-export const KEY_TYPES = ["string", "list", "hash", "set", "zset", "json", "stream"] as const
-export const KEY_NAMES = {
+export const DATA_TYPES = ["string", "list", "hash", "set", "zset", "json", "stream"] as const
+export const DATA_TYPE_NAMES = {
   string: "String",
   list: "List",
   hash: "Hash",
@@ -7,9 +7,9 @@ export const KEY_NAMES = {
   zset: "Sorted Set",
   json: "JSON",
   stream: "Stream",
-}
+} as const
 
-export type DataType = (typeof KEY_TYPES)[number]
+export type DataType = (typeof DATA_TYPES)[number]
 
 const LIST_DATA_TYPES = ["set", "zset", "list", "hash", "stream"] as const
 const SIMPLE_DATA_TYPES = ["string", "json"] as const
