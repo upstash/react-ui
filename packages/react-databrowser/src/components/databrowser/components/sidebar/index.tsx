@@ -7,20 +7,13 @@ import { DisplayDbSize } from "./db-size";
 import { Empty } from "./empty";
 import { LoadingSkeleton } from "./skeleton-buttons";
 import { useKeys } from "../../hooks/use-keys";
-import { IconLoader2, IconMaximize } from "@tabler/icons-react";
+import { IconMaximize } from "@tabler/icons-react";
 import { useDatabrowserStore } from "@/store";
+import { InfiniteScroll } from "./infinite-scroll";
 
 export function Sidebar() {
   const { keys, query } = useKeys();
   const { setSearchKey, search } = useDatabrowserStore();
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const { scrollTop, clientHeight, scrollHeight } = e.currentTarget;
-    if (scrollTop + clientHeight > scrollHeight - 100) {
-      if (query.isFetching || !query.hasNextPage) return;
-      query.fetchNextPage();
-    }
-  };
 
   return (
     <div className="flex h-full flex-col rounded-xl border p-1">
@@ -53,12 +46,9 @@ export function Sidebar() {
       {query.isLoading ? (
         <LoadingSkeleton />
       ) : keys.length > 0 ? (
-        <div className="h-full w-full overflow-y-scroll" onScroll={handleScroll}>
+        <InfiniteScroll query={query}>
           <KeysList />
-          <div className="flex h-[100px] justify-center py-2 text-zinc-300">
-            {query.isFetching && <IconLoader2 className="animate-spin" size={16} />}
-          </div>
-        </div>
+        </InfiniteScroll>
       ) : (
         <Empty />
       )}

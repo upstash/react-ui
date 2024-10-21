@@ -1,71 +1,78 @@
-import { DataType } from "@/types";
 import { DisplayHeader } from "./display-header";
-import { InfiniteData, useInfiniteQuery, UseInfiniteQueryResult } from "@tanstack/react-query";
-import { useDatabrowser, useDatabrowserStore } from "@/store";
+import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
+import { useDatabrowserStore } from "@/store";
 import { useMemo } from "react";
 import { ListEditDisplay } from "./list-edit-display";
-import { DataHashDisplay, DataSetDisplay, DataZSetDisplay } from "./list-types";
+import { useListQuery } from "./list-types";
+import { InfiniteScroll } from "../sidebar/infinite-scroll";
+import { ListDataType } from "@/types";
 
-export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
+export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { selectedListItem } = useDatabrowserStore();
   console.log("item", selectedListItem);
+
+  const query = useListQuery({ dataKey, type });
+
+  const headers = {
+    list: ["Index", "Content"],
+    hash: ["Field", "Value"],
+    zset: ["Value", "Score"],
+    stream: ["ID", "Value"],
+  } as const;
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex h-full flex-col gap-2">
       <DisplayHeader dataKey={dataKey} type={type} hideBadges={selectedListItem !== undefined} />
       {selectedListItem ? (
         <ListEditDisplay dataKey={dataKey} type={type} />
       ) : (
-        <table className="w-full flex-grow text-sm text-zinc-700">
-          <tbody>
-            {type === "zset" ? (
-              <DataZSetDisplay dataKey={dataKey} />
-            ) : type === "set" ? (
-              <DataSetDisplay dataKey={dataKey} />
-            ) : type === "hash" ? (
-              <DataHashDisplay dataKey={dataKey} />
-            ) : (
-              <>WIP</>
+        <InfiniteScroll query={query}>
+          <table className="w-full flex-grow  text-sm text-zinc-700">
+            {type !== "set" && (
+              <thead>
+                <td className="px-3 py-2 font-medium">{headers[type][0]}</td>
+                {headers[type][1] && <td className="px-3 py-2 font-medium">{headers[type][1]}</td>}
+              </thead>
             )}
-          </tbody>
-        </table>
+            <tbody>
+              <ListItems query={query} type={type} />
+            </tbody>
+          </table>
+        </InfiniteScroll>
       )}
     </div>
   );
 };
 
 export const ListItems = ({
+  type,
   query,
 }: {
+  type: ListDataType;
   query: UseInfiniteQueryResult<
     InfiniteData<{
-      cursor: string;
       keys: ItemData[];
     }>
   >;
 }) => {
+  const { setSelectedListItem } = useDatabrowserStore();
   const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data]);
 
   return (
     <>
-      {keys.map(({ key, value }) => (
-        <ListItem key={key} dataKey={key} value={value} />
+      {keys.map(({ key, value }, i) => (
+        <tr
+          onClick={() => {
+            setSelectedListItem(key, value);
+          }}
+          className="cursor-pointer border-b hover:bg-zinc-100"
+        >
+          {type === "list" && <td className="px-3 py-2">{i}</td>}
+          <td className="px-3 py-2">{key}</td>
+          {value && <td className="px-3 py-2">{value}</td>}
+        </tr>
       ))}
     </>
-  );
-};
-
-const ListItem = ({ dataKey, value }: { dataKey: string; value?: string }) => {
-  const { setSelectedListItem } = useDatabrowserStore();
-  return (
-    <tr
-      onClick={() => {
-        setSelectedListItem(dataKey, value);
-      }}
-      className="cursor-pointer border-b hover:bg-zinc-100"
-    >
-      <td className="px-3 py-2">{dataKey}</td>
-      {value && <td className="px-3 py-2">{value}</td>}
-    </tr>
   );
 };
 
