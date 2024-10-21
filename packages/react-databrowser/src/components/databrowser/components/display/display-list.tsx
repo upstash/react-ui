@@ -1,22 +1,23 @@
-import { DisplayHeader } from "./display-header";
-import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
-import { useDatabrowserStore } from "@/store";
-import { useMemo } from "react";
-import { ListEditDisplay } from "./list-edit-display";
-import { useFetchListItems } from "../../hooks/use-fetch-list-items";
-import { InfiniteScroll } from "../sidebar/infinite-scroll";
-import { ListDataType } from "@/types";
+import { useMemo } from "react"
+import { useDatabrowserStore } from "@/store"
+import type { ListDataType } from "@/types"
+import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query"
+
+import { useFetchListItems } from "../../hooks/use-fetch-list-items"
+import { InfiniteScroll } from "../sidebar/infinite-scroll"
+import { DisplayHeader } from "./display-header"
+import { ListEditDisplay } from "./list-edit-display"
 
 export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
-  const { selectedListItem } = useDatabrowserStore();
-  const query = useFetchListItems({ dataKey, type });
+  const { selectedListItem } = useDatabrowserStore()
+  const query = useFetchListItems({ dataKey, type })
 
   const headers = {
     list: ["Index", "Content"],
     hash: ["Field", "Value"],
     zset: ["Value", "Score"],
     stream: ["ID", "Value"],
-  } as const;
+  } as const
 
   return (
     <div className="flex h-full flex-col gap-2">
@@ -30,7 +31,9 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
               <thead>
                 <tr>
                   <th className="px-3 py-2 text-left font-medium">{headers[type][0]}</th>
-                  {headers[type][1] && <th className="px-3 py-2 text-left font-medium">{headers[type][1]}</th>}
+                  {headers[type][1] && (
+                    <th className="px-3 py-2 text-left font-medium">{headers[type][1]}</th>
+                  )}
                 </tr>
               </thead>
             )}
@@ -41,30 +44,30 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
         </InfiniteScroll>
       )}
     </div>
-  );
-};
+  )
+}
 
 export const ListItems = ({
   type,
   query,
 }: {
-  type: ListDataType;
+  type: ListDataType
   query: UseInfiniteQueryResult<
     InfiniteData<{
-      keys: ItemData[];
+      keys: ItemData[]
     }>
-  >;
+  >
 }) => {
-  const { setSelectedListItem } = useDatabrowserStore();
-  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data]);
+  const { setSelectedListItem } = useDatabrowserStore()
+  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
 
   return (
     <>
-      {keys.map(({ key, value }, i) => (
+      {keys.map(({ key, value }, _i) => (
         <tr
           key={key}
           onClick={() => {
-            setSelectedListItem(key, value);
+            setSelectedListItem(key, value)
           }}
           className="cursor-pointer border-b hover:bg-zinc-100"
         >
@@ -73,10 +76,10 @@ export const ListItems = ({
         </tr>
       ))}
     </>
-  );
-};
+  )
+}
 
 type ItemData = {
-  key: string;
-  value?: string;
-};
+  key: string
+  value?: string
+}

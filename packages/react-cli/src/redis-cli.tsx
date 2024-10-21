@@ -1,93 +1,93 @@
-import type React from "react";
-import { type PropsWithChildren, type ReactNode, useEffect, useRef, useState } from "react";
-import * as ScrollArea from "@radix-ui/react-scroll-area";
+import type React from "react"
+import { useEffect, useRef, useState, type PropsWithChildren, type ReactNode } from "react"
+import * as ScrollArea from "@radix-ui/react-scroll-area"
 
-import "./cli.css";
+import "./cli.css"
 
 type CommandContext = {
-  setStdin: (s: string) => void;
+  setStdin: (s: string) => void
   /**
    * Adds a new command to stdin and pushes it to the history
    */
-  addCommand: (command: CommandResult) => void;
-};
+  addCommand: (command: CommandResult) => void
+}
 
-type Command = (ctx: CommandContext) => void | Promise<void>;
+type Command = (ctx: CommandContext) => void | Promise<void>
 
 export type CliProps = {
-  url: string;
-  token: string;
-  welcome?: ReactNode;
+  url: string
+  token: string
+  welcome?: ReactNode
 
   /**
    * trigger one or multiple commands to run on start
    *
    * For example `init: "help"` shows the help
    */
-  init?: string | string[];
+  init?: string | string[]
 
   /**
    * The className prop is used to add custom styles to the cli and applied to the root element
    */
-  className?: string;
+  className?: string
 
-  commands?: Record<string, Command>;
-};
+  commands?: Record<string, Command>
+}
 
 type CommandResult = {
   /**
    * @default Date.now()
    */
-  time?: number;
-  command: string;
-  result?: string | null | number | boolean | string[] | React.ReactNode;
-  error?: boolean;
-};
+  time?: number
+  command: string
+  result?: string | null | number | boolean | string[] | React.ReactNode
+  error?: boolean
+}
 
 export const RedisCli: React.FC<CliProps> = (props) => {
   /**
    * Holds a unique set of command inputs
    */
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>([])
 
   /**
    * Used to cycle through the history with the up and down arrow keys
    */
-  const [historyIndex, setHistoryIndex] = useState<number | null>(null);
+  const [historyIndex, setHistoryIndex] = useState<number | null>(null)
 
   /**
    * Holds all commands that have been executed and their results
    */
-  const [results, setResults] = useState<CommandResult[]>([]);
+  const [results, setResults] = useState<CommandResult[]>([])
 
   /**
    * Adds a command to the history
    */
   function addCommand(command: CommandResult) {
-    command.time ??= Date.now();
+    command.time ??= Date.now()
     setHistory((prev) => {
       if (prev.length === 0 || prev[0] !== command.command) {
-        return [command.command, ...prev];
+        return [command.command, ...prev]
       }
-      return prev;
-    });
-    setResults((prev) => [...prev, command]);
+      return prev
+    })
+    setResults((prev) => [...prev, command])
   }
   /**
    * Used to show a loading indicator when querying redis
    */
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   /**
    * stdin is the input that the user types in the cli
    */
-  const [stdin, setStdin] = useState("");
+  const [stdin, setStdin] = useState("")
 
   const specialCommands: Record<string, Command> = {
     clear: (_ctx) => {
-      setResults([]);
-      setHistoryIndex(null);
-      setStdin("");
+      setResults([])
+      setHistoryIndex(null)
+      setStdin("")
     },
     help: (ctx) => {
       ctx.addCommand({
@@ -126,17 +126,17 @@ export const RedisCli: React.FC<CliProps> = (props) => {
             </div>
           </div>
         ),
-      });
+      })
     },
     ...props.commands,
-  };
+  }
 
   /**
    * Run a command against redis and write the command to history
    */
   async function runRedisCommand(command: string): Promise<void> {
     try {
-      const args = splitArgs(command);
+      const args = splitArgs(command)
 
       const res = await fetch(props.url, {
         method: "POST",
@@ -145,12 +145,17 @@ export const RedisCli: React.FC<CliProps> = (props) => {
           Authorization: `Bearer ${props.token}`,
         },
         body: JSON.stringify(args),
-      });
-      const json = (await res.json()) as { result?: string; error?: string };
-      addCommand({ command, result: json.error ?? json.result, error: !!json.error, time: Date.now() });
+      })
+      const json = (await res.json()) as { result?: string; error?: string }
+      addCommand({
+        command,
+        result: json.error ?? json.result,
+        error: !!json.error,
+        time: Date.now(),
+      })
     } catch (e) {
-      console.error(e);
-      addCommand({ command, error: true, result: (e as Error).message, time: Date.now() });
+      console.error(e)
+      addCommand({ command, error: true, result: (e as Error).message, time: Date.now() })
     }
   }
 
@@ -160,16 +165,16 @@ export const RedisCli: React.FC<CliProps> = (props) => {
    */
   useEffect(() => {
     if (historyIndex === null) {
-      return;
+      return
     }
-    const cmd = history[historyIndex];
+    const cmd = history[historyIndex]
     if (!cmd) {
-      return;
+      return
     }
-    setStdin(cmd);
-  }, [historyIndex, history]);
+    setStdin(cmd)
+  }, [historyIndex, history])
 
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLInputElement>(null)
 
   /**
    * When the user presses enter, we first check if the command is a special command
@@ -179,68 +184,68 @@ export const RedisCli: React.FC<CliProps> = (props) => {
   const onEnter = async () => {
     try {
       if (loading) {
-        return;
+        return
       }
-      setLoading(true);
+      setLoading(true)
 
-      const command = stdin.trim();
+      const command = stdin.trim()
       if (!command) {
-        addCommand({ command, time: Date.now() });
-        return;
+        addCommand({ command, time: Date.now() })
+        return
       }
       if (specialCommands[command]) {
         specialCommands[command]({
           setStdin,
           addCommand,
-        });
-        return;
+        })
+        return
       }
 
       // await new Promise((r) => setTimeout(r, 1000));
 
-      await runRedisCommand(command);
+      await runRedisCommand(command)
     } catch (e) {
-      const err = e as Error;
-      console.error(err.message);
+      const err = e as Error
+      console.error(err.message)
     } finally {
-      setHistoryIndex(null);
-      setLoading(false);
-      setStdin("");
+      setHistoryIndex(null)
+      setLoading(false)
+      setStdin("")
       /**
        * We need a timeout here because react needs to update the dom before we can scroll to the
        * bottom of the cli. If we don't wait, scrollIntoView will scroll to the same place as
        * before
        */
-      setTimeout(() => ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 10);
+      setTimeout(() => ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 10)
     }
-  };
+  }
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Not sure how to fix this so ignoring for now since it works
   useEffect(() => {
     async function run() {
       if (!props.init) {
-        return;
+        return
       }
       try {
-        const commands = Array.isArray(props.init) ? props.init : [props.init];
+        const commands = Array.isArray(props.init) ? props.init : [props.init]
         for (const command of commands) {
-          const cmd = specialCommands[command];
+          const cmd = specialCommands[command]
           if (cmd) {
             cmd({
               setStdin,
               addCommand,
-            });
+            })
           } else {
-            await runRedisCommand(command);
+            await runRedisCommand(command)
           }
         }
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     }
 
-    run();
-  }, [props.init]);
+    run()
+  }, [props.init])
 
   return (
     <div
@@ -253,7 +258,7 @@ export const RedisCli: React.FC<CliProps> = (props) => {
          *    probably trying to copy some text
          */
         if (window?.getSelection()?.type !== "Range") {
-          ref.current?.focus();
+          ref.current?.focus()
         }
       }}
     >
@@ -285,32 +290,36 @@ export const RedisCli: React.FC<CliProps> = (props) => {
               onChange={(e) => setStdin(e.currentTarget.value)}
               onKeyDown={async (e) => {
                 if (e.ctrlKey && e.key === "c") {
-                  e.preventDefault();
-                  addCommand({ command: `${stdin}^C`, time: Date.now() });
-                  setStdin("");
-                  return;
+                  e.preventDefault()
+                  addCommand({ command: `${stdin}^C`, time: Date.now() })
+                  setStdin("")
+                  return
                 }
 
                 if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  await onEnter();
-                  return;
+                  e.preventDefault()
+                  await onEnter()
+                  return
                 }
                 if (e.key === "ArrowUp") {
                   if (history.length === 0) {
-                    setHistoryIndex(null);
-                    return;
+                    setHistoryIndex(null)
+                    return
                   }
-                  setHistoryIndex(Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1));
-                  return;
+                  setHistoryIndex(
+                    Math.min(history.length - 1, historyIndex === null ? 0 : historyIndex + 1)
+                  )
+                  return
                 }
                 if (e.key === "ArrowDown") {
                   if (history.length === 0) {
-                    setHistoryIndex(null);
-                    return;
+                    setHistoryIndex(null)
+                    return
                   }
-                  setHistoryIndex(Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1));
-                  return;
+                  setHistoryIndex(
+                    Math.max(0, historyIndex === null ? history.length - 1 : historyIndex - 1)
+                  )
+                  return
                 }
               }}
               className="upstash-cli-stdin"
@@ -323,8 +332,8 @@ export const RedisCli: React.FC<CliProps> = (props) => {
         <ScrollArea.Corner style={{ background: "black" }} />
       </ScrollArea.Root>
     </div>
-  );
-};
+  )
+}
 
 const Line: React.FC<PropsWithChildren<{ prefix?: React.ReactNode; className?: string }>> = ({
   className,
@@ -335,48 +344,48 @@ const Line: React.FC<PropsWithChildren<{ prefix?: React.ReactNode; className?: s
     <div className="upstash-cli-line-prefix">{prefix ?? <span> </span>}</div>
     <div className="upstash-cli-line-content">{children}</div>
   </div>
-);
+)
 /**
  *  splitArgs splits the command into an array of arguments by spaces
  * it handles single and double quotes correctly
  */
 function splitArgs(input: string): string[] {
-  const separator = /\s/g;
-  let singleQuoteOpen = false;
-  let doubleQuoteOpen = false;
-  let tokenBuffer = [];
-  const ret = [];
+  const separator = /\s/g
+  let singleQuoteOpen = false
+  let doubleQuoteOpen = false
+  let tokenBuffer = []
+  const ret = []
 
-  const arr = input.split("");
+  const arr = input.split("")
   for (let i = 0; i < arr.length; ++i) {
-    const element = arr[i];
-    const matches = element.match(separator);
+    const element = arr[i]
+    const matches = element.match(separator)
     if (element === "'" && !doubleQuoteOpen) {
-      singleQuoteOpen = !singleQuoteOpen;
-      continue;
+      singleQuoteOpen = !singleQuoteOpen
+      continue
     }
     if (element === '"' && !singleQuoteOpen) {
-      doubleQuoteOpen = !doubleQuoteOpen;
-      continue;
+      doubleQuoteOpen = !doubleQuoteOpen
+      continue
     }
 
     if (!(singleQuoteOpen || doubleQuoteOpen) && matches) {
       if (tokenBuffer.length > 0) {
-        ret.push(tokenBuffer.join(""));
-        tokenBuffer = [];
+        ret.push(tokenBuffer.join(""))
+        tokenBuffer = []
       } else {
-        ret.push(element);
+        ret.push(element)
       }
     } else {
-      tokenBuffer.push(element);
+      tokenBuffer.push(element)
     }
   }
   if (tokenBuffer.length > 0) {
-    ret.push(tokenBuffer.join(""));
+    ret.push(tokenBuffer.join(""))
   } else {
-    ret.push("");
+    ret.push("")
   }
-  return ret;
+  return ret
 }
 
 const Result: React.FC<{ result: CommandResult }> = ({ result }) => {
@@ -412,25 +421,25 @@ const Result: React.FC<{ result: CommandResult }> = ({ result }) => {
         </Line>
       ) : null}
     </>
-  );
-};
+  )
+}
 
 function formatResult(result: CommandResult["result"]): string | ReactNode {
   switch (typeof result) {
     case "undefined":
-      return "";
+      return ""
     case "boolean":
     case "number":
-      return result.toString();
+      return result.toString()
     case "object":
       if (result === null) {
-        return "nil";
+        return "nil"
       }
       if (Array.isArray(result)) {
-        return result.map(formatResult).join(", ");
+        return result.map(formatResult).join(", ")
       }
-      return result;
+      return result
     default:
-      return result;
+      return result
   }
 }

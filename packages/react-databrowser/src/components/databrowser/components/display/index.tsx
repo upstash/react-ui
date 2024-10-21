@@ -1,11 +1,12 @@
-import { useDatabrowserStore } from "@/store";
-import { useKeyType } from "../../hooks/use-keys";
-import { EditorDisplay } from "./display-simple";
-import { ListDisplay } from "./display-list";
+import { useDatabrowserStore } from "@/store"
+
+import { useKeyType } from "../../hooks/use-keys"
+import { ListDisplay } from "./display-list"
+import { EditorDisplay } from "./display-simple"
 
 export const DataDisplay = () => {
-  const { selectedKey } = useDatabrowserStore();
-  const type = useKeyType(selectedKey);
+  const { selectedKey } = useDatabrowserStore()
+  const type = useKeyType(selectedKey)
 
   return (
     <div className="h-full rounded-xl border p-1">
@@ -21,5 +22,5 @@ export const DataDisplay = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,48 +1,49 @@
-import { createContext, PropsWithChildren, useContext, useMemo } from "react";
-import { RedisKey, useFetchKeys } from "./use-fetch-keys";
-import { useDatabrowserStore } from "@/store";
-import { useInfiniteQuery, UseInfiniteQueryResult } from "@tanstack/react-query";
+import { createContext, useContext, useMemo, type PropsWithChildren } from "react"
+import { useDatabrowserStore } from "@/store"
+import { useInfiniteQuery, type UseInfiniteQueryResult } from "@tanstack/react-query"
+
+import { useFetchKeys, type RedisKey } from "./use-fetch-keys"
 
 const KeysContext = createContext<
   | {
-      keys: RedisKey[];
-      query: UseInfiniteQueryResult;
-      refetch: () => void;
+      keys: RedisKey[]
+      query: UseInfiniteQueryResult
+      refetch: () => void
     }
   | undefined
->(undefined);
+>(undefined)
 
 export const KeysProvider = ({ children }: PropsWithChildren) => {
-  const { search: searchState } = useDatabrowserStore();
+  const { search: searchState } = useDatabrowserStore()
 
   const search = useMemo(
     () => ({
       key: searchState.key.includes("*") ? searchState.key : `*${searchState.key}*`,
       type: searchState.type,
     }),
-    [searchState],
-  );
+    [searchState]
+  )
 
-  const { getPage, resetCache } = useFetchKeys(search);
+  const { getPage, resetCache } = useFetchKeys(search)
 
   const query = useInfiniteQuery({
     queryKey: ["useFetchKeys", search],
     initialPageParam: 0,
     queryFn: async ({ pageParam: pageIndex }) => {
-      return getPage(pageIndex);
+      return getPage(pageIndex)
     },
     select: (data) => data,
     getNextPageParam: (lastPage, __, lastPageIndex) => {
-      return lastPage.hasNextPage ? lastPageIndex + 1 : undefined;
+      return lastPage.hasNextPage ? lastPageIndex + 1 : undefined
     },
-  });
+  })
 
   const refetch = () => {
-    resetCache();
-    query.refetch();
-  };
+    resetCache()
+    query.refetch()
+  }
 
-  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data]);
+  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
 
   return (
     <KeysContext.Provider
@@ -54,21 +55,21 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     >
       {children}
     </KeysContext.Provider>
-  );
-};
+  )
+}
 
 export const useKeys = () => {
-  const context = useContext(KeysContext);
+  const context = useContext(KeysContext)
   if (!context) {
-    throw new Error("useKeys must be used within a KeysProvider");
+    throw new Error("useKeys must be used within a KeysProvider")
   }
-  return context;
-};
+  return context
+}
 
 export const useKeyType = (key?: string) => {
-  const { keys } = useKeys();
+  const { keys } = useKeys()
 
-  const type = useMemo(() => keys.find(([k, _]) => k === key), [keys, key]);
+  const type = useMemo(() => keys.find(([k, _]) => k === key), [keys, key])
 
-  return type?.[1];
-};
+  return type?.[1]
+}

@@ -1,15 +1,19 @@
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import { useField } from "./input/use-field";
-import { useDatabrowserStore } from "@/store";
-import { ListDataType } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { useEditListItem } from "../../hooks/use-edit-list-item";
+import { useDatabrowserStore } from "@/store"
+import type { ListDataType } from "@/types"
+import { FormProvider, useForm, useFormContext } from "react-hook-form"
+
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+
+import { useEditListItem } from "../../hooks/use-edit-list-item"
+import { useField } from "./input/use-field"
 
 export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
-  const { selectedListItem } = useDatabrowserStore();
+  const { selectedListItem } = useDatabrowserStore()
 
-  if (!selectedListItem) return <></>;
+  if (!selectedListItem) {
+    return <></>
+  }
 
   return (
     <div className="rounded-md bg-zinc-100 p-3">
@@ -21,8 +25,8 @@ export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: List
         dataKey={dataKey}
       />
     </div>
-  );
-};
+  )
+}
 
 const ListEditForm = ({
   type,
@@ -30,20 +34,20 @@ const ListEditForm = ({
   itemKey,
   itemValue,
 }: {
-  type: ListDataType;
-  dataKey: string;
-  itemKey: string;
-  itemValue: string;
+  type: ListDataType
+  dataKey: string
+  itemKey: string
+  itemValue: string
 }) => {
   const form = useForm({
     defaultValues: {
       key: itemKey,
       value: itemValue,
     },
-  });
+  })
 
-  const { mutateAsync, isPending } = useEditListItem();
-  const { setSelectedListItem } = useDatabrowserStore();
+  const { mutateAsync, isPending } = useEditListItem()
+  const { setSelectedListItem } = useDatabrowserStore()
 
   return (
     <FormProvider {...form}>
@@ -55,8 +59,8 @@ const ListEditForm = ({
             itemKey,
             newKey: key,
             newValue: value,
-          });
-          setSelectedListItem(undefined);
+          })
+          setSelectedListItem(undefined)
         })}
         className="flex flex-col gap-2"
       >
@@ -69,7 +73,7 @@ const ListEditForm = ({
           <Button
             type="button"
             onClick={() => {
-              setSelectedListItem(undefined);
+              setSelectedListItem(undefined)
             }}
             className="h-6 rounded-md border bg-white px-3 font-normal text-zinc-700 hover:bg-zinc-100"
           >
@@ -87,24 +91,25 @@ const ListEditForm = ({
         </div>
       </form>
     </FormProvider>
-  );
-};
+  )
+}
 
 const FormItem = ({ name, label }: { name: string; label: string }) => {
-  const form = useFormContext();
+  const form = useFormContext()
   const { editor, selector } = useField({
     name,
     form,
     isEditorDynamic: true,
-  });
+  })
 
   return (
     <div className="flex flex-col gap-1">
       <div className="flex">
-        <span className="font-medium text-zinc-700">{label}</span> <span className="text-zinc-300">/</span>
+        <span className="font-medium text-zinc-700">{label}</span>{" "}
+        <span className="text-zinc-300">/</span>
         {selector}
       </div>
       {editor}
     </div>
-  );
-};
+  )
+}

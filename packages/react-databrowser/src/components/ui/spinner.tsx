@@ -1,12 +1,17 @@
-import type React from "react";
-import type { PropsWithChildren } from "react";
+import type React from "react"
+import type { PropsWithChildren } from "react"
 
 export interface SpinnerProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  isLoadingText: string;
-  isLoading: boolean;
+  isLoadingText: string
+  isLoading: boolean
 }
 
-export const Spinner = ({ isLoading, className, isLoadingText, children }: PropsWithChildren<SpinnerProps>) => {
+export const Spinner = ({
+  isLoading,
+  className,
+  isLoadingText,
+  children,
+}: PropsWithChildren<SpinnerProps>) => {
   return (
     <div className={className ?? "flex items-center"}>
       {isLoading ? (
@@ -31,5 +36,5 @@ export const Spinner = ({ isLoading, className, isLoadingText, children }: Props
         children
       )}
     </div>
-  );
-};
+  )
+}

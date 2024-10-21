@@ -1,24 +1,31 @@
-import { Button } from "@/components/ui/button";
-import { CheckIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useState } from "react"
+import { CheckIcon } from "@radix-ui/react-icons"
+
+import { Button } from "@/components/ui/button"
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  onCopy: () => void;
-  sizeVariant?: "icon-sm" | "icon-xs";
-  svgSize?: { w: number; h: number };
-  variant?: "outline" | "default" | "ghost";
+  onCopy: () => void
+  sizeVariant?: "icon-sm" | "icon-xs"
+  svgSize?: { w: number; h: number }
+  variant?: "outline" | "default" | "ghost"
 }
 
-export function CopyButton({ onCopy, sizeVariant = "icon-sm", variant = "outline", svgSize, className }: Props) {
-  const [copied, setCopied] = useState(false);
+export function CopyButton({
+  onCopy,
+  sizeVariant = "icon-sm",
+  variant = "outline",
+  svgSize,
+  className,
+}: Props) {
+  const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
-    setCopied(true);
-    onCopy();
+    setCopied(true)
+    onCopy()
     setTimeout(() => {
-      setCopied(false);
-    }, 1500);
-  };
+      setCopied(false)
+    }, 1500)
+  }
 
   return (
     <Button size={sizeVariant} variant={variant} onClick={handleCopy} className={className}>
@@ -43,13 +50,13 @@ export function CopyButton({ onCopy, sizeVariant = "icon-sm", variant = "outline
         </svg>
       )}
     </Button>
-  );
+  )
 }
 
 export const handleCopyClick = async (textToCopy: string) => {
   try {
-    await navigator.clipboard.writeText(textToCopy);
+    await navigator.clipboard.writeText(textToCopy)
   } catch (err) {
-    console.error("Failed to copy text: ", err);
+    console.error("Failed to copy text: ", err)
   }
-};
+}

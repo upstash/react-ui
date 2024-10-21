@@ -1,20 +1,29 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useMemo } from "react";
-import { checkIsValidJSON } from "./use-field";
+import { useMemo } from "react"
 
-const contentTypes = ["Text", "JSON"] as const;
-export type ContentType = (typeof contentTypes)[number];
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+import { checkIsValidJSON } from "./use-field"
+
+const contentTypes = ["Text", "JSON"] as const
+export type ContentType = (typeof contentTypes)[number]
 
 export const ContentTypeSelect = ({
   value,
   onChange,
   data,
 }: {
-  value: ContentType;
-  onChange: (value: ContentType) => void;
-  data: string;
+  value: ContentType
+  onChange: (value: ContentType) => void
+  data: string
 }) => {
-  const isValidJSON = useMemo(() => checkIsValidJSON(data), [data]);
+  const isValidJSON = useMemo(() => checkIsValidJSON(data), [data])
 
   return (
     <Select value={value} onValueChange={onChange}>
@@ -30,5 +39,5 @@ export const ContentTypeSelect = ({
         </SelectGroup>
       </SelectContent>
     </Select>
-  );
-};
+  )
+}

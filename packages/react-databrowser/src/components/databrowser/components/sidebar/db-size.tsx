@@ -1,10 +1,11 @@
-import { Skeleton } from "@/components/ui/skeleton";
-import { formatNumberWithCommas } from "@/lib/utils";
-import { useDatabrowser } from "@/store";
-import { useQuery } from "@tanstack/react-query";
+import { useDatabrowser } from "@/store"
+import { useQuery } from "@tanstack/react-query"
+
+import { formatNumberWithCommas } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const DisplayDbSize = () => {
-  const { redis } = useDatabrowser();
+  const { redis } = useDatabrowser()
   const {
     isLoading,
     error,
@@ -12,16 +13,20 @@ export const DisplayDbSize = () => {
   } = useQuery({
     queryKey: ["useFetchDbSize"],
     queryFn: async () => {
-      return await redis.dbsize();
+      return await redis.dbsize()
     },
-  });
+  })
 
   if (keyCount === undefined) {
     return (
       <div className="flex items-center justify-center gap-1 text-sm font-normal text-[#00000066]">
         <Skeleton className="h-5 w-10 rounded" />
       </div>
-    );
+    )
   }
-  return <div className="text-sm font-normal text-[#00000066]">{formatNumberWithCommas(keyCount)} Keys</div>;
-};
+  return (
+    <div className="text-sm font-normal text-[#00000066]">
+      {formatNumberWithCommas(keyCount)} Keys
+    </div>
+  )
+}

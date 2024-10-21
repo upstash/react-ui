@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton"
 
-const DEFAULT_SKELETON_COUNT = 10;
+const DEFAULT_SKELETON_COUNT = 10
 export const LoadingSkeleton = () => (
   <div className="flex flex-col pr-1">
     {Array(DEFAULT_SKELETON_COUNT)
@@ -12,4 +12,4 @@ export const LoadingSkeleton = () => (
         </div>
       ))}
   </div>
-);
+)

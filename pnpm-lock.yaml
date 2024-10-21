@@ -14,6 +14,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.26.1
         version: 2.27.1
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.3.1
+        version: 4.3.1(prettier@3.2.5)
       husky:
         specifier: ^8.0.1
         version: 8.0.3
@@ -25,7 +28,7 @@ importers:
         version: 3.2.5
       prettier-plugin-tailwindcss:
         specifier: ^0.5.5
-        version: 0.5.14(prettier@3.2.5)
+        version: 0.5.14(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.2.5))(prettier@3.2.5)
       turbo:
         specifier: ^1.9.3
         version: 1.13.2
@@ -52,7 +55,7 @@ importers:
         version: link:../../packages/react-databrowser
       next:
         specifier: 13.3.0
-        version: 13.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 13.3.0(@babel/core@7.24.4)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -737,6 +740,15 @@ packages:
 
   '@floating-ui/utils@0.2.1':
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+
+  '@ianvs/prettier-plugin-sort-imports@4.3.1':
+    resolution: {integrity: sha512-ZHwbyjkANZOjaBm3ZosADD2OUYGFzQGxfy67HmGZU94mHqe7g1LCMA7YYKB1Cq+UTPCBqlAYapY0KXAjKEw8Sg==}
+    peerDependencies:
+      '@vue/compiler-sfc': 2.7.x || 3.x
+      prettier: 2 || 3
+    peerDependenciesMeta:
+      '@vue/compiler-sfc':
+        optional: true
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -3616,6 +3628,18 @@ snapshots:
 
   '@floating-ui/utils@0.2.1': {}
 
+  '@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.2.5)':
+    dependencies:
+      '@babel/core': 7.24.4
+      '@babel/generator': 7.24.4
+      '@babel/parser': 7.24.4
+      '@babel/traverse': 7.24.1
+      '@babel/types': 7.24.0
+      prettier: 3.2.5
+      semver: 7.6.0
+    transitivePeerDependencies:
+      - supports-color
+
   '@isaacs/cliui@8.0.2':
     dependencies:
       string-width: 5.1.2
@@ -5134,7 +5158,7 @@ snapshots:
 
   nanoid@3.3.7: {}
 
-  next@13.3.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next@13.3.0(@babel/core@7.24.4)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@next/env': 13.3.0
       '@swc/helpers': 0.4.14
@@ -5143,7 +5167,7 @@ snapshots:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(react@18.2.0)
+      styled-jsx: 5.1.1(@babel/core@7.24.4)(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 13.3.0
       '@next/swc-darwin-x64': 13.3.0
@@ -5335,9 +5359,11 @@ snapshots:
       path-exists: 4.0.0
       which-pm: 2.0.0
 
-  prettier-plugin-tailwindcss@0.5.14(prettier@3.2.5):
+  prettier-plugin-tailwindcss@0.5.14(@ianvs/prettier-plugin-sort-imports@4.3.1(prettier@3.2.5))(prettier@3.2.5):
     dependencies:
       prettier: 3.2.5
+    optionalDependencies:
+      '@ianvs/prettier-plugin-sort-imports': 4.3.1(prettier@3.2.5)
 
   prettier@2.8.8: {}
 
@@ -5641,10 +5667,12 @@ snapshots:
     dependencies:
       min-indent: 1.0.1
 
-  styled-jsx@5.1.1(react@18.2.0):
+  styled-jsx@5.1.1(@babel/core@7.24.4)(react@18.2.0):
     dependencies:
       client-only: 0.0.1
       react: 18.2.0
+    optionalDependencies:
+      '@babel/core': 7.24.4
 
   sucrase@3.35.0:
     dependencies:

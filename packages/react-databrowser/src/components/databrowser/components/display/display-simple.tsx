@@ -1,16 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { cn } from "@/lib/utils";
-import { SimpleDataType } from "@/types";
-import { useEffect } from "react";
-import { useFetchSimpleKey } from "../../hooks/use-fetch-simple-key";
-import { useSetSimpleKey } from "../../hooks/use-set-simple-key";
-import { DisplayHeader } from "./display-header";
-import { useField } from "./input/use-field";
-import { useForm } from "react-hook-form";
+import { useEffect } from "react"
+import type { SimpleDataType } from "@/types"
+import { useForm } from "react-hook-form"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+
+import { useFetchSimpleKey } from "../../hooks/use-fetch-simple-key"
+import { useSetSimpleKey } from "../../hooks/use-set-simple-key"
+import { DisplayHeader } from "./display-header"
+import { useField } from "./input/use-field"
 
 export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: SimpleDataType }) => {
-  const { data } = useFetchSimpleKey(dataKey, type);
+  const { data } = useFetchSimpleKey(dataKey, type)
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
@@ -23,16 +25,24 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
         <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
       )}
     </div>
-  );
-};
+  )
+}
 
-const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: SimpleDataType; data: string }) => {
+const EditorDisplayForm = ({
+  dataKey,
+  type,
+  data,
+}: {
+  dataKey: string
+  type: SimpleDataType
+  data: string
+}) => {
   const form = useForm({
     defaultValues: { value: data },
-  });
-  const { editor, selector } = useField({ name: "value", form });
+  })
+  const { editor, selector } = useField({ name: "value", form })
 
-  const { mutateAsync: setKey, isPending: isSettingKey } = useSetSimpleKey(dataKey, type);
+  const { mutateAsync: setKey, isPending: isSettingKey } = useSetSimpleKey(dataKey, type)
 
   // Updates default values after submit
   useEffect(() => {
@@ -40,13 +50,13 @@ const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: Sim
       { value: data },
       {
         keepValues: true,
-      },
-    );
-  }, [data]);
+      }
+    )
+  }, [data])
 
   const handleCancel = () => {
-    form.reset();
-  };
+    form.reset()
+  }
 
   return (
     <>
@@ -65,10 +75,10 @@ const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: Sim
           )}
           <Button
             onClick={form.handleSubmit(async ({ value }) => {
-              await setKey(value);
+              await setKey(value)
             })}
             className={cn(
-              "h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50",
+              "h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
             )}
             disabled={!form.formState.isValid || !form.formState.isDirty}
           >
@@ -79,5 +89,5 @@ const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: Sim
         </div>
       </div>
     </>
-  );
-};
+  )
+}

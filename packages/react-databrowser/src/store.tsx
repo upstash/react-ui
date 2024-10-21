@@ -1,84 +1,92 @@
-import { type PropsWithChildren, createContext, useContext, useMemo, useState } from "react";
-import type { Redis } from "@upstash/redis";
-import { redisClient } from "./lib/clients";
-import { create, useStore } from "zustand";
-import type { DataType } from "./types";
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from "react"
+import type { Redis } from "@upstash/redis"
+import { create, useStore } from "zustand"
+
+import { redisClient } from "./lib/clients"
+import type { DataType } from "./types"
 
 export type DatabrowserProps = {
-  url?: string;
-  token?: string;
-};
-
-type DatabrowserContextProps = {
-  redis: Redis;
-  store: ReturnType<typeof createDatabrowserStore>;
-};
-
-const DatabrowserContext = createContext<DatabrowserContextProps | undefined>(undefined);
-
-interface DatabrowserProviderProps {
-  databrowser: DatabrowserProps;
+  url?: string
+  token?: string
 }
 
-export const DatabrowserProvider = ({ children, databrowser }: PropsWithChildren<DatabrowserProviderProps>) => {
-  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser]);
+type DatabrowserContextProps = {
+  redis: Redis
+  store: ReturnType<typeof createDatabrowserStore>
+}
+
+const DatabrowserContext = createContext<DatabrowserContextProps | undefined>(undefined)
+
+interface DatabrowserProviderProps {
+  databrowser: DatabrowserProps
+}
+
+export const DatabrowserProvider = ({
+  children,
+  databrowser,
+}: PropsWithChildren<DatabrowserProviderProps>) => {
+  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser])
 
   const [store] = useState(() => {
-    return createDatabrowserStore();
-  });
+    return createDatabrowserStore()
+  })
 
-  return <DatabrowserContext.Provider value={{ redis: redisInstances, store }}>{children}</DatabrowserContext.Provider>;
-};
+  return (
+    <DatabrowserContext.Provider value={{ redis: redisInstances, store }}>
+      {children}
+    </DatabrowserContext.Provider>
+  )
+}
 
 export const useDatabrowser = (): DatabrowserContextProps => {
-  const context = useContext(DatabrowserContext);
+  const context = useContext(DatabrowserContext)
   if (!context) {
-    throw new Error("useDatabrowser must be used within a DatabrowserProvider");
+    throw new Error("useDatabrowser must be used within a DatabrowserProvider")
   }
-  return context;
-};
+  return context
+}
 
 export const useDatabrowserStore = () => {
-  const { store } = useDatabrowser();
+  const { store } = useDatabrowser()
 
-  return useStore(store);
-};
+  return useStore(store)
+}
 
 export type SearchFilter = {
-  key: string;
-  type: DataType | undefined;
-};
+  key: string
+  type: DataType | undefined
+}
 
 type DatabrowserStore = {
-  selectedKey: string | undefined;
-  setSelectedKey: (key: string | undefined) => void;
+  selectedKey: string | undefined
+  setSelectedKey: (key: string | undefined) => void
 
   selectedListItem?: {
-    key: string;
-    value?: string;
-  };
-  setSelectedListItem: (key?: string, value?: string) => void;
+    key: string
+    value?: string
+  }
+  setSelectedListItem: (key?: string, value?: string) => void
 
-  search: SearchFilter;
-  setSearch: (search: SearchFilter) => void;
-  setSearchKey: (key: string) => void;
-  setSearchType: (type: DataType | undefined) => void;
-};
+  search: SearchFilter
+  setSearch: (search: SearchFilter) => void
+  setSearchKey: (key: string) => void
+  setSearchType: (type: DataType | undefined) => void
+}
 
 const createDatabrowserStore = () =>
   create<DatabrowserStore>((set) => ({
     selectedKey: undefined,
     setSelectedKey: (key) => {
-      set((old) => ({ ...old, selectedKey: key, selectedListItem: undefined }));
+      set((old) => ({ ...old, selectedKey: key, selectedListItem: undefined }))
     },
 
     selectedListItem: undefined,
     setSelectedListItem: (key, value) => {
-      set((old) => ({ ...old, selectedListItem: key ? { key, value } : undefined }));
+      set((old) => ({ ...old, selectedListItem: key ? { key, value } : undefined }))
     },
 
     search: { key: "", type: undefined },
     setSearch: (search) => set({ search }),
     setSearchKey: (key) => set((state) => ({ search: { ...state.search, key } })),
     setSearchType: (type) => set((state) => ({ search: { ...state.search, type } })),
-  }));
+  }))

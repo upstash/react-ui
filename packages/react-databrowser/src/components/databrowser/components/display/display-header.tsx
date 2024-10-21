@@ -1,10 +1,12 @@
-import { DataType } from "@/types";
-import { RedisTypeTag } from "../type-tag";
-import { formatBytes } from "@/lib/utils";
-import { TTLPopover } from "./ttl-popover";
-import { useFetchTTL } from "../../hooks";
-import { Skeleton } from "@/components/ui/skeleton";
-import { IconChevronDown } from "@tabler/icons-react";
+import type { DataType } from "@/types"
+import { IconChevronDown } from "@tabler/icons-react"
+
+import { formatBytes } from "@/lib/utils"
+import { Skeleton } from "@/components/ui/skeleton"
+
+import { useFetchTTL } from "../../hooks"
+import { RedisTypeTag } from "../type-tag"
+import { TTLPopover } from "./ttl-popover"
 
 export const DisplayHeader = ({
   size,
@@ -13,11 +15,11 @@ export const DisplayHeader = ({
   type,
   hideBadges,
 }: {
-  size?: number;
-  length?: number;
-  dataKey: string;
-  type: DataType;
-  hideBadges?: boolean;
+  size?: number
+  length?: number
+  dataKey: string
+  type: DataType
+  hideBadges?: boolean
 }) => {
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
@@ -40,11 +42,11 @@ export const DisplayHeader = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 const TTLBadge = ({ dataKey }: { dataKey: string }) => {
-  const { data: ttl, isLoading } = useFetchTTL(dataKey);
+  const { data: ttl, isLoading } = useFetchTTL(dataKey)
 
   return (
     <Badge label="TTL:">
@@ -61,12 +63,12 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
         </>
       )}
     </Badge>
-  );
-};
+  )
+}
 
 const Badge = ({ children, label }: { children: React.ReactNode; label: string }) => (
   <div className="flex h-6 items-center rounded-md bg-white px-2 text-xs text-zinc-700">
     <span className="mr-[3px] text-zinc-500">{label}</span>
     {children}
   </div>
-);
+)

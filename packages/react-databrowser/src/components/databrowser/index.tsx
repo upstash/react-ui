@@ -1,17 +1,20 @@
-import "@/globals.css";
-import { queryClient } from "@/lib/clients";
-import { type DatabrowserProps, DatabrowserProvider } from "@/store";
-import { useMemo } from "react";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "../ui/toaster";
-import { Sidebar } from "./components/sidebar";
-import { DataDisplay } from "./components/display";
-import { KeysProvider } from "./hooks/use-keys";
-import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
-import { IconDotsVertical } from "@tabler/icons-react";
+import "@/globals.css"
+
+import { useMemo } from "react"
+import { DatabrowserProvider, type DatabrowserProps } from "@/store"
+import { IconDotsVertical } from "@tabler/icons-react"
+import { QueryClientProvider } from "@tanstack/react-query"
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels"
+
+import { queryClient } from "@/lib/clients"
+
+import { Toaster } from "../ui/toaster"
+import { DataDisplay } from "./components/display"
+import { Sidebar } from "./components/sidebar"
+import { KeysProvider } from "./hooks/use-keys"
 
 export const Databrowser = ({ token, url }: DatabrowserProps) => {
-  const credentials = useMemo(() => ({ token, url }), [token, url]);
+  const credentials = useMemo(() => ({ token, url }), [token, url])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -34,5 +37,5 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
         </KeysProvider>
       </DatabrowserProvider>
     </QueryClientProvider>
-  );
-};
+  )
+}

@@ -1,17 +1,24 @@
-import { Button } from "@/components/ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useState } from "react"
+import { ReloadIcon } from "@radix-ui/react-icons"
 
-export const ReloadButton = ({ onClick, isLoading: isLoadingProp }: { onClick: () => void; isLoading?: boolean }) => {
-  const [isLoading, setIsLoading] = useState(false);
+import { Button } from "@/components/ui/button"
+
+export const ReloadButton = ({
+  onClick,
+  isLoading: isLoadingProp,
+}: {
+  onClick: () => void
+  isLoading?: boolean
+}) => {
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleClick = () => {
-    setIsLoading(true);
-    onClick();
+    setIsLoading(true)
+    onClick()
     setTimeout(() => {
-      setIsLoading(false);
-    }, 350);
-  };
+      setIsLoading(false)
+    }, 350)
+  }
 
   return (
     <div>
@@ -26,5 +33,5 @@ export const ReloadButton = ({ onClick, isLoading: isLoadingProp }: { onClick: (
         <ReloadIcon className={isLoading || isLoadingProp ? "animate-spin" : ""} />
       </Button>
     </div>
-  );
-};
+  )
+}

@@ -1,18 +1,29 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useDatabrowserStore } from "@/store";
-import { KEY_NAMES, DataType } from "@/types";
+import { useDatabrowserStore } from "@/store"
+import { KEY_NAMES, type DataType } from "@/types"
 
-const ALL_TYPES_KEY = "all";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+const ALL_TYPES_KEY = "all"
 
 export function DataTypeSelector() {
-  const { search, setSearchType } = useDatabrowserStore();
+  const { search, setSearchType } = useDatabrowserStore()
 
   return (
     <Select
       onValueChange={(type: DataType | typeof ALL_TYPES_KEY) => {
-        console.log(type);
-        if (type === ALL_TYPES_KEY) setSearchType(undefined);
-        else setSearchType(type);
+        console.log(type)
+        if (type === ALL_TYPES_KEY) {
+          setSearchType(undefined)
+        } else {
+          setSearchType(type)
+        }
       }}
       value={search.type === undefined ? ALL_TYPES_KEY : search.type}
     >
@@ -29,5 +40,5 @@ export function DataTypeSelector() {
         </SelectGroup>
       </SelectContent>
     </Select>
-  );
+  )
 }

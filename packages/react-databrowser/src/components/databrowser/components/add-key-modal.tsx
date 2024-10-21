@@ -1,6 +1,10 @@
-import { useAddKey } from "@/components/databrowser/hooks/use-add-key";
-import { RedisTypeTag } from "@/components/databrowser/components/type-tag";
-import { Button } from "@/components/ui/button";
+import { useState, type FormEvent } from "react"
+import { useDatabrowserStore } from "@/store"
+import type { DataType } from "@/types"
+import { PlusIcon } from "@radix-ui/react-icons"
+import { Label } from "@radix-ui/react-label"
+
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -9,8 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -19,64 +23,69 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Spinner } from "@/components/ui/spinner";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { useDatabrowserStore } from "@/store";
-import type { DataType } from "@/types";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { Label } from "@radix-ui/react-label";
-import { type FormEvent, useState } from "react";
+} from "@/components/ui/select"
+import { Spinner } from "@/components/ui/spinner"
+import { Textarea } from "@/components/ui/textarea"
+import { useToast } from "@/components/ui/use-toast"
+import { RedisTypeTag } from "@/components/databrowser/components/type-tag"
+import { useAddKey } from "@/components/databrowser/hooks/use-add-key"
 
-const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
-export type ExpUnitUnion = (typeof expUnit)[number];
+const expUnit = [
+  "Second(s)",
+  "Minute(s)",
+  "Hour(s)",
+  "Day(s)",
+  "Week(s)",
+  "Month(s)",
+  "Year(s)",
+] as const
+export type ExpUnitUnion = (typeof expUnit)[number]
 
 export function AddKeyModal() {
-  const { toast } = useToast();
-  const { setSelectedKey } = useDatabrowserStore();
-  const [open, setOpen] = useState(false);
+  const { toast } = useToast()
+  const { setSelectedKey } = useDatabrowserStore()
+  const [open, setOpen] = useState(false)
 
-  const { mutateAsync: addKey, isPending } = useAddKey();
+  const { mutateAsync: addKey, isPending } = useAddKey()
 
   const handleAddData = async (e: FormEvent<HTMLFormElement>) => {
     try {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
+      e.preventDefault()
+      const formData = new FormData(e.currentTarget)
 
-      const key = formData.get("key") as string;
-      const value = formData.get("value") as string;
+      const key = formData.get("key") as string
+      const value = formData.get("value") as string
 
       if (!(key && value)) {
-        throw new Error("Missing key or value data");
+        throw new Error("Missing key or value data")
       }
 
-      const exp = Number(formData.get("exp"));
-      const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined;
-      const ttl = expUnit ? convertToSeconds(expUnit, exp) : undefined;
-      const ok = await addKey({ key, value, ex: ttl });
+      const exp = Number(formData.get("exp"))
+      const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined
+      const ttl = expUnit ? convertToSeconds(expUnit, exp) : undefined
+      const ok = await addKey({ key, value, ex: ttl })
 
       if (ok) {
         toast({
           description: "Data Set Successfully!",
-        });
-        setSelectedKey(key);
+        })
+        setSelectedKey(key)
       } else {
         toast({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: "There was a problem with your request.",
-        });
+        })
       }
-      setOpen(false);
+      setOpen(false)
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
         description: (error as Error).message,
-      });
+      })
     }
-  };
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -124,9 +133,9 @@ export function AddKeyModal() {
               <Textarea
                 onBlur={(e) => {
                   try {
-                    const value = JSON.parse(e.target.value);
-                    const prettified = JSON.stringify(value, null, 4);
-                    e.target.value = prettified;
+                    const value = JSON.parse(e.target.value)
+                    const prettified = JSON.stringify(value, null, 4)
+                    e.target.value = prettified
                   } catch {}
                 }}
                 cols={5}
@@ -153,7 +162,13 @@ export function AddKeyModal() {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <Input name="exp" type="number" id="exp" placeholder="1H is 3600 seconds" className="col-span-3" />
+              <Input
+                name="exp"
+                type="number"
+                id="exp"
+                placeholder="1H is 3600 seconds"
+                className="col-span-3"
+              />
               <p className="w-100 col-span-4 text-sm text-gray-500">
                 Leave it empty if you want to make the key permanent.
               </p>
@@ -169,7 +184,7 @@ export function AddKeyModal() {
         </form>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
 
 const timeUnitToSeconds: Record<ExpUnitUnion, number> = {
@@ -180,11 +195,11 @@ const timeUnitToSeconds: Record<ExpUnitUnion, number> = {
   "Week(s)": 604800,
   "Month(s)": 2592000, // Note: This is an approximation!
   "Year(s)": 31536000, // Note: This does not account for leap years!
-};
+}
 
 function convertToSeconds(expUnit: ExpUnitUnion, exp: number): number {
   if (!(expUnit in timeUnitToSeconds)) {
-    throw new Error("Invalid time unit");
+    throw new Error("Invalid time unit")
   }
-  return exp * timeUnitToSeconds[expUnit];
+  return exp * timeUnitToSeconds[expUnit]
 }

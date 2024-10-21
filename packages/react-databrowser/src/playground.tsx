@@ -1,5 +1,6 @@
-import ReactDOM from "react-dom/client";
-import { Databrowser } from "@/components/databrowser";
+import ReactDOM from "react-dom/client"
+
+import { Databrowser } from "@/components/databrowser"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <main
@@ -29,5 +30,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         url={process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL}
       />
     </div>
-  </main>,
-);
+  </main>
+)

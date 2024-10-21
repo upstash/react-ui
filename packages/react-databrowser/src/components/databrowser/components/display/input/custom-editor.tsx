@@ -1,6 +1,7 @@
-import { cn } from "@/lib/utils";
-import { Editor, useMonaco } from "@monaco-editor/react";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react"
+import { Editor, useMonaco } from "@monaco-editor/react"
+
+import { cn } from "@/lib/utils"
 
 export const CustomEditor = ({
   language,
@@ -8,20 +9,22 @@ export const CustomEditor = ({
   onChange,
   maxDynamicHeight,
 }: {
-  language: string;
-  value: string;
-  onChange: (value: string) => void;
-  maxDynamicHeight?: number;
+  language: string
+  value: string
+  onChange: (value: string) => void
+  maxDynamicHeight?: number
 }) => {
-  const monaco = useMonaco();
-  const editorRef = useRef(undefined);
+  const monaco = useMonaco()
+  const editorRef = useRef(undefined)
 
   useEffect(() => {
-    if (!monaco || !editorRef.current) return;
+    if (!monaco || !editorRef.current) {
+      return
+    }
 
     // @ts-ignore
-    monaco?.editor.setModelLanguage(editorRef.current.getModel(), language);
-  }, [monaco, language]);
+    monaco?.editor.setModelLanguage(editorRef.current.getModel(), language)
+  }, [monaco, language])
 
   return (
     <div
@@ -33,11 +36,11 @@ export const CustomEditor = ({
       <Editor
         onMount={(editor) => {
           // @ts-ignore
-          editorRef.current = editor;
+          editorRef.current = editor
         }}
         value={value}
         onChange={(value) => {
-          onChange(value ?? "");
+          onChange(value ?? "")
         }}
         defaultLanguage={language}
         options={{
@@ -64,5 +67,5 @@ export const CustomEditor = ({
         }}
       />
     </div>
-  );
-};
+  )
+}

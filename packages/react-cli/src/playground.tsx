@@ -1,7 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RedisCli } from "./redis-cli";
-import "./cli.css";
+import React from "react"
+import ReactDOM from "react-dom/client"
+
+import { RedisCli } from "./redis-cli"
+
+import "./cli.css"
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -32,5 +34,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         />
       </div>
     </main>
-  </React.StrictMode>,
-);
+  </React.StrictMode>
+)

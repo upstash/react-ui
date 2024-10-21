@@ -1,7 +1,15 @@
-import { KEY_NAMES, type DataType } from "@/types";
-import colors from "tailwindcss/colors";
-import { IconArrowsSort, IconCodeDots, IconHash, IconLayersIntersect, IconList, IconQuote } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
+import { KEY_NAMES, type DataType } from "@/types"
+import {
+  IconArrowsSort,
+  IconCodeDots,
+  IconHash,
+  IconLayersIntersect,
+  IconList,
+  IconQuote,
+} from "@tabler/icons-react"
+import colors from "tailwindcss/colors"
+
+import { cn } from "@/lib/utils"
 
 const colorsMap = {
   string: colors.sky,
@@ -11,7 +19,7 @@ const colorsMap = {
   zset: colors.pink,
   list: colors.orange,
   stream: colors.orange,
-} as const;
+} as const
 
 const iconsMap = {
   string: <IconQuote size={16} />,
@@ -21,14 +29,14 @@ const iconsMap = {
   zset: <IconArrowsSort size={16} />,
   list: <IconList size={16} />,
   stream: <IconList size={16} />,
-} as const;
+} as const
 
 export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolean }) {
   return (
     <div
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-md text-xs font-medium leading-none tracking-wide",
-        isIcon ? "h-5 w-5" : "h-6 px-1 uppercase",
+        isIcon ? "h-5 w-5" : "h-6 px-1 uppercase"
       )}
       style={{
         backgroundColor: colorsMap[type][200],
@@ -37,5 +45,5 @@ export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolea
     >
       {isIcon ? iconsMap[type] : KEY_NAMES[type]}
     </div>
-  );
+  )
 }
