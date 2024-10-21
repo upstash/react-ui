@@ -53,6 +53,12 @@ type DatabrowserStore = {
   selectedKey: string | undefined;
   setSelectedKey: (key: string | undefined) => void;
 
+  selectedListItem?: {
+    key: string;
+    value?: string;
+  };
+  setSelectedListItem: (key?: string, value?: string) => void;
+
   search: SearchFilter;
   setSearch: (search: SearchFilter) => void;
   setSearchKey: (key: string) => void;
@@ -62,7 +68,14 @@ type DatabrowserStore = {
 const createDatabrowserStore = () =>
   create<DatabrowserStore>((set) => ({
     selectedKey: undefined,
-    setSelectedKey: (key) => set({ selectedKey: key }),
+    setSelectedKey: (key) => {
+      set((old) => ({ ...old, selectedKey: key, selectedListItem: undefined }));
+    },
+
+    selectedListItem: undefined,
+    setSelectedListItem: (key, value) => {
+      set((old) => ({ ...old, selectedListItem: key ? { key, value } : undefined }));
+    },
 
     search: { key: "", type: undefined },
     setSearch: (search) => set({ search }),

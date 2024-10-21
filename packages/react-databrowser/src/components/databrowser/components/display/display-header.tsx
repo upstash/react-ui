@@ -11,11 +11,13 @@ export const DisplayHeader = ({
   length,
   dataKey,
   type,
+  hideBadges,
 }: {
   size?: number;
   length?: number;
   dataKey: string;
   type: DataType;
+  hideBadges?: boolean;
 }) => {
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
@@ -29,12 +31,14 @@ export const DisplayHeader = ({
           dataKey
         )}
       </h2>
-      <div className="flex flex-wrap gap-1">
-        <RedisTypeTag type={type} isIcon={false} />
-        {size && <Badge label="Size:">{formatBytes(size)}</Badge>}
-        {length && <Badge label="Size:">{size}</Badge>}
-        <TTLBadge dataKey={dataKey} />
-      </div>
+      {!hideBadges && (
+        <div className="flex flex-wrap gap-1">
+          <RedisTypeTag type={type} isIcon={false} />
+          {size && <Badge label="Size:">{formatBytes(size)}</Badge>}
+          {length && <Badge label="Size:">{size}</Badge>}
+          <TTLBadge dataKey={dataKey} />
+        </div>
+      )}
     </div>
   );
 };

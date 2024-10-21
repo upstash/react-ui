@@ -28,12 +28,12 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
   const query = useInfiniteQuery({
     queryKey: ["useFetchKeys", search],
     initialPageParam: 0,
-    queryFn: async ({ pageParam }) => {
-      return getPage(pageParam);
+    queryFn: async ({ pageParam: pageIndex }) => {
+      return getPage(pageIndex);
     },
     select: (data) => data,
-    getNextPageParam: (lastPage, __, lastParam) => {
-      return lastPage.hasNextPage ? lastParam + 1 : undefined;
+    getNextPageParam: (lastPage, __, lastPageIndex) => {
+      return lastPage.hasNextPage ? lastPageIndex + 1 : undefined;
     },
   });
 

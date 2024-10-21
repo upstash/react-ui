@@ -3,7 +3,15 @@ import { ContentType, ContentTypeSelect } from "./content-type-select";
 import { CustomEditor } from "./custom-editor";
 import { useController, UseFormReturn } from "react-hook-form";
 
-export const useField = ({ name, form }: { name: string; form: UseFormReturn<any> }) => {
+export const useField = ({
+  name,
+  form,
+  isEditorDynamic = false,
+}: {
+  name: string;
+  form: UseFormReturn<any>;
+  isEditorDynamic?: boolean;
+}) => {
   const { field, fieldState } = useController<Record<string, string>>({
     name,
     control: form.control,
@@ -40,7 +48,7 @@ export const useField = ({ name, form }: { name: string; form: UseFormReturn<any
           language={contentType === "JSON" ? "json" : "plaintext"}
           value={field.value}
           onChange={field.onChange}
-          maxDynamicHeight={200}
+          maxDynamicHeight={isEditorDynamic ? 100 : undefined}
         />
       </>
     ),
