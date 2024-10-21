@@ -13,7 +13,7 @@ export const useFetchSimpleKey = (dataKey: string, type: DataType) => {
       if (type === "string") {
         return (await redis.get(dataKey)) as string | null;
       } else if (type === "json") {
-        return JSON.stringify(await redis.json.get(dataKey));
+        return (await redis.json.get(dataKey)) as string | null;
       } else {
         throw new Error(`Invalid type when fetching simple key: ${type}`);
       }

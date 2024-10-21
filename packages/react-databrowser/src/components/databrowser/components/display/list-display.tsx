@@ -9,8 +9,6 @@ import { ListDataType } from "@/types";
 
 export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { selectedListItem } = useDatabrowserStore();
-  console.log("item", selectedListItem);
-
   const query = useListQuery({ dataKey, type });
 
   const headers = {
@@ -30,8 +28,10 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
           <table className="w-full flex-grow  text-sm text-zinc-700">
             {type !== "set" && (
               <thead>
-                <td className="px-3 py-2 font-medium">{headers[type][0]}</td>
-                {headers[type][1] && <td className="px-3 py-2 font-medium">{headers[type][1]}</td>}
+                <tr>
+                  <th className="px-3 py-2 text-left font-medium">{headers[type][0]}</th>
+                  {headers[type][1] && <th className="px-3 py-2 text-left font-medium">{headers[type][1]}</th>}
+                </tr>
               </thead>
             )}
             <tbody>
@@ -62,6 +62,7 @@ export const ListItems = ({
     <>
       {keys.map(({ key, value }, i) => (
         <tr
+          key={key}
           onClick={() => {
             setSelectedListItem(key, value);
           }}
