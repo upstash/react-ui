@@ -1,6 +1,6 @@
 import { useDatabrowser } from "@/store";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { transformArray } from "./list-display";
+import { transformArray } from "../components/display/list-display";
 import { ListDataType } from "@/types";
 
 export const LIST_DISPLAY_PAGE_SIZE = 50;

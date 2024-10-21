@@ -1,5 +1,5 @@
 import { useAddData } from "@/components/databrowser/hooks/useAddData";
-import { RedisTypeTag } from "@/components/databrowser/type-tag";
+import { RedisTypeTag } from "@/components/databrowser/components/type-tag";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

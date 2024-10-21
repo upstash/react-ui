@@ -3,7 +3,7 @@ import { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query";
 import { useDatabrowserStore } from "@/store";
 import { useMemo } from "react";
 import { ListEditDisplay } from "./list-edit-display";
-import { useListQuery } from "./list-types";
+import { useListQuery } from "../../hooks/use-list-query";
 import { InfiniteScroll } from "../sidebar/infinite-scroll";
 import { ListDataType } from "@/types";
 

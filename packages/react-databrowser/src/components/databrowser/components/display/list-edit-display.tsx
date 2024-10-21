@@ -4,7 +4,7 @@ import { useDatabrowserStore } from "@/store";
 import { ListDataType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useEditListItem } from "./use-edit-list-item";
+import { useEditListItem } from "../../hooks/use-edit-list-item";
 
 export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { selectedListItem } = useDatabrowserStore();

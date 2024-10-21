@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { RedisTypeTag } from "@/components/databrowser/type-tag";
+import { RedisTypeTag } from "@/components/databrowser/components/type-tag";
 import { useDatabrowserStore } from "@/store";
 import { useKeys } from "../../hooks/use-keys";
 import { cn } from "@/lib/utils";

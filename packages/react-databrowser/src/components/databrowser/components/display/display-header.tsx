@@ -1,5 +1,5 @@
 import { DataType } from "@/types";
-import { RedisTypeTag } from "../../type-tag";
+import { RedisTypeTag } from "../type-tag";
 import { formatBytes } from "@/lib/utils";
 import { TTLPopover } from "./old/ttl-popover";
 import { useFetchTTLByKey } from "../../hooks";
