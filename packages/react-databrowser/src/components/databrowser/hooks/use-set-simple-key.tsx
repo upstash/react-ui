@@ -1,17 +1,17 @@
 import { queryClient } from "@/lib/clients";
 import { useDatabrowser } from "@/store";
-import { DataType } from "@/types";
+import { SimpleDataType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
 import { FETCH_SIMPLE_KEY_QUERY_KEY } from "./use-fetch-simple-key";
 
-export const useSetSimpleKey = (dataKey: string, type: DataType) => {
+export const useSetSimpleKey = (dataKey: string, type: SimpleDataType) => {
   const { redis } = useDatabrowser();
   return useMutation({
     mutationFn: async (value: string) => {
       if (type === "string") {
-        return await redis.set(dataKey, value);
+        await redis.set(dataKey, value);
       } else if (type === "json") {
-        return await redis.json.set(dataKey, "$", JSON.parse(value));
+        await redis.json.set(dataKey, "$", JSON.parse(value));
       } else {
         throw new Error(`Invalid type when setting simple key: ${type}`);
       }

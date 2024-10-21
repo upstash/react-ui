@@ -67,7 +67,6 @@ export const ListItems = ({
           }}
           className="cursor-pointer border-b hover:bg-zinc-100"
         >
-          {type === "list" && <td className="px-3 py-2">{i}</td>}
           <td className="px-3 py-2">{key}</td>
           {value && <td className="px-3 py-2">{value}</td>}
         </tr>

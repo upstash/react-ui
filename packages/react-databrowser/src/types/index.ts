@@ -12,7 +12,9 @@ export const KEY_NAMES = {
 export type DataType = (typeof KEY_TYPES)[number];
 
 const LIST_DATA_TYPES = ["set", "zset", "list", "hash", "stream"] as const;
+const SIMPLE_DATA_TYPES = ["string", "json"] as const;
 
+export type SimpleDataType = (typeof SIMPLE_DATA_TYPES)[number];
 export type ListDataType = (typeof LIST_DATA_TYPES)[number];
 
 export type ActionVariants = "reset" | "filter" | "search" | "next" | "prev";

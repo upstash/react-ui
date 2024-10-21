@@ -1,12 +1,12 @@
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useField } from "./input/use-field";
-import { useDatabrowser, useDatabrowserStore } from "@/store";
-import { DataType } from "@/types";
+import { useDatabrowserStore } from "@/store";
+import { ListDataType } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useMutation } from "@tanstack/react-query";
+import { useEditListItem } from "./use-edit-list-item";
 
-export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
+export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { selectedListItem } = useDatabrowserStore();
 
   if (!selectedListItem) return <></>;
@@ -24,50 +24,13 @@ export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: Data
   );
 };
 
-const useEditListItem = () => {
-  const { redis } = useDatabrowser();
-
-  return useMutation({
-    mutationFn: async ({
-      type,
-      dataKey,
-      itemKey,
-      newKey,
-      newValue,
-    }: {
-      type: DataType;
-      dataKey: string;
-      itemKey: string;
-      newKey?: string;
-      newValue?: string;
-    }) => {
-      const pipe = redis.pipeline();
-      const shouldDelete = newKey === undefined || newKey !== itemKey;
-
-      if (type === "zset") {
-        if (Number.isNaN(Number(newValue))) throw new Error("Value must be a number for zset data type");
-
-        if (shouldDelete) pipe.zrem(dataKey, itemKey);
-        pipe.zadd(dataKey, {
-          member: newKey,
-          score: Number(newValue),
-        });
-      } else {
-        throw new Error("Not implemented");
-      }
-
-      await pipe.exec();
-    },
-  });
-};
-
 const ListEditForm = ({
   type,
   dataKey,
   itemKey,
   itemValue,
 }: {
-  type: DataType;
+  type: ListDataType;
   dataKey: string;
   itemKey: string;
   itemValue: string;

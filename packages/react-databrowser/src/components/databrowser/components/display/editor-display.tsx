@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { DataType } from "@/types";
+import { SimpleDataType } from "@/types";
 import { useEffect } from "react";
 import { useFetchSimpleKey } from "../../hooks/use-fetch-simple-key";
 import { useSetSimpleKey } from "../../hooks/use-set-simple-key";
@@ -9,7 +9,7 @@ import { DisplayHeader } from "./display-header";
 import { useField } from "./input/use-field";
 import { useForm } from "react-hook-form";
 
-export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
+export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: SimpleDataType }) => {
   const { data } = useFetchSimpleKey(dataKey, type);
 
   return (
@@ -26,7 +26,7 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: DataTy
   );
 };
 
-const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: DataType; data: string }) => {
+const EditorDisplayForm = ({ dataKey, type, data }: { dataKey: string; type: SimpleDataType; data: string }) => {
   const form = useForm({
     defaultValues: { value: data },
   });

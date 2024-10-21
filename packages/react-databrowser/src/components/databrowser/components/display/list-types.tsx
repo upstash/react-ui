@@ -10,7 +10,7 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   const setQuery = useInfiniteQuery({
     enabled: type === "set",
-    queryKey: ["list", dataKey],
+    queryKey: ["list-set", dataKey],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const [nextCursor, keys] = await redis.sscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE });
@@ -26,7 +26,7 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   const zsetQuery = useInfiniteQuery({
     enabled: type === "zset",
-    queryKey: ["list", dataKey],
+    queryKey: ["list-zset", dataKey],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const res = await redis.zscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE });
@@ -42,7 +42,7 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   const hashQuery = useInfiniteQuery({
     enabled: type === "hash",
-    queryKey: ["list", dataKey],
+    queryKey: ["list-hash", dataKey],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const res = await redis.hscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE });
@@ -58,15 +58,15 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   const listQuery = useInfiniteQuery({
     enabled: type === "list",
-    queryKey: ["list", dataKey],
+    queryKey: ["list-list", dataKey],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const lastIndex = Number(pageParam);
-      const keys = await redis.lrange(dataKey, lastIndex, lastIndex + LIST_DISPLAY_PAGE_SIZE);
+      const values = await redis.lrange(dataKey, lastIndex, lastIndex + LIST_DISPLAY_PAGE_SIZE);
 
       return {
         cursor: lastIndex + LIST_DISPLAY_PAGE_SIZE,
-        keys: keys.map((key) => ({ key })),
+        keys: values.map((value, i) => ({ key: (lastIndex + i).toString(), value })),
       };
     },
 
@@ -75,7 +75,7 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   const streamQuery = useInfiniteQuery({
     enabled: type === "stream",
-    queryKey: ["list", dataKey],
+    queryKey: ["list-stream", dataKey],
     initialPageParam: "0",
     queryFn: async ({ pageParam: lastId }) => {
       console.log("Args", {
