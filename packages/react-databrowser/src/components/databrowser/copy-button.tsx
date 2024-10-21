@@ -9,13 +9,7 @@ interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   variant?: "outline" | "default" | "ghost";
 }
 
-export function CopyToClipboardButton({
-  onCopy,
-  sizeVariant = "icon-sm",
-  variant = "outline",
-  svgSize,
-  className,
-}: Props) {
+export function CopyButton({ onCopy, sizeVariant = "icon-sm", variant = "outline", svgSize, className }: Props) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AddDataDialog } from "../add-data/add-data-dialog";
+import { AddKeyModal } from "../add-key-modal";
 import { KeysList } from "./keys-list";
 import { DataTypeSelector } from "./type-selector";
 import { DisplayDbSize } from "./db-size";
@@ -26,7 +26,7 @@ export function Sidebar() {
             <Button variant={"outline"} className="h-8 w-8 p-0">
               <IconMaximize size={20} />
             </Button>
-            <AddDataDialog />
+            <AddKeyModal />
           </div>
         </div>
         {/* Header bottom */}

@@ -1,7 +1,7 @@
 import { useDatabrowser } from "@/store";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFetchTTLByKey = (dataKey: string) => {
+export const useFetchTTL = (dataKey: string) => {
   const { redis } = useDatabrowser();
 
   const { isLoading, error, data } = useQuery({

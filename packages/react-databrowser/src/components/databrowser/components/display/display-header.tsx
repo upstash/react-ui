@@ -1,8 +1,8 @@
 import { DataType } from "@/types";
 import { RedisTypeTag } from "../type-tag";
 import { formatBytes } from "@/lib/utils";
-import { TTLPopover } from "./old/ttl-popover";
-import { useFetchTTLByKey } from "../../hooks";
+import { TTLPopover } from "./ttl-popover";
+import { useFetchTTL } from "../../hooks";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IconChevronDown } from "@tabler/icons-react";
 
@@ -44,7 +44,7 @@ export const DisplayHeader = ({
 };
 
 const TTLBadge = ({ dataKey }: { dataKey: string }) => {
-  const { data: ttl, isLoading } = useFetchTTLByKey(dataKey);
+  const { data: ttl, isLoading } = useFetchTTL(dataKey);
 
   return (
     <Badge label="TTL:">

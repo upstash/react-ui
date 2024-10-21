@@ -2,7 +2,7 @@ import { type PropsWithChildren, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { usePersistTTL, useUpdateTTL } from "@/components/databrowser/hooks/useUpdateTTL";
+import { usePersistTTL, useUpdateTTL } from "@/components/databrowser/hooks/use-update-ttl";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";

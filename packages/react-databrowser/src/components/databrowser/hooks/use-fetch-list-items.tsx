@@ -1,11 +1,10 @@
 import { useDatabrowser } from "@/store";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { transformArray } from "../components/display/list-display";
 import { ListDataType } from "@/types";
 
 export const LIST_DISPLAY_PAGE_SIZE = 50;
 
-export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
+export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { redis } = useDatabrowser();
 
   const setQuery = useInfiniteQuery({
@@ -111,3 +110,21 @@ export const useListQuery = ({ dataKey, type }: { dataKey: string; type: ListDat
 
   return map[type];
 };
+
+function transformArray(inputArray: (string | number)[]) {
+  if (inputArray.length % 2 !== 0) {
+    throw new Error("The input array length must be even.");
+  }
+
+  return inputArray.reduce<
+    {
+      key: string;
+      value: string;
+    }[]
+  >((acc, curr, idx, src) => {
+    if (idx % 2 === 0) {
+      acc.push({ key: String(curr), value: String(src[idx + 1]) });
+    }
+    return acc;
+  }, []);
+}

@@ -1,7 +1,7 @@
 import { useDatabrowserStore } from "@/store";
 import { useKeyType } from "../../hooks/use-keys";
-import { EditorDisplay } from "./editor-display";
-import { ListDisplay } from "./list-display";
+import { EditorDisplay } from "./display-simple";
+import { ListDisplay } from "./display-list";
 
 export const DataDisplay = () => {
   const { selectedKey } = useDatabrowserStore();

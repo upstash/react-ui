@@ -1,4 +1,4 @@
-import { useAddData } from "@/components/databrowser/hooks/useAddData";
+import { useAddKey } from "@/components/databrowser/hooks/use-add-key";
 import { RedisTypeTag } from "@/components/databrowser/components/type-tag";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,12 +32,12 @@ import { type FormEvent, useState } from "react";
 const expUnit = ["Second(s)", "Minute(s)", "Hour(s)", "Day(s)", "Week(s)", "Month(s)", "Year(s)"] as const;
 export type ExpUnitUnion = (typeof expUnit)[number];
 
-export function AddDataDialog() {
+export function AddKeyModal() {
   const { toast } = useToast();
   const { setSelectedKey } = useDatabrowserStore();
   const [open, setOpen] = useState(false);
 
-  const addData = useAddData();
+  const { mutateAsync: addKey, isPending } = useAddKey();
 
   const handleAddData = async (e: FormEvent<HTMLFormElement>) => {
     try {
@@ -53,8 +53,8 @@ export function AddDataDialog() {
 
       const exp = Number(formData.get("exp"));
       const expUnit = formData.get("exp-unit") as ExpUnitUnion | undefined;
-      const ttl = expUnit ? convertToSeconds(expUnit, exp) : null;
-      const ok = await addData.mutateAsync([key, value, ttl, false]);
+      const ttl = expUnit ? convertToSeconds(expUnit, exp) : undefined;
+      const ok = await addKey({ key, value, ex: ttl });
 
       if (ok) {
         toast({
@@ -160,8 +160,8 @@ export function AddDataDialog() {
             </div>
           </div>
           <DialogFooter>
-            <button disabled={addData.isPending} className="save-changes-btn">
-              <Spinner isLoading={addData.isPending} isLoadingText="Please wait">
+            <button disabled={isPending} className="save-changes-btn">
+              <Spinner isLoading={isPending} isLoadingText="Please wait">
                 Save changes
               </Spinner>
             </button>

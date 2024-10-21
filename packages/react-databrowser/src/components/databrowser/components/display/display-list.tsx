@@ -80,16 +80,3 @@ type ItemData = {
   key: string;
   value?: string;
 };
-
-export function transformArray(inputArray: (string | number)[]): ItemData[] {
-  if (inputArray.length % 2 !== 0) {
-    throw new Error("The input array length must be even.");
-  }
-
-  return inputArray.reduce<ItemData[]>((acc, curr, idx, src) => {
-    if (idx % 2 === 0) {
-      acc.push({ key: String(curr), value: String(src[idx + 1]) });
-    }
-    return acc;
-  }, []);
-}
