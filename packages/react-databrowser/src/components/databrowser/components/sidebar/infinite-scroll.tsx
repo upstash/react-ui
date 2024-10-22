@@ -1,6 +1,9 @@
 import type { PropsWithChildren } from "react"
+import { Scrollbar } from "@radix-ui/react-scroll-area"
 import { IconLoader2 } from "@tabler/icons-react"
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
+
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export const InfiniteScroll = ({
   query,
@@ -19,11 +22,11 @@ export const InfiniteScroll = ({
   }
 
   return (
-    <div className="h-full w-full overflow-y-scroll" onScroll={handleScroll}>
+    <ScrollArea type="auto" className="block h-full w-full transition-all" onScroll={handleScroll}>
       {children}
       <div className="flex h-[100px] justify-center py-2 text-zinc-300">
         {query.isFetching && <IconLoader2 className="animate-spin" size={16} />}
       </div>
-    </div>
+    </ScrollArea>
   )
 }

@@ -34,13 +34,13 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
             {type !== "set" && (
               <thead>
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium">{keyHeader}</th>
-                  <th className="px-3 py-2 text-left font-medium">{valueHeader}</th>
+                  <th className="px-3 py-2 text-left font-medium opacity-40">{keyHeader}</th>
+                  <th className="px-3 py-2 text-left font-medium opacity-40">{valueHeader}</th>
                 </tr>
               </thead>
             )}
             <tbody>
-              <ListItems query={query} type={type} />
+              <ListItems query={query} />
             </tbody>
           </table>
         </InfiniteScroll>
@@ -50,10 +50,8 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
 }
 
 export const ListItems = ({
-  type,
   query,
 }: {
-  type: ListDataType
   query: UseInfiniteQueryResult<
     InfiniteData<{
       keys: ItemData[]
@@ -73,8 +71,8 @@ export const ListItems = ({
           }}
           className="cursor-pointer border-b hover:bg-zinc-100"
         >
-          <td className="px-3 py-2">{key}</td>
-          {value && <td className="px-3 py-2">{value}</td>}
+          <td className="max-w-0 truncate px-3 py-2">{key}</td>
+          {value !== undefined && <td className="max-w-0 truncate px-3 py-2">{value}</td>}
         </tr>
       ))}
     </>

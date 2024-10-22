@@ -29,7 +29,7 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
                 <IconDotsVertical size={16} />
               </div>
             </PanelResizeHandle>
-            <Panel minSize={20}>
+            <Panel minSize={30}>
               <DataDisplay />
             </Panel>
           </PanelGroup>

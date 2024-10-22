@@ -12,27 +12,24 @@ export const KeysList = () => {
 
   return (
     <>
-      {keys.map(([dataKey, dataType]) => {
-        const isSelected = selectedKey === dataKey
-        return (
-          <Button
-            key={dataKey}
-            className={cn(
-              "flex w-full items-center justify-start gap-[8px] border",
-              isSelected
-                ? "border-emerald-400 bg-emerald-50 shadow-sm hover:bg-emerald-100/60"
-                : "border-transparent"
-            )}
-            variant={isSelected ? "default" : "ghost"}
-            onClick={() => setSelectedKey(dataKey)}
-          >
-            <RedisTypeTag type={dataType} isIcon />
-            <p className="truncate whitespace-nowrap text-left text-[14px] font-medium text-[#000000]">
-              {dataKey}
-            </p>
-          </Button>
-        )
-      })}
+      {keys.map(([dataKey, dataType]) => (
+        <Button
+          key={dataKey}
+          className={cn(
+            "flex w-full items-center justify-start gap-[8px] border",
+            selectedKey === dataKey
+              ? "border-emerald-400 bg-emerald-50 shadow-sm hover:bg-emerald-100/60"
+              : "border-transparent"
+          )}
+          variant={selectedKey === dataKey ? "default" : "ghost"}
+          onClick={() => setSelectedKey(dataKey)}
+        >
+          <RedisTypeTag type={dataType} isIcon />
+          <p className="truncate whitespace-nowrap text-left text-[14px] font-medium text-[#000000]">
+            {dataKey}
+          </p>
+        </Button>
+      ))}
     </>
   )
 }
