@@ -1,7 +1,6 @@
 import { useDatabrowserStore } from "@/store"
 import type { DataType } from "@/types"
-import { ButtonIcon } from "@radix-ui/react-icons"
-import { IconChevronDown, IconDots, IconDotsVertical, IconPlus } from "@tabler/icons-react"
+import { IconChevronDown, IconPlus } from "@tabler/icons-react"
 
 import { formatBytes } from "@/lib/utils"
 import { Button } from "@/components/ui/button"

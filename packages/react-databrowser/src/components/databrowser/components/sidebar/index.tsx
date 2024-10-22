@@ -25,9 +25,6 @@ export function Sidebar() {
         <div className="mb-2 flex justify-between">
           <DisplayDbSize />
           <div className="flex gap-1">
-            <Button variant={"outline"} className="h-8 w-8 p-0">
-              <IconMaximize size={20} />
-            </Button>
             <AddKeyModal />
           </div>
         </div>
