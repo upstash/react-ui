@@ -64,8 +64,9 @@ type DatabrowserStore = {
   selectedListItem?: {
     key: string
     value?: string
+    isNew?: boolean
   }
-  setSelectedListItem: (key?: string, value?: string) => void
+  setSelectedListItem: (item?: { key: string; value?: string; isNew?: boolean }) => void
 
   search: SearchFilter
   setSearch: (search: SearchFilter) => void
@@ -81,8 +82,8 @@ const createDatabrowserStore = () =>
     },
 
     selectedListItem: undefined,
-    setSelectedListItem: (key, value) => {
-      set((old) => ({ ...old, selectedListItem: key ? { key, value } : undefined }))
+    setSelectedListItem: (item) => {
+      set((old) => ({ ...old, selectedListItem: item }))
     },
 
     search: { key: "", type: undefined },

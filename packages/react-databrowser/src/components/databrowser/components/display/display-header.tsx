@@ -1,3 +1,4 @@
+import { useDatabrowserStore } from "@/store"
 import type { DataType } from "@/types"
 import { ButtonIcon } from "@radix-ui/react-icons"
 import { IconChevronDown, IconDots, IconDotsVertical, IconPlus } from "@tabler/icons-react"
@@ -25,6 +26,12 @@ export const DisplayHeader = ({
   const size = content?.length
   const length = content?.length
 
+  const { setSelectedListItem } = useDatabrowserStore()
+
+  const handleAddItem = () => {
+    setSelectedListItem({ key: "", value: "", isNew: true })
+  }
+
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
       <div className="flex items-center justify-between gap-1">
@@ -38,7 +45,10 @@ export const DisplayHeader = ({
             dataKey
           )}
         </h2>
-        <Button className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm">
+        <Button
+          onClick={handleAddItem}
+          className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm"
+        >
           <IconPlus className="text-zinc-400" size={20} />
         </Button>
         <KeyActions dataKey={dataKey} type={type} content={content} />

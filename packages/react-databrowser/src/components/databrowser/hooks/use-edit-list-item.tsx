@@ -14,12 +14,14 @@ export const useEditListItem = () => {
       itemKey,
       newKey,
       newValue,
+      isNew,
     }: {
       type: ListDataType
       dataKey: string
       itemKey: string
       newKey?: string
       newValue?: string
+      isNew?: boolean
     }) => {
       console.log({
         type,
@@ -29,7 +31,7 @@ export const useEditListItem = () => {
         newValue,
       })
       const pipe = redis.pipeline()
-      const shouldDelete = newKey === undefined || newKey !== itemKey
+      const shouldDelete = !isNew && (newKey === undefined || newKey !== itemKey)
 
       if (type === "set") {
         if (shouldDelete) {
@@ -62,13 +64,17 @@ export const useEditListItem = () => {
           })
         }
       } else if (type === "list") {
-        const index = Number(itemKey)
+        if (isNew) {
+          pipe.lpush(dataKey, newValue)
+        } else {
+          const index = Number(itemKey)
 
-        if (Number.isNaN(index)) {
-          throw new Error("Index must be a number for list data type")
+          if (Number.isNaN(index)) {
+            throw new Error("Index must be a number for list data type")
+          }
+
+          pipe.lset(dataKey, index, newValue)
         }
-
-        pipe.lset(dataKey, index, newValue)
       } else if (type === "stream") {
         throw new Error("Editing stream items is not supported")
       }

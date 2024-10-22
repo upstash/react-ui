@@ -88,12 +88,18 @@ export function TTLPopover({
             <div className="flex">
               <Controller
                 rules={{
-                  required: "Please enter a key",
+                  required: "Please enter an expiration time",
+                  min: { value: -1, message: "TTL can't be lower than -1" },
                 }}
                 control={control}
                 name="value"
                 render={({ field }) => (
-                  <Input placeholder="mykey" {...field} className="h-8 flex-grow rounded-r-none" />
+                  <Input
+                    min="-1"
+                    placeholder="mykey"
+                    {...field}
+                    className="h-8 flex-grow rounded-r-none"
+                  />
                 )}
               />
               <Controller

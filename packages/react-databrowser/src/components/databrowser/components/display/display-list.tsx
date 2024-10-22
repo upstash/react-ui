@@ -69,7 +69,7 @@ export const ListItems = ({
         <tr
           key={key}
           onClick={() => {
-            setSelectedListItem(key, value)
+            setSelectedListItem({ key, value })
           }}
           className="cursor-pointer border-b hover:bg-zinc-100"
         >

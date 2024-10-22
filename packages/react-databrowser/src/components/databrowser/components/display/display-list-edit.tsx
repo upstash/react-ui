@@ -20,8 +20,7 @@ export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: List
     <div className="rounded-md bg-zinc-100 p-3">
       <ListEditForm
         key={selectedListItem.key}
-        itemKey={selectedListItem.key}
-        itemValue={selectedListItem.value ?? ""}
+        item={selectedListItem}
         type={type}
         dataKey={dataKey}
       />
@@ -32,13 +31,11 @@ export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: List
 const ListEditForm = ({
   type,
   dataKey,
-  itemKey,
-  itemValue,
+  item: { key: itemKey, value: itemValue, isNew },
 }: {
   type: ListDataType
   dataKey: string
-  itemKey: string
-  itemValue: string
+  item: { key: string; value?: string; isNew?: boolean }
 }) => {
   const form = useForm({
     defaultValues: {
@@ -47,26 +44,26 @@ const ListEditForm = ({
     },
   })
 
-  const { mutateAsync, isPending } = useEditListItem()
+  const { mutateAsync: editItem, isPending } = useEditListItem()
   const { setSelectedListItem } = useDatabrowserStore()
 
   const [keyLabel, valueLabel] = headerLabels[type]
 
+  const onSubmit = form.handleSubmit(async ({ key, value }) => {
+    await editItem({
+      type: type,
+      dataKey,
+      itemKey,
+      newKey: key,
+      newValue: value,
+      isNew: isNew,
+    })
+    setSelectedListItem(undefined)
+  })
+
   return (
     <FormProvider {...form}>
-      <form
-        onSubmit={form.handleSubmit(async ({ key, value }) => {
-          await mutateAsync({
-            type: type,
-            dataKey,
-            itemKey,
-            newKey: key,
-            newValue: value,
-          })
-          setSelectedListItem(undefined)
-        })}
-        className="flex flex-col gap-2"
-      >
+      <form onSubmit={onSubmit} className="flex flex-col gap-2">
         <div className="flex flex-grow flex-col gap-2">
           {type !== "list" && <FormItem name="key" label={keyLabel} />}
           {type === "zset" ? (
@@ -111,7 +108,7 @@ const NumberFormItem = ({ name, label }: { name: string; label: string }) => {
         name={name}
         render={({ field }) => (
           <input
-            className="rounded-md border border-zinc-300 px-3 py-1 shadow-sm"
+            className="plain-input rounded-md border border-zinc-300 px-3 py-1 shadow-sm"
             type="number"
             {...field}
           />
