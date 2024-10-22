@@ -56,21 +56,19 @@ export const DisplayHeader = ({
 }
 
 const TTLBadge = ({ dataKey }: { dataKey: string }) => {
-  const { data: ttl, isLoading } = useFetchTTL(dataKey)
+  const { data: ttl } = useFetchTTL(dataKey)
 
   return (
     <Badge label="TTL:">
-      {isLoading ? (
+      {ttl === undefined ? (
         <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
       ) : (
-        <>
-          <TTLPopover dataKey={dataKey} TTL={ttl}>
-            <div className="flex gap-[2px]">
-              {ttl === -1 ? "Forever" : `${ttl}s`}
-              <IconChevronDown className="mt-[1px] text-zinc-400" size={12} />
-            </div>
-          </TTLPopover>
-        </>
+        <TTLPopover dataKey={dataKey} ttl={ttl}>
+          <div className="flex gap-[2px]">
+            {ttl === -1 ? "Forever" : `${ttl}s`}
+            <IconChevronDown className="mt-[1px] text-zinc-400" size={12} />
+          </div>
+        </TTLPopover>
       )}
     </Badge>
   )

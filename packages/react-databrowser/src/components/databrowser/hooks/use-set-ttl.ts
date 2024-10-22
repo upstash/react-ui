@@ -1,0 +1,25 @@
+import { useDatabrowser } from "@/store"
+import { useMutation } from "@tanstack/react-query"
+
+import { queryClient } from "@/lib/clients"
+
+import { FETCH_SIMPLE_KEY_QUERY_KEY } from "./use-fetch-simple-key"
+
+export const useSetTTL = () => {
+  const { redis } = useDatabrowser()
+
+  const updateTTL = useMutation({
+    mutationFn: async ({ dataKey, ttl }: { dataKey: string; ttl?: number }) => {
+      if (ttl === undefined) await redis.persist(dataKey)
+      else await redis.expire(dataKey, ttl)
+    },
+    onSuccess: (_, { dataKey }) => {
+      queryClient.invalidateQueries({ queryKey: ["fetch-ttl", dataKey] })
+      console.log("invalidating", {
+        queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
+      })
+      queryClient.invalidateQueries({ queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey] })
+    },
+  })
+  return updateTTL
+}
