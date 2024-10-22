@@ -4,12 +4,14 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 
 export const LIST_DISPLAY_PAGE_SIZE = 50
 
+export const FETCH_LIST_ITEMS_QUERY_KEY = "use-fetch-list-items"
+
 export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { redis } = useDatabrowser()
 
   const setQuery = useInfiniteQuery({
     enabled: type === "set",
-    queryKey: ["list-set", dataKey],
+    queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "set"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const [nextCursor, keys] = await redis.sscan(dataKey, cursor, {
@@ -27,7 +29,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
 
   const zsetQuery = useInfiniteQuery({
     enabled: type === "zset",
-    queryKey: ["list-zset", dataKey],
+    queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "zset"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const res = await redis.zscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE })
@@ -43,7 +45,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
 
   const hashQuery = useInfiniteQuery({
     enabled: type === "hash",
-    queryKey: ["list-hash", dataKey],
+    queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "hash"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
       const res = await redis.hscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE })
@@ -59,7 +61,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
 
   const listQuery = useInfiniteQuery({
     enabled: type === "list",
-    queryKey: ["list-list", dataKey],
+    queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "list"],
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const lastIndex = Number(pageParam)
@@ -76,7 +78,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
 
   const streamQuery = useInfiniteQuery({
     enabled: type === "stream",
-    queryKey: ["list-stream", dataKey],
+    queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "stream"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: lastId }) => {
       console.log("Args", {

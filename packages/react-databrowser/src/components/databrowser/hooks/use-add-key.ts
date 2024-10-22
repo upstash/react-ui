@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
 
+import { FETCH_KEYS_QUERY_KEY } from "./use-keys"
+
 export const useAddKey = () => {
   const { redis } = useDatabrowser()
 
@@ -29,7 +31,7 @@ export const useAddKey = () => {
     },
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: ["useFetchPaginatedKeys"],
+        queryKey: [FETCH_KEYS_QUERY_KEY],
       }),
   })
   return mutation

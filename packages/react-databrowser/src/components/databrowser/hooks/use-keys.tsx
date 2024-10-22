@@ -13,6 +13,8 @@ const KeysContext = createContext<
   | undefined
 >(undefined)
 
+export const FETCH_KEYS_QUERY_KEY = "use-fetch-keys"
+
 export const KeysProvider = ({ children }: PropsWithChildren) => {
   const { search: searchState } = useDatabrowserStore()
 
@@ -27,7 +29,7 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
   const { getPage, resetCache } = useFetchKeys(search)
 
   const query = useInfiniteQuery({
-    queryKey: ["useFetchKeys", search],
+    queryKey: [FETCH_KEYS_QUERY_KEY, search],
     initialPageParam: 0,
     queryFn: async ({ pageParam: pageIndex }) => {
       return getPage(pageIndex)

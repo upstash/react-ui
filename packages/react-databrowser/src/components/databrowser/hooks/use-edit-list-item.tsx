@@ -4,6 +4,8 @@ import { useMutation } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
 
+import { FETCH_LIST_ITEMS_QUERY_KEY } from "./use-fetch-list-items"
+
 export const useEditListItem = () => {
   const { redis } = useDatabrowser()
 
@@ -83,7 +85,7 @@ export const useEditListItem = () => {
     },
     onSuccess: (_, { type, dataKey }) => {
       queryClient.invalidateQueries({
-        queryKey: [`list-${type}`, dataKey],
+        queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey],
       })
     },
   })

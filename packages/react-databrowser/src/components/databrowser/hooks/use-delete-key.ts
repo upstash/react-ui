@@ -3,16 +3,18 @@ import { useMutation } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
 
+import { FETCH_KEYS_QUERY_KEY } from "./use-keys"
+
 export const useDeleteKey = () => {
   const { redis } = useDatabrowser()
 
   const deleteKey = useMutation({
-    mutationFn: async (dataKey: string) => {
-      return Boolean(await redis.del(dataKey))
+    mutationFn: async (key: string) => {
+      return Boolean(await redis.del(key))
     },
-    onSuccess: () =>
+    onSuccess: (_, key) =>
       queryClient.invalidateQueries({
-        queryKey: ["useFetchPaginatedKeys"],
+        queryKey: [FETCH_KEYS_QUERY_KEY, key],
       }),
   })
 

@@ -21,7 +21,6 @@ export const useSetSimpleKey = (dataKey: string, type: SimpleDataType) => {
     onSuccess: (_, value) => {
       // Update the cache
       queryClient.setQueryData([FETCH_SIMPLE_KEY_QUERY_KEY, dataKey], value)
-      // Invalidate the cache
       queryClient.invalidateQueries({
         queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
       })

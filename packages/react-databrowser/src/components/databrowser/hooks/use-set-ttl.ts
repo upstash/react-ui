@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 import { queryClient } from "@/lib/clients"
 
 import { FETCH_SIMPLE_KEY_QUERY_KEY } from "./use-fetch-simple-key"
+import { FETCH_TTL_QUERY_KEY } from "./use-fetch-ttl"
 
 export const useSetTTL = () => {
   const { redis } = useDatabrowser()
@@ -14,10 +15,7 @@ export const useSetTTL = () => {
       else await redis.expire(dataKey, ttl)
     },
     onSuccess: (_, { dataKey }) => {
-      queryClient.invalidateQueries({ queryKey: ["fetch-ttl", dataKey] })
-      console.log("invalidating", {
-        queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
-      })
+      queryClient.invalidateQueries({ queryKey: [FETCH_TTL_QUERY_KEY, dataKey] })
       queryClient.invalidateQueries({ queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey] })
     },
   })
