@@ -1,7 +1,5 @@
 import { useDatabrowserStore } from "@/store"
-import { IconMaximize } from "@tabler/icons-react"
 
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 import { useKeys } from "../../hooks/use-keys"

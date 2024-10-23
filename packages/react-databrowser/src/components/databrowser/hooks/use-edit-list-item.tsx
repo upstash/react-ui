@@ -28,55 +28,60 @@ export const useEditListItem = () => {
       const pipe = redis.pipeline()
       const shouldDelete = !isNew && (newKey === undefined || newKey !== itemKey)
 
-      if (type === "set") {
-        if (shouldDelete) {
-          pipe.srem(dataKey, itemKey)
-        }
-        if (newKey) {
-          pipe.sadd(dataKey, newKey)
-        }
-      } else if (type === "zset") {
-        if (Number.isNaN(Number(newValue))) {
-          throw new Error("Value must be a number for zset data type")
-        }
-
-        if (shouldDelete) {
-          pipe.zrem(dataKey, itemKey)
-        }
-        if (newKey) {
-          pipe.zadd(dataKey, {
-            member: newKey,
-            score: Number(newValue),
-          })
-        }
-      } else if (type === "hash") {
-        if (shouldDelete) {
-          pipe.hdel(dataKey, itemKey)
-        }
-        if (newKey) {
-          pipe.hset(dataKey, {
-            [newKey]: newValue,
-          })
-        }
-      } else if (type === "list") {
-        if (isNew) {
-          pipe.lpush(dataKey, newValue)
-        } else {
-          const index = Number(itemKey)
-
-          if (Number.isNaN(index)) {
-            throw new Error("Index must be a number for list data type")
+      switch (type) {
+        case "set": {
+          if (shouldDelete) {
+            pipe.srem(dataKey, itemKey)
+          }
+          if (newKey) {
+            pipe.sadd(dataKey, newKey)
           }
 
-          pipe.lset(dataKey, index, newValue)
+          break
         }
-      } else if (type === "stream") {
-        throw new Error("Editing stream items is not supported")
+        case "zset": {
+          if (Number.isNaN(Number(newValue))) {
+            throw new TypeError("Value must be a number for zset data type")
+          }
+
+          if (shouldDelete) pipe.zrem(dataKey, itemKey)
+          if (newKey)
+            pipe.zadd(dataKey, {
+              member: newKey,
+              score: Number(newValue),
+            })
+
+          break
+        }
+        case "hash": {
+          if (shouldDelete) pipe.hdel(dataKey, itemKey)
+          if (newKey)
+            pipe.hset(dataKey, {
+              [newKey]: newValue,
+            })
+
+          break
+        }
+        case "list": {
+          if (isNew) {
+            pipe.lpush(dataKey, newValue)
+          } else {
+            if (Number.isNaN(Number(itemKey)))
+              throw new TypeError("Index must be a number for list data type")
+
+            pipe.lset(dataKey, Number(itemKey), newValue)
+          }
+
+          break
+        }
+        default: {
+          throw new Error("Editing stream items is not supported")
+        }
       }
 
       await pipe.exec()
     },
-    onSuccess: (_, { type, dataKey }) => {
+    onSuccess: (_, { dataKey }) => {
       queryClient.invalidateQueries({
         queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey],
       })

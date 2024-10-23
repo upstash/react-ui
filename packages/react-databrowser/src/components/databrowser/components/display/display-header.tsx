@@ -58,7 +58,7 @@ export const DisplayHeader = ({
             <IconPlus className="text-zinc-400" size={20} />
           </Button>
         )}
-        <KeyActions dataKey={dataKey} type={type} content={content} />
+        <KeyActions dataKey={dataKey} content={content} />
       </div>
       {!hideBadges && (
         <div className="flex flex-wrap gap-1">
@@ -82,14 +82,14 @@ const LengthBadge = ({
   type: DataType
   content?: string
 }) => {
-  const { data } = useFetchKeyLength({ dataKey, type })
+  const { data, isLoading } = useFetchKeyLength({ dataKey, type })
 
   // If the type is a simple type, the length is the size of the content
   const length = content?.length ?? data
 
   return (
     <Badge label="Length:">
-      {!length ? <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" /> : length}
+      {isLoading ? <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" /> : length}
     </Badge>
   )
 }
@@ -99,12 +99,12 @@ const SizeBadge = ({ dataKey }: { dataKey: string }) => {
 
   return (
     <Badge label="Size:">
-      {!size ? (
-        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
-      ) : (
+      {size ? (
         bytes(size, {
           unitSeparator: " ",
         })
+      ) : (
+        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
       )}
     </Badge>
   )

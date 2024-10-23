@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from "react"
-import { Scrollbar } from "@radix-ui/react-scroll-area"
 import { IconLoader2 } from "@tabler/icons-react"
 import type { UseInfiniteQueryResult } from "@tanstack/react-query"
 

@@ -15,14 +15,14 @@ export const CustomEditor = ({
   maxDynamicHeight?: number
 }) => {
   const monaco = useMonaco()
-  const editorRef = useRef(undefined)
+  const editorRef = useRef()
 
   useEffect(() => {
     if (!monaco || !editorRef.current) {
       return
     }
 
-    // @ts-ignore
+    // @ts-expect-error not typing the editor type
     monaco?.editor.setModelLanguage(editorRef.current.getModel(), language)
   }, [monaco, language])
 
@@ -36,7 +36,7 @@ export const CustomEditor = ({
       <Editor
         loading={undefined}
         onMount={(editor) => {
-          // @ts-ignore
+          // @ts-expect-error not typing the editor type
           editorRef.current = editor
         }}
         value={value}

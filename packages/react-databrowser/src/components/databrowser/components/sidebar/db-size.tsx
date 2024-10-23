@@ -1,16 +1,12 @@
 import { useDatabrowser } from "@/store"
 import { useQuery } from "@tanstack/react-query"
 
-import { formatNumberWithCommas } from "@/lib/utils"
+import { formatNumber } from "@/lib/utils"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const DisplayDbSize = () => {
   const { redis } = useDatabrowser()
-  const {
-    isLoading,
-    error,
-    data: keyCount,
-  } = useQuery({
+  const { data: keyCount } = useQuery({
     queryKey: ["useFetchDbSize"],
     queryFn: async () => {
       return await redis.dbsize()
@@ -24,9 +20,5 @@ export const DisplayDbSize = () => {
       </div>
     )
   }
-  return (
-    <div className="text-sm font-normal text-[#00000066]">
-      {formatNumberWithCommas(keyCount)} Keys
-    </div>
-  )
+  return <div className="text-sm font-normal text-[#00000066]">{formatNumber(keyCount)} Keys</div>
 }

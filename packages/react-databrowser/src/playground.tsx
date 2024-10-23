@@ -2,7 +2,7 @@ import ReactDOM from "react-dom/client"
 
 import { Databrowser } from "@/components/databrowser"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.querySelector("#root")!).render(
   <main
     style={{
       height: "100vh",

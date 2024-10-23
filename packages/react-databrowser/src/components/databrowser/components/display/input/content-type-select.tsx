@@ -11,8 +11,8 @@ import {
 
 import { checkIsValidJSON } from "./use-field"
 
-const contentTypes = ["Text", "JSON"] as const
-export type ContentType = (typeof contentTypes)[number]
+const _contentTypes = ["Text", "JSON"] as const
+export type ContentType = (typeof _contentTypes)[number]
 
 export const ContentTypeSelect = ({
   value,

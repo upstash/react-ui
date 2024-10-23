@@ -14,8 +14,8 @@ export type RedisKey = [string, DataType]
 export const useFetchKeys = (search: SearchFilter) => {
   const { redis } = useDatabrowser()
 
-  const cache = useRef<PaginationCache | undefined>(undefined)
-  const lastKey = useRef<string | undefined>(undefined)
+  const cache = useRef<PaginationCache | undefined>()
+  const lastKey = useRef<string | undefined>()
 
   const getPage = useCallback(
     (page: number) => {

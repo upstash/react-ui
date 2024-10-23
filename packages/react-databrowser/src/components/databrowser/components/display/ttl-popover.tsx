@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, type PropsWithChildren } from "react"
 import { Controller, useForm } from "react-hook-form"
 
-import { queryClient } from "@/lib/clients"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"

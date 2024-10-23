@@ -1,5 +1,5 @@
 import { useDatabrowser } from "@/store"
-import { DataType } from "@/types"
+import type { DataType } from "@/types"
 import { useMutation } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
@@ -11,24 +11,42 @@ export const useAddKey = () => {
 
   const mutation = useMutation({
     mutationFn: async ({ key, type }: { key: string; type: DataType }) => {
-      if (type === "set") redis.sadd(key, "value")
-      else if (type === "zset")
-        redis.zadd(key, {
+      switch (type) {
+      case "set": {
+      redis.sadd(key, "value")
+      break;
+      }
+      case "zset": {
+      redis.zadd(key, {
           member: "value",
           score: 0,
         })
-      else if (type === "hash")
-        redis.hset(key, {
+      break;
+      }
+      case "hash": {
+      redis.hset(key, {
           field: "field",
           value: "value",
         })
-      else if (type === "list") redis.lpush(key, "value")
-      else if (type === "stream")
-        redis.xadd(key, "*", {
+      break;
+      }
+      case "list": {
+      redis.lpush(key, "value")
+      break;
+      }
+      case "stream": {
+      redis.xadd(key, "*", {
           foo: "bar",
         })
-      else if (type === "string") redis.set(key, "value")
-      else throw new Error(`Invalid type provided to useAddKey: "${type}"`)
+      break;
+      }
+      case "string": {
+      redis.set(key, "value")
+      break;
+      }
+      default: { throw new Error(`Invalid type provided to useAddKey: "${type}"`)
+      }
+      }
     },
     onSuccess: () =>
       queryClient.invalidateQueries({
