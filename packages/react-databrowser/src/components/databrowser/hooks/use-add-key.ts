@@ -27,7 +27,8 @@ export const useAddKey = () => {
         redis.xadd(key, "*", {
           foo: "bar",
         })
-      else throw new Error(`Invalid type ${type} provided to useAddKey`)
+      else if (type === "string") redis.set(key, "value")
+      else throw new Error(`Invalid type provided to useAddKey: "${type}"`)
     },
     onSuccess: () =>
       queryClient.invalidateQueries({

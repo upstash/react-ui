@@ -7,9 +7,11 @@ export const FETCH_SIMPLE_KEY_QUERY_KEY = "fetch-simple-key"
 /** Simple key standing for string or json */
 export const useFetchSimpleKey = (dataKey: string, type: DataType) => {
   const { redis } = useDatabrowser()
+  console.log("key", [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey])
   return useQuery({
     queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
     queryFn: async () => {
+      console.log("fetching", dataKey)
       if (type === "string") {
         return (await redis.get(dataKey)) as string | null
       }

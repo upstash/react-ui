@@ -62,7 +62,7 @@ const EditorDisplayForm = ({
     <>
       <div className="flex-grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
       <div className="flex flex-shrink-0 justify-between px-3 pb-2 pt-1">
-        {selector}
+        {type !== "json" ? selector : <div />}
 
         <div className="flex gap-1">
           {form.formState.isDirty && (

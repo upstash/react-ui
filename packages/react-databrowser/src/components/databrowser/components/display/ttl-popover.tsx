@@ -17,16 +17,12 @@ import { Spinner } from "@/components/ui/spinner"
 import { useSetTTL } from "@/components/databrowser/hooks/use-set-ttl"
 
 const PERSISTED_KEY = -1
-const MISSING_KEY = -2
 
 const timeUnits = [
   { label: "Seconds", value: 1 },
   { label: "Minutes", value: 60 },
   { label: "Hours", value: 60 * 60 },
   { label: "Days", value: 60 * 60 * 24 },
-  { label: "Weeks", value: 60 * 60 * 24 * 7 },
-  { label: "Months", value: 60 * 60 * 24 * 30 },
-  { label: "Years", value: 60 * 60 * 24 * 365 },
 ] as const
 
 export function TTLPopover({
@@ -94,12 +90,7 @@ export function TTLPopover({
                 control={control}
                 name="value"
                 render={({ field }) => (
-                  <Input
-                    min="-1"
-                    placeholder="mykey"
-                    {...field}
-                    className="h-8 flex-grow rounded-r-none"
-                  />
+                  <Input min="-1" {...field} className="h-8 flex-grow rounded-r-none" />
                 )}
               />
               <Controller

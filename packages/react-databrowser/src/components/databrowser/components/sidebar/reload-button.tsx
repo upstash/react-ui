@@ -28,7 +28,6 @@ export const ReloadButton = ({
         className="h-8 w-8 rounded-md border border-[#D9D9D9]"
         onClick={handleClick}
         disabled={isLoading || isLoadingProp}
-        data-testid="reset"
       >
         <ReloadIcon className={isLoading || isLoadingProp ? "animate-spin" : ""} />
       </Button>

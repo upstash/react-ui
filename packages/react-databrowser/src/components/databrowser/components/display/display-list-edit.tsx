@@ -17,7 +17,7 @@ export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: List
   }
 
   return (
-    <div className="rounded-md bg-zinc-100 p-3">
+    <div className="grow rounded-md bg-zinc-100 p-3">
       <ListEditForm
         key={selectedListItem.key}
         item={selectedListItem}

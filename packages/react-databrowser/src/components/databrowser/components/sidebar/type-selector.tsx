@@ -28,7 +28,7 @@ export function DataTypeSelector() {
       value={search.type === undefined ? ALL_TYPES_KEY : search.type}
     >
       <SelectTrigger className="h-[32px] !w-auto whitespace-nowrap rounded-lg rounded-r-none border-r-0 border-zinc-300 pr-7">
-        <SelectValue placeholder="All Types" />
+        <SelectValue />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

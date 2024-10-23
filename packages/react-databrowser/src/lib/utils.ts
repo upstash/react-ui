@@ -66,6 +66,28 @@ export function formatNumberWithCommas(value: number) {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
+const units = {
+  year: 24 * 60 * 60 * 1000 * 365,
+  month: (24 * 60 * 60 * 1000 * 365) / 12,
+  day: 24 * 60 * 60 * 1000,
+  hour: 60 * 60 * 1000,
+  min: 60 * 1000,
+  second: 1000,
+} as const
+
+export function formatTime(seconds: number) {
+  // 130 -> 2 minutes
+  // 7800 -> 2 hours
+
+  for (const [unit, value] of Object.entries(units)) {
+    const interval = (seconds * 1000) / value
+    if (interval >= 1) {
+      return `${Math.floor(interval)} ${unit}${interval > 1 && unit !== "min" ? "s" : ""}`
+    }
+  }
+  return "just now"
+}
+
 export default function formatHighlight(json: unknown, colorOptions: ColorOptions = {}): string {
   let jsonStr: string
   if (typeof json === "string") {

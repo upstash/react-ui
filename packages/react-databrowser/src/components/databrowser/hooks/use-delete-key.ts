@@ -1,21 +1,19 @@
 import { useDatabrowser } from "@/store"
 import { useMutation } from "@tanstack/react-query"
 
-import { queryClient } from "@/lib/clients"
-
-import { FETCH_KEYS_QUERY_KEY } from "./use-keys"
+import { useDeleteKeyCache } from "./use-delete-key-cache"
 
 export const useDeleteKey = () => {
   const { redis } = useDatabrowser()
+  const { deleteKeyCache } = useDeleteKeyCache()
 
   const deleteKey = useMutation({
     mutationFn: async (key: string) => {
       return Boolean(await redis.del(key))
     },
-    onSuccess: (_, key) =>
-      queryClient.invalidateQueries({
-        queryKey: [FETCH_KEYS_QUERY_KEY, key],
-      }),
+    onSuccess: (_, key) => {
+      deleteKeyCache(key)
+    },
   })
 
   return deleteKey

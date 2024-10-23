@@ -20,6 +20,9 @@ export const useFetchTTL = (dataKey: string) => {
 
   useEffect(() => {
     if (data === -2) {
+      console.log("invalidating", {
+        queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
+      })
       queryClient.invalidateQueries({
         queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
       })

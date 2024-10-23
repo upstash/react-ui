@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, type PropsWithChildren } from "react"
+import { createContext, useCallback, useContext, useMemo, type PropsWithChildren } from "react"
 import { useDatabrowserStore } from "@/store"
 import { useInfiniteQuery, type UseInfiniteQueryResult } from "@tanstack/react-query"
 
@@ -32,6 +32,7 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     queryKey: [FETCH_KEYS_QUERY_KEY, search],
     initialPageParam: 0,
     queryFn: async ({ pageParam: pageIndex }) => {
+      console.log("Fetch page", pageIndex)
       return getPage(pageIndex)
     },
     select: (data) => data,
@@ -40,10 +41,11 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     },
   })
 
-  const refetch = () => {
+  const refetch = useCallback(() => {
+    console.log("CALLED")
     resetCache()
     query.refetch()
-  }
+  }, [query, resetCache])
 
   const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
 

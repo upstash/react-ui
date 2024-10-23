@@ -11,8 +11,8 @@ export const DATA_TYPE_NAMES = {
 
 export type DataType = (typeof DATA_TYPES)[number]
 
-const LIST_DATA_TYPES = ["set", "zset", "list", "hash", "stream"] as const
-const SIMPLE_DATA_TYPES = ["string", "json"] as const
+export const LIST_DATA_TYPES = ["set", "zset", "list", "hash", "stream"] as const
+export const SIMPLE_DATA_TYPES = ["string", "json"] as const
 
 export type SimpleDataType = (typeof SIMPLE_DATA_TYPES)[number]
 export type ListDataType = (typeof LIST_DATA_TYPES)[number]

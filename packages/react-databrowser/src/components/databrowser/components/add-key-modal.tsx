@@ -42,7 +42,7 @@ export function AddKeyModal() {
   const [open, setOpen] = useState(false)
 
   const { mutateAsync: addKey, isPending } = useAddKey()
-  const { control, handleSubmit, formState, reset } = useForm<{
+  const { control, handleSubmit, formState, reset, getValues } = useForm<{
     key: string
     type: DataType
   }>({
@@ -51,6 +51,8 @@ export function AddKeyModal() {
       type: "string",
     },
   })
+
+  console.log("form", getValues())
 
   const onSubmit = handleSubmit(async ({ key, type }) => {
     try {
@@ -79,7 +81,6 @@ export function AddKeyModal() {
             variant="outline"
             size="icon"
             className="h-8 w-8 border-none bg-[#13B981] hover:bg-[#13B981]/90"
-            data-testid="add-new-data"
           >
             <PlusIcon className="h-4 w-4 text-white" />
           </Button>

@@ -1,12 +1,18 @@
+import { useEffect } from "react"
 import { useDatabrowserStore } from "@/store"
-import type { DataType } from "@/types"
+import { type DataType } from "@/types"
 import { IconChevronDown, IconPlus } from "@tabler/icons-react"
+import bytes from "bytes"
 
-import { formatBytes } from "@/lib/utils"
+import { queryClient } from "@/lib/clients"
+import { formatTime } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 
-import { useFetchTTL } from "../../hooks"
+import { FETCH_TTL_QUERY_KEY, useFetchTTL } from "../../hooks"
+import { useDeleteKeyCache } from "../../hooks/use-delete-key-cache"
+import { useFetchKeyLength } from "../../hooks/use-fetch-key-length"
+import { useFetchKeySize } from "../../hooks/use-fetch-key-size"
 import { RedisTypeTag } from "../type-tag"
 import { KeyActions } from "./key-actions"
 import { TTLPopover } from "./ttl-popover"
@@ -44,18 +50,21 @@ export const DisplayHeader = ({
             dataKey
           )}
         </h2>
-        <Button
-          onClick={handleAddItem}
-          className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm"
-        >
-          <IconPlus className="text-zinc-400" size={20} />
-        </Button>
+        {type !== "string" && type !== "json" && (
+          <Button
+            onClick={handleAddItem}
+            className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm"
+          >
+            <IconPlus className="text-zinc-400" size={20} />
+          </Button>
+        )}
         <KeyActions dataKey={dataKey} type={type} content={content} />
       </div>
       {!hideBadges && (
         <div className="flex flex-wrap gap-1">
           <RedisTypeTag type={type} isIcon={false} />
-          {size && <Badge label="Size:">{formatBytes(size)}</Badge>}
+          <SizeBadge dataKey={dataKey} />
+          <LengthBadge dataKey={dataKey} type={type} content={content} />
           {length && <Badge label="Length:">{size}</Badge>}
           <TTLBadge dataKey={dataKey} />
         </div>
@@ -64,8 +73,67 @@ export const DisplayHeader = ({
   )
 }
 
+const LengthBadge = ({
+  dataKey,
+  type,
+  content,
+}: {
+  dataKey: string
+  type: DataType
+  content?: string
+}) => {
+  const { data } = useFetchKeyLength({ dataKey, type })
+
+  // If the type is a simple type, the length is the size of the content
+  const length = content?.length ?? data
+
+  return (
+    <Badge label="Length:">
+      {!length ? <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" /> : length}
+    </Badge>
+  )
+}
+
+const SizeBadge = ({ dataKey }: { dataKey: string }) => {
+  const { data: size } = useFetchKeySize(dataKey)
+
+  return (
+    <Badge label="Size:">
+      {!size ? (
+        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
+      ) : (
+        bytes(size, {
+          unitSeparator: " ",
+        })
+      )}
+    </Badge>
+  )
+}
+
+const TTL_INFINITE = -1
+const TTL_NOT_FOUND = -2
+
 const TTLBadge = ({ dataKey }: { dataKey: string }) => {
   const { data: ttl } = useFetchTTL(dataKey)
+  const { deleteKeyCache } = useDeleteKeyCache()
+
+  // Tick the ttl query every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      queryClient.setQueryData([FETCH_TTL_QUERY_KEY, dataKey], (ttl?: number) => {
+        console.log("TICKING", ttl)
+        if (ttl === undefined || ttl === TTL_INFINITE) return ttl
+
+        if (ttl <= 1) {
+          deleteKeyCache(dataKey)
+          return TTL_NOT_FOUND
+        }
+        return ttl - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <Badge label="TTL:">
@@ -74,7 +142,7 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
       ) : (
         <TTLPopover dataKey={dataKey} ttl={ttl}>
           <div className="flex gap-[2px]">
-            {ttl === -1 ? "Forever" : `${ttl}s`}
+            {ttl === TTL_INFINITE ? "Forever" : formatTime(ttl)}
             <IconChevronDown className="mt-[1px] text-zinc-400" size={12} />
           </div>
         </TTLPopover>
