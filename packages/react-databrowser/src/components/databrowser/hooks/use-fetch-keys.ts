@@ -90,36 +90,36 @@ class PaginationCache {
     }
   }
 
-  private async fetch() {
-    const fetchType = async (type: string) => {
-      let fetchCount = INITIAL_FETCH_COUNT
+  private async fetchForType(type: string) {
+    let fetchCount = INITIAL_FETCH_COUNT
 
-      while (true) {
-        const cursor = this.cache[type].cursor
-        if (cursor === "-1" || this.getLength() >= this.targetCount) {
-          break
-        }
-
-        const [nextCursor, newKeys] = await this.redis.scan(cursor, {
-          count: fetchCount,
-          match: this.searchTerm,
-          type: type,
-        })
-
-        fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT)
-
-        // Dedupe here because redis can and will return duplicates for example when
-        // a key is deleted because of ttl etc.
-        const dedupedSet = new Set([...this.cache[type].keys, ...newKeys])
-
-        this.cache[type].keys = [...dedupedSet]
-        this.cache[type].cursor = nextCursor === "0" ? "-1" : nextCursor
+    while (true) {
+      const cursor = this.cache[type].cursor
+      if (cursor === "-1" || this.getLength() >= this.targetCount) {
+        break
       }
-    }
 
+      const [nextCursor, newKeys] = await this.redis.scan(cursor, {
+        count: fetchCount,
+        match: this.searchTerm,
+        type: type,
+      })
+
+      fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT)
+
+      // Dedupe here because redis can and will return duplicates for example when
+      // a key is deleted because of ttl etc.
+      const dedupedSet = new Set([...this.cache[type].keys, ...newKeys])
+
+      this.cache[type].keys = [...dedupedSet]
+      this.cache[type].cursor = nextCursor === "0" ? "-1" : nextCursor
+    }
+  }
+
+  private async fetch() {
     // Fetch pages of each type until they are enough
     const types = this.typeFilter ? [this.typeFilter] : DATA_TYPES
-    await Promise.all(types.map(fetchType))
+    await Promise.all(types.map(this.fetchForType))
   }
 
   private isAllEnded() {
