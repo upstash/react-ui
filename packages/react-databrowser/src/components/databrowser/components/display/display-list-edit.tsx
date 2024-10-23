@@ -1,9 +1,11 @@
+import { Stream } from "stream"
 import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { SimpleTooltip } from "@/components/ui/tooltip"
 
 import { useEditListItem } from "../../hooks/use-edit-list-item"
 import { headerLabels } from "./display-list"
@@ -83,15 +85,17 @@ const ListEditForm = ({
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            className="h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
-            disabled={!form.formState.isValid || !form.formState.isDirty}
-          >
-            <Spinner isLoading={isPending} isLoadingText={"Saving"}>
-              Save
-            </Spinner>
-          </Button>
+          <SimpleTooltip content={type === "stream" ? "Streams are not mutable" : undefined}>
+            <Button
+              type="submit"
+              className="h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
+              disabled={!form.formState.isValid || !form.formState.isDirty || type === "stream"}
+            >
+              <Spinner isLoading={isPending} isLoadingText={"Saving"}>
+                Save
+              </Spinner>
+            </Button>
+          </SimpleTooltip>
         </div>
       </form>
     </FormProvider>

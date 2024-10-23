@@ -52,8 +52,6 @@ export function AddKeyModal() {
     },
   })
 
-  console.log("form", getValues())
-
   const onSubmit = handleSubmit(async ({ key, type }) => {
     try {
       await addKey({ key, type })

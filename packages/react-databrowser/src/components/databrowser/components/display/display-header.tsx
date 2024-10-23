@@ -121,7 +121,6 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       queryClient.setQueryData([FETCH_TTL_QUERY_KEY, dataKey], (ttl?: number) => {
-        console.log("TICKING", ttl)
         if (ttl === undefined || ttl === TTL_INFINITE) return ttl
 
         if (ttl <= 1) {

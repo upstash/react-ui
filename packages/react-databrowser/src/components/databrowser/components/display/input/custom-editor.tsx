@@ -34,6 +34,7 @@ export const CustomEditor = ({
       }}
     >
       <Editor
+        loading={undefined}
         onMount={(editor) => {
           // @ts-ignore
           editorRef.current = editor

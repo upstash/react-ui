@@ -25,13 +25,6 @@ export const useEditListItem = () => {
       newValue?: string
       isNew?: boolean
     }) => {
-      console.log({
-        type,
-        dataKey,
-        itemKey,
-        newKey,
-        newValue,
-      })
       const pipe = redis.pipeline()
       const shouldDelete = !isNew && (newKey === undefined || newKey !== itemKey)
 

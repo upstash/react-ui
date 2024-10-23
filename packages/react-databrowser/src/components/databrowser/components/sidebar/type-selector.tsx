@@ -18,7 +18,6 @@ export function DataTypeSelector() {
   return (
     <Select
       onValueChange={(type: DataType | typeof ALL_TYPES_KEY) => {
-        console.log(type)
         if (type === ALL_TYPES_KEY) {
           setSearchType(undefined)
         } else {

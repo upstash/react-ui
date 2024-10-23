@@ -32,7 +32,6 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     queryKey: [FETCH_KEYS_QUERY_KEY, search],
     initialPageParam: 0,
     queryFn: async ({ pageParam: pageIndex }) => {
-      console.log("Fetch page", pageIndex)
       return getPage(pageIndex)
     },
     select: (data) => data,
@@ -42,7 +41,6 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
   })
 
   const refetch = useCallback(() => {
-    console.log("CALLED")
     resetCache()
     query.refetch()
   }, [query, resetCache])

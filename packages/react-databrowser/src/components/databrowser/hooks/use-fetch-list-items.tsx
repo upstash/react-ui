@@ -81,10 +81,6 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
     queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "stream"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: lastId }) => {
-      console.log("Args", {
-        dataKey,
-        lastId,
-      })
       const messages = (await redis.xrange(
         dataKey,
         lastId,

@@ -18,9 +18,11 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
     <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
       <DisplayHeader dataKey={dataKey} type={type} content={data ?? undefined} />
       {data === undefined ? (
-        <>Loading...</>
+        <div className="flex h-full items-center justify-center">
+          <Spinner isLoadingText={""} isLoading={true} />
+        </div>
       ) : data === null ? (
-        <>Missing key</>
+        <></>
       ) : (
         <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
       )}

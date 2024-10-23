@@ -108,8 +108,6 @@ class PaginationCache {
 
         fetchCount = Math.min(fetchCount * 2, MAX_FETCH_COUNT)
 
-        // console.log("< scan", type, newKeys.length, nextCursor === 0 ? "END" : "MORE");
-
         // Dedupe here because redis can and will return duplicates for example when
         // a key is deleted because of ttl etc.
         const dedupedSet = new Set([...this.cache[type].keys, ...newKeys])
