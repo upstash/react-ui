@@ -17,9 +17,9 @@
   ],
   "author": "Oguzhan Olguncu <oguzhan@upstash.com>",
   "scripts": {
-    "build": "tsc && tsup",
+    "build": "tsup",
     "dev": "vite",
-    "lint": "tsc"
+    "lint": "tsc && eslint"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
