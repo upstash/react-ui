@@ -31,13 +31,16 @@ $ npm install @upstash/react-databrowser
 ## 2. Configuration
 
 ### Environment Variables
+
 Configure your Upstash Redis REST URL and token as environment variables:
 
 ```sh-session
 NEXT_PUBLIC_UPSTASH_REDIS_REST_URL=YOUR_REDIS_REST_URL
 NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN=YOUR_REDIS_REST_TOKEN
 ```
+
 ## 3. Usage
+
 ### Creating the Data Browser Component
 
 In your React application, create a new component that will utilize @upstash/react-databrowser.
@@ -47,20 +50,21 @@ Here's a basic example of how to use the component:
 ```tsx
 // /app/components/DatabrowserDemo.tsx
 
-import { Databrowser } from "@upstash/react-databrowser";
-import "@upstash/react-databrowser/dist/index.css";
+import { Databrowser } from "@upstash/react-databrowser"
+
+import "@upstash/react-databrowser/dist/index.css"
 
 export default function DatabrowserDemo() {
-  const redisUrl = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL;
-  const redisToken = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
+  const redisUrl = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL
+  const redisToken = process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN
 
   return (
     <main style={mainStyle}>
       <div style={divStyle}>
-        <Databrowser token={redisToken} url={redisUrl}/>
+        <Databrowser token={redisToken} url={redisUrl} />
       </div>
     </main>
-  );
+  )
 }
 
 const mainStyle = {
@@ -71,7 +75,7 @@ const mainStyle = {
   justifyContent: "center",
   flexDirection: "column",
   background: "rgb(250,250,250)",
-};
+}
 
 const divStyle = {
   height: "100%",
@@ -80,6 +84,5 @@ const divStyle = {
   maxWidth: "64rem",
   borderRadius: "0.5rem",
   overflow: "hidden",
-};
-
+}
 ```

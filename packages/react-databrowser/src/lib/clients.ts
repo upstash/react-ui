@@ -1,17 +1,18 @@
-import type { DatabrowserProps } from "@/store";
-import { Redis } from "@upstash/redis";
-import { QueryCache, QueryClient } from "@tanstack/react-query";
-import { toast } from "@/components/ui/use-toast";
+import type { DatabrowserProps } from "@/store"
+import { QueryCache, QueryClient } from "@tanstack/react-query"
+import { Redis } from "@upstash/redis"
+
+import { toast } from "@/components/ui/use-toast"
 
 export const redisClient = (databrowser?: DatabrowserProps) => {
-  const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN;
-  const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL;
+  const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN
+  const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL
 
   if (!url) {
-    throw new Error("Redis URL is missing!");
+    throw new Error("Redis URL is missing!")
   }
   if (!token) {
-    throw new Error("Redis TOKEN is missing!");
+    throw new Error("Redis TOKEN is missing!")
   }
 
   const redis = new Redis({
@@ -20,10 +21,10 @@ export const redisClient = (databrowser?: DatabrowserProps) => {
     enableAutoPipelining: true,
     automaticDeserialization: false,
     keepAlive: false,
-  });
+  })
 
-  return redis;
-};
+  return redis
+}
 
 /**
  * QueryClient Configuration.
@@ -58,22 +59,22 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
       if (error.name === "UpstashError") {
-        let desc = error.message;
+        let desc = error.message
 
         // Because the message does not fit in the toast, we only take the
         // first two sentences.
         // Example: "ERR max daily request limit exceeded. Limit: 10000, Usage: 10000."
         if (error.message.includes("max daily request limit exceeded.")) {
-          desc = error.message.split(".").slice(0, 2).join(".");
+          desc = error.message.split(".").slice(0, 2).join(".")
         }
 
         toast({
           variant: "destructive",
           title: "Error",
           description: desc,
-        });
+        })
       }
-      console.error(error);
+      console.error(error)
     },
   }),
-});
+})

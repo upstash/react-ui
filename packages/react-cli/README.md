@@ -8,9 +8,7 @@
 </div>
 <br/>
 
-
 ![Upstash Redis CLI](img/cli.png)
-
 
 ## 1. Install
 
@@ -24,22 +22,21 @@ $ npm install @upstash/react-cli
 // /app/components/cli.tsx
 
 "use client"
-import { RedisCli } from "@upstash/react-cli";
 
-import "@upstash/react-cli/dist/index.css";
+import { RedisCli } from "@upstash/react-cli"
 
+import "@upstash/react-cli/dist/index.css"
 
-<div
-        style={{
-          width: "100%",
-          height: "100%",
-          maxWidth: "48rem",
-          maxHeight: "32rem",
-        }}
-      >
+;<div
+  style={{
+    width: "100%",
+    height: "100%",
+    maxWidth: "48rem",
+    maxHeight: "32rem",
+  }}
+>
   <RedisCli url="UPSTASH_REDIS_REST_URL" token="UPSTASH_REDIS_REST_TOKEN" />;
 </div>
-
 ```
 
 ## With Tailwind CSS
@@ -56,5 +53,4 @@ module.exports = {
   ],
   //...
 }
-
 ```
