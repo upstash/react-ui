@@ -88,7 +88,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
         LIST_DISPLAY_PAGE_SIZE
       )) as unknown as [string, string[]][]
 
-      const lastMessageId = messages.length > 0 ? messages.at(-1)[0] : undefined
+      const lastMessageId = messages.length > 0 ? messages.at(-1)?.[0] : undefined
 
       return {
         cursor: lastMessageId,

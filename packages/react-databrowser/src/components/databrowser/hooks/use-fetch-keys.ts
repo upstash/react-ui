@@ -122,10 +122,15 @@ class PaginationCache {
     await Promise.all(types.map(this.fetchForType))
   }
 
-  private isAllEnded() {
-    return (this.typeFilter ? [this.typeFilter] : DATA_TYPES).every(
-      (type) => this.cache[type].cursor === "-1"
-    )
+  // TODO: Yusuf, implement this function
+  private isAllEnded(): boolean {
+    const types = this.typeFilter ? [this.typeFilter] : DATA_TYPES
+
+    if (!Array.isArray(types)) {
+      throw new Error("types is not an array")
+    }
+
+    return types.every((type) => this.cache[type] && this.cache[type].cursor === "-1")
   }
 
   async getPage(page: number) {
