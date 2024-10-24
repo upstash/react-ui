@@ -90,7 +90,7 @@ class PaginationCache {
     }
   }
 
-  private async fetchForType(type: string) {
+  private fetchForType = async (type: string) => {
     let fetchCount = INITIAL_FETCH_COUNT
 
     while (true) {
