@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "fmt": "prettier --write ./packages",
@@ -11,17 +12,17 @@
     "bump-versions": "pnpm changeset version && pnpm install"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@typescript-eslint/eslint-plugin": "8.4.0",
     "@typescript-eslint/parser": "8.4.0",
     "eslint": "9.10.0",
     "eslint-plugin-unicorn": "55.0.0",
-    "@changesets/cli": "^2.26.1",
-    "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
-    "turbo": "^1.9.3"
+    "turbo": "^2.2.3"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
@@ -30,5 +31,6 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "packageManager": "pnpm@9.0.0"
 }
