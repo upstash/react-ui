@@ -11,7 +11,13 @@ import { toast } from "@/components/ui/use-toast"
 
 import { useDeleteKey } from "../../hooks"
 
-export function KeyActions({ dataKey, content }: { dataKey: string; content?: string }) {
+export function KeyActions({
+  dataKey,
+  content,
+}: {
+  dataKey: string
+  content?: string
+}) {
   const { mutateAsync: deleteKey } = useDeleteKey()
   return (
     <DropdownMenu>

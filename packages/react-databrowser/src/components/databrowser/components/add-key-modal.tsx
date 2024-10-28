@@ -48,7 +48,8 @@ export function AddKeyModal() {
       setSelectedKey(key)
     } catch (error) {
       toast({
-        description: error instanceof Error ? error.message : "An error occurred",
+        description:
+          error instanceof Error ? error.message : "An error occurred",
         variant: "destructive",
       })
     }
@@ -63,15 +64,13 @@ export function AddKeyModal() {
       }}
     >
       <DialogTrigger asChild>
-        <div>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8 border-none bg-[#13B981] hover:bg-[#13B981]/90"
-          >
-            <PlusIcon className="h-4 w-4 text-white" />
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="icon-sm"
+          className="border-none bg-[#13B981] hover:bg-[#13B981]/90"
+        >
+          <PlusIcon className="h-4 w-4 text-white" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
@@ -106,12 +105,18 @@ export function AddKeyModal() {
               control={control}
               name="key"
               render={({ field }) => (
-                <Input placeholder="mykey" {...field} className="h-8 flex-grow " />
+                <Input
+                  placeholder="mykey"
+                  {...field}
+                  className="h-8 flex-grow "
+                />
               )}
             />
           </div>
           {formState.errors.key && (
-            <div className="mb-3 mt-1 text-xs text-red-500">{formState.errors.key?.message}</div>
+            <div className="mb-3 mt-1 text-xs text-red-500">
+              {formState.errors.key?.message}
+            </div>
           )}
           <div className="mt-1 text-xs text-zinc-500">
             After creating the key, you can edit the value

@@ -6,7 +6,13 @@ export const LIST_DISPLAY_PAGE_SIZE = 50
 
 export const FETCH_LIST_ITEMS_QUERY_KEY = "use-fetch-list-items"
 
-export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
+export const useFetchListItems = ({
+  dataKey,
+  type,
+}: {
+  dataKey: string
+  type: ListDataType
+}) => {
   const { redis } = useDatabrowser()
 
   const setQuery = useInfiniteQuery({
@@ -32,7 +38,9 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
     queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "zset"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
-      const res = await redis.zscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE })
+      const res = await redis.zscan(dataKey, cursor, {
+        count: LIST_DISPLAY_PAGE_SIZE,
+      })
 
       return {
         cursor: res[0],
@@ -48,7 +56,9 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
     queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "hash"],
     initialPageParam: "0",
     queryFn: async ({ pageParam: cursor }) => {
-      const res = await redis.hscan(dataKey, cursor, { count: LIST_DISPLAY_PAGE_SIZE })
+      const res = await redis.hscan(dataKey, cursor, {
+        count: LIST_DISPLAY_PAGE_SIZE,
+      })
 
       return {
         cursor: res[0],
@@ -65,11 +75,18 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const lastIndex = Number(pageParam)
-      const values = await redis.lrange(dataKey, lastIndex, lastIndex + LIST_DISPLAY_PAGE_SIZE)
+      const values = await redis.lrange(
+        dataKey,
+        lastIndex,
+        lastIndex + LIST_DISPLAY_PAGE_SIZE
+      )
 
       return {
         cursor: lastIndex + LIST_DISPLAY_PAGE_SIZE,
-        keys: values.map((value, i) => ({ key: (lastIndex + i).toString(), value })),
+        keys: values.map((value, i) => ({
+          key: (lastIndex + i).toString(),
+          value,
+        })),
       }
     },
 
@@ -88,7 +105,8 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
         LIST_DISPLAY_PAGE_SIZE
       )) as unknown as [string, string[]][]
 
-      const lastMessageId = messages.length > 0 ? messages.at(-1)?.[0] : undefined
+      const lastMessageId =
+        messages.length > 0 ? messages.at(-1)?.[0] : undefined
 
       return {
         cursor: lastMessageId,

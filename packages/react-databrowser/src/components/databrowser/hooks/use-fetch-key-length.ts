@@ -4,7 +4,13 @@ import { useQuery } from "@tanstack/react-query"
 
 export const FETCH_KEY_LENGTH_QUERY_KEY = "fetch-key-length"
 
-export const useFetchKeyLength = ({ dataKey, type }: { dataKey: string; type: DataType }) => {
+export const useFetchKeyLength = ({
+  dataKey,
+  type,
+}: {
+  dataKey: string
+  type: DataType
+}) => {
   const { redis } = useDatabrowser()
 
   return useQuery({

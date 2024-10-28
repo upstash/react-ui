@@ -1,7 +1,7 @@
 import "@/globals.css"
 
 import { useMemo } from "react"
-import { DatabrowserProvider, type DatabrowserProps } from "@/store"
+import { type DatabrowserProps, DatabrowserProvider } from "@/store"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
 import { IconDotsVertical } from "@tabler/icons-react"
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -22,16 +22,25 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
       <TooltipProvider>
         <DatabrowserProvider databrowser={credentials}>
           <KeysProvider>
-            <PanelGroup direction="horizontal">
-              <Panel defaultSize={30} minSize={20}>
+            <PanelGroup
+              autoSaveId="persistence"
+              direction="horizontal"
+              className="gap-0.5"
+            >
+              <Panel defaultSize={30} minSize={30}>
                 <Sidebar />
               </Panel>
-              <PanelResizeHandle>
-                <div className="mx-1 flex h-full w-4 items-center rounded-md transition-colors hover:bg-zinc-300/20">
-                  <IconDotsVertical size={16} />
-                </div>
+              <PanelResizeHandle
+                className="h-fullm flex w-1.5 items-center justify-center
+              rounded-full hover:bg-zinc-300/20"
+              >
+                <IconDotsVertical
+                  size={16}
+                  stroke={1}
+                  className="pointer-events-none shrink-0 opacity-20"
+                />
               </PanelResizeHandle>
-              <Panel minSize={30}>
+              <Panel minSize={40}>
                 <DataDisplay />
               </Panel>
             </PanelGroup>

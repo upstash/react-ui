@@ -20,7 +20,9 @@ export const Checkbox = React.forwardRef<HTMLButtonElement, Props>(
         size="icon"
         className={cn(
           "h-8 w-8 rounded-md border border-[#D9D9D9]",
-          checked ? "border-emerald-400 !text-emerald-400" : "bg-white text-black",
+          checked
+            ? "border-emerald-400 !text-emerald-400"
+            : "bg-white text-black",
           className
         )}
         onClick={() => onChange?.(!checked)}

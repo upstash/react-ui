@@ -1,7 +1,7 @@
-import type React from "react"
 import type { PropsWithChildren } from "react"
 
-export interface SpinnerProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface SpinnerProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   isLoadingText: string
   isLoading: boolean
 }

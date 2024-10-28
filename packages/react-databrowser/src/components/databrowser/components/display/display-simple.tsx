@@ -11,12 +11,22 @@ import { useSetSimpleKey } from "../../hooks/use-set-simple-key"
 import { DisplayHeader } from "./display-header"
 import { useField } from "./input/use-field"
 
-export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: SimpleDataType }) => {
+export const EditorDisplay = ({
+  dataKey,
+  type,
+}: {
+  dataKey: string
+  type: SimpleDataType
+}) => {
   const { data } = useFetchSimpleKey(dataKey, type)
 
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
-      <DisplayHeader dataKey={dataKey} type={type} content={data ?? undefined} />
+      <DisplayHeader
+        dataKey={dataKey}
+        type={type}
+        content={data ?? undefined}
+      />
       {data === undefined ? (
         <div className="flex h-full items-center justify-center">
           <Spinner isLoadingText={""} isLoading={true} />
@@ -24,7 +34,12 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
       ) : data === null ? (
         <></>
       ) : (
-        <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
+        <EditorDisplayForm
+          key={dataKey}
+          dataKey={dataKey}
+          type={type}
+          data={data}
+        />
       )}
     </div>
   )
@@ -44,7 +59,10 @@ const EditorDisplayForm = ({
   })
   const { editor, selector } = useField({ name: "value", form })
 
-  const { mutateAsync: setKey, isPending: isSettingKey } = useSetSimpleKey(dataKey, type)
+  const { mutateAsync: setKey, isPending: isSettingKey } = useSetSimpleKey(
+    dataKey,
+    type
+  )
 
   // Updates default values after submit
   useEffect(() => {
@@ -62,7 +80,9 @@ const EditorDisplayForm = ({
 
   return (
     <>
-      <div className="flex-grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
+      <div className="flex-grow rounded-md border border-zinc-300 bg-white p-1">
+        {editor}
+      </div>
       <div className="flex flex-shrink-0 justify-between px-3 pb-2 pt-1">
         {type === "json" ? <div /> : selector}
 

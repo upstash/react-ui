@@ -1,6 +1,11 @@
 import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
-import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form"
+import {
+  Controller,
+  FormProvider,
+  useForm,
+  useFormContext,
+} from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -10,7 +15,13 @@ import { useEditListItem } from "../../hooks/use-edit-list-item"
 import { headerLabels } from "./display-list"
 import { useField } from "./input/use-field"
 
-export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
+export const ListEditDisplay = ({
+  dataKey,
+  type,
+}: {
+  dataKey: string
+  type: ListDataType
+}) => {
   const { selectedListItem } = useDatabrowserStore()
 
   if (!selectedListItem) {
@@ -84,11 +95,17 @@ const ListEditForm = ({
           >
             Cancel
           </Button>
-          <SimpleTooltip content={type === "stream" ? "Streams are not mutable" : undefined}>
+          <SimpleTooltip
+            content={type === "stream" ? "Streams are not mutable" : undefined}
+          >
             <Button
               type="submit"
               className="h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
-              disabled={!form.formState.isValid || !form.formState.isDirty || type === "stream"}
+              disabled={
+                !form.formState.isValid ||
+                !form.formState.isDirty ||
+                type === "stream"
+              }
             >
               <Spinner isLoading={isPending} isLoadingText={"Saving"}>
                 Save
@@ -121,7 +138,14 @@ const NumberFormItem = ({ name, label }: { name: string; label: string }) => {
   )
 }
 
-const FormItem = ({ name, label }: { name: string; label: string; isNumber?: boolean }) => {
+const FormItem = ({
+  name,
+  label,
+}: {
+  name: string
+  label: string
+  isNumber?: boolean
+}) => {
   const form = useFormContext()
   const { editor, selector } = useField({
     name,

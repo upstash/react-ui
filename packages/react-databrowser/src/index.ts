@@ -1,1 +1,1 @@
-export { Databrowser } from "@/components/databrowser"
+export { Databrowser } from '@/components/databrowser'

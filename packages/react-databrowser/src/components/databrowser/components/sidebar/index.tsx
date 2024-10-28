@@ -16,30 +16,33 @@ export function Sidebar() {
   const { setSearchKey, search } = useDatabrowserStore()
 
   return (
-    <div className="flex h-full flex-col rounded-xl border p-1">
-      {/* Header */}
+    <div className="flex h-full flex-col gap-2 rounded-xl border p-1">
+      {/* start -> Header */}
       <div className="rounded-lg bg-zinc-100 px-3 py-2">
         {/* Header top */}
-        <div className="mb-2 flex justify-between">
+        <div className="flex h-10 items-center justify-between">
           <DisplayDbSize />
           <div className="flex gap-1">
             <AddKeyModal />
           </div>
         </div>
+
         {/* Header bottom */}
-        <div className="flex">
+        <div className="flex h-10">
           <DataTypeSelector />
           <Input
             type="text"
             placeholder="Search"
             className={
-              "block h-8 rounded-l-none border-zinc-300 px-2 font-normal placeholder-zinc-300 focus-visible:ring-0"
+              "block rounded-l-none border-zinc-300 px-2 font-normal placeholder-zinc-300 focus-visible:ring-0"
             }
             onChange={(e) => setSearchKey(e.target.value)}
             value={search.key}
           />
         </div>
       </div>
+      {/* finish -> Header */}
+
       {query.isLoading ? (
         <LoadingSkeleton />
       ) : keys.length > 0 ? (

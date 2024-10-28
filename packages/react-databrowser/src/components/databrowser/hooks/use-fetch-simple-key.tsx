@@ -15,8 +15,10 @@ export const useFetchSimpleKey = (dataKey: string, type: DataType) => {
     queryKey: [FETCH_SIMPLE_KEY_QUERY_KEY, dataKey],
     queryFn: async () => {
       let result
-      if (type === "string") result = (await redis.get(dataKey)) as string | null
-      else if (type === "json") result = (await redis.json.get(dataKey)) as string | null
+      if (type === "string")
+        result = (await redis.get(dataKey)) as string | null
+      else if (type === "json")
+        result = (await redis.json.get(dataKey)) as string | null
       else throw new Error(`Invalid type when fetching simple key: ${type}`)
 
       if (result === null) deleteKeyCache(dataKey)

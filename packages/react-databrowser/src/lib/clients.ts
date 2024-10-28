@@ -5,7 +5,8 @@ import { Redis } from "@upstash/redis"
 import { toast } from "@/components/ui/use-toast"
 
 export const redisClient = (databrowser?: DatabrowserProps) => {
-  const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN
+  const token =
+    databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN
   const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL
 
   if (!url) {

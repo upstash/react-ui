@@ -1,8 +1,17 @@
-import { createContext, useCallback, useContext, useMemo, type PropsWithChildren } from "react"
+import {
+  createContext,
+  type PropsWithChildren,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react"
 import { useDatabrowserStore } from "@/store"
-import { useInfiniteQuery, type UseInfiniteQueryResult } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  type UseInfiniteQueryResult,
+} from "@tanstack/react-query"
 
-import { useFetchKeys, type RedisKey } from "./use-fetch-keys"
+import { type RedisKey, useFetchKeys } from "./use-fetch-keys"
 
 const KeysContext = createContext<
   | {
@@ -20,7 +29,9 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
 
   const search = useMemo(
     () => ({
-      key: searchState.key.includes("*") ? searchState.key : `*${searchState.key}*`,
+      key: searchState.key.includes("*")
+        ? searchState.key
+        : `*${searchState.key}*`,
       type: searchState.type,
     }),
     [searchState]
@@ -45,7 +56,10 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     query.refetch()
   }, [query, resetCache])
 
-  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
+  const keys = useMemo(
+    () => query.data?.pages.flatMap((page) => page.keys) ?? [],
+    [query.data]
+  )
 
   return (
     <KeysContext.Provider

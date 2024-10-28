@@ -28,7 +28,12 @@ export function CopyButton({
   }
 
   return (
-    <Button size={sizeVariant} variant={variant} onClick={handleCopy} className={className}>
+    <Button
+      size={sizeVariant}
+      variant={variant}
+      onClick={handleCopy}
+      className={className}
+    >
       {copied ? (
         <CheckIcon />
       ) : (

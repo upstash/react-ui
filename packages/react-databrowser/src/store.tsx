@@ -1,4 +1,10 @@
-import { createContext, useContext, useMemo, useState, type PropsWithChildren } from "react"
+import {
+  createContext,
+  type PropsWithChildren,
+  useContext,
+  useMemo,
+  useState,
+} from "react"
 import type { Redis } from "@upstash/redis"
 import { create, useStore } from "zustand"
 
@@ -15,7 +21,9 @@ type DatabrowserContextProps = {
   store: ReturnType<typeof createDatabrowserStore>
 }
 
-const DatabrowserContext = createContext<DatabrowserContextProps | undefined>(undefined)
+const DatabrowserContext = createContext<DatabrowserContextProps | undefined>(
+  undefined
+)
 
 interface DatabrowserProviderProps {
   databrowser: DatabrowserProps
@@ -66,7 +74,11 @@ type DatabrowserStore = {
     value?: string
     isNew?: boolean
   }
-  setSelectedListItem: (item?: { key: string; value?: string; isNew?: boolean }) => void
+  setSelectedListItem: (item?: {
+    key: string
+    value?: string
+    isNew?: boolean
+  }) => void
 
   search: SearchFilter
   setSearch: (search: SearchFilter) => void
@@ -88,6 +100,8 @@ const createDatabrowserStore = () =>
 
     search: { key: "", type: undefined },
     setSearch: (search) => set({ search }),
-    setSearchKey: (key) => set((state) => ({ search: { ...state.search, key } })),
-    setSearchType: (type) => set((state) => ({ search: { ...state.search, type } })),
+    setSearchKey: (key) =>
+      set((state) => ({ search: { ...state.search, key } })),
+    setSearchType: (type) =>
+      set((state) => ({ search: { ...state.search, type } })),
   }))

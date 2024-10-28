@@ -1,9 +1,13 @@
-import { useEffect, useMemo, useState, type PropsWithChildren } from "react"
+import { type PropsWithChildren, useEffect, useMemo, useState } from "react"
 import { Controller, useForm } from "react-hook-form"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -89,7 +93,11 @@ export function TTLPopover({
                 control={control}
                 name="value"
                 render={({ field }) => (
-                  <Input min="-1" {...field} className="h-8 flex-grow rounded-r-none" />
+                  <Input
+                    min="-1"
+                    {...field}
+                    className="h-8 flex-grow rounded-r-none"
+                  />
                 )}
               />
               <Controller
@@ -114,11 +122,14 @@ export function TTLPopover({
               />
             </div>
             {formState.errors.value && (
-              <div className="my-1 text-xs text-red-500">{formState.errors.value.message}</div>
+              <div className="my-1 text-xs text-red-500">
+                {formState.errors.value.message}
+              </div>
             )}
           </div>
           <div className="text-xs text-zinc-500">
-            TTL sets a timer to automatically delete keys after a defined period.
+            TTL sets a timer to automatically delete keys after a defined
+            period.
           </div>
           <div className="flex justify-between">
             <Button
@@ -131,7 +142,12 @@ export function TTLPopover({
               Persist
             </Button>
             <div className="flex gap-2">
-              <Button size={"sm"} variant={"outline"} onClick={() => setOpen(false)} type="button">
+              <Button
+                size={"sm"}
+                variant={"outline"}
+                onClick={() => setOpen(false)}
+                type="button"
+              >
                 Cancel
               </Button>
               <Button size={"sm"} variant={"primary"} type="submit">

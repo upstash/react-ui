@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react"
-import { useDatabrowser, type SearchFilter } from "@/store"
+import { type SearchFilter, useDatabrowser } from "@/store"
 import { DATA_TYPES, type DataType } from "@/types"
 import type { Redis } from "@upstash/redis"
 
@@ -47,6 +47,14 @@ function slicePage(keys: RedisKey[], page: number) {
 }
 
 class PaginationCache {
+  // Cursor is 0 initially, then it is set to -1 when we reach the end
+  cache: Record<string, { cursor: string; keys: string[] }> =
+    Object.fromEntries(
+      DATA_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
+    )
+  targetCount = 0
+  isFetching = false
+
   constructor(
     private readonly redis: Redis,
     private readonly searchTerm: string,
@@ -57,14 +65,39 @@ class PaginationCache {
     }
   }
 
-  // Cursor is 0 initially, then it is set to -1 when we reach the end
-  cache: Record<string, { cursor: string; keys: string[] }> = Object.fromEntries(
-    DATA_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
-  )
-  targetCount = 0
+  async getPage(page: number) {
+    // The number of keys we need to have in the cache to satisfy this function call
+    // +1 here to fetch one more than needed to check if there is a next page
+    this.targetCount = (page + 1) * PAGE_SIZE + 1
+
+    // Starts the fetching loop if it's not already started
+    void this.startFetch()
+
+    // Wait until we have enough
+    await new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        if (this.getLength() >= this.targetCount || this.isAllEnded()) {
+          clearInterval(interval)
+          resolve()
+        }
+      }, 100)
+    })
+
+    const hasEnoughForNextPage = this.getLength() > (page + 1) * PAGE_SIZE
+
+    const hasNextPage = !this.isAllEnded() || hasEnoughForNextPage
+
+    return {
+      keys: slicePage(this.getKeys(), page),
+      hasNextPage,
+    }
+  }
 
   private getLength() {
-    return Object.values(this.cache).reduce((acc, curr) => acc + curr.keys.length, 0)
+    return Object.values(this.cache).reduce(
+      (acc, curr) => acc + curr.keys.length,
+      0
+    )
   }
 
   private getKeys() {
@@ -77,7 +110,6 @@ class PaginationCache {
     return sorted
   }
 
-  isFetching = false
   private async startFetch() {
     if (this.isFetching) {
       return
@@ -130,34 +162,8 @@ class PaginationCache {
       throw new Error("types is not an array")
     }
 
-    return types.every((type) => this.cache[type] && this.cache[type].cursor === "-1")
-  }
-
-  async getPage(page: number) {
-    // The number of keys we need to have in the cache to satisfy this function call
-    // +1 here to fetch one more than needed to check if there is a next page
-    this.targetCount = (page + 1) * PAGE_SIZE + 1
-
-    // Starts the fetching loop if it's not already started
-    void this.startFetch()
-
-    // Wait until we have enough
-    await new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
-        if (this.getLength() >= this.targetCount || this.isAllEnded()) {
-          clearInterval(interval)
-          resolve()
-        }
-      }, 100)
-    })
-
-    const hasEnoughForNextPage = this.getLength() > (page + 1) * PAGE_SIZE
-
-    const hasNextPage = !this.isAllEnded() || hasEnoughForNextPage
-
-    return {
-      keys: slicePage(this.getKeys(), page),
-      hasNextPage,
-    }
+    return types.every(
+      (type) => this.cache[type] && this.cache[type].cursor === "-1"
+    )
   }
 }

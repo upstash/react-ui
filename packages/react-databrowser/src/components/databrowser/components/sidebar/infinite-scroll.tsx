@@ -21,7 +21,10 @@ export const InfiniteScroll = ({
   }
 
   return (
-    <ScrollArea type="auto" className="block h-full w-full transition-all" onScroll={handleScroll}>
+    <ScrollArea
+      className="block h-full w-full transition-all"
+      onScroll={handleScroll}
+    >
       {children}
       <div className="flex h-[100px] justify-center py-2 text-zinc-300">
         {query.isFetching && <IconLoader2 className="animate-spin" size={16} />}

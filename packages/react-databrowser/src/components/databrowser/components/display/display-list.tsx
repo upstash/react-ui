@@ -1,7 +1,10 @@
 import { useMemo } from "react"
 import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
-import type { InfiniteData, UseInfiniteQueryResult } from "@tanstack/react-query"
+import type {
+  InfiniteData,
+  UseInfiniteQueryResult,
+} from "@tanstack/react-query"
 
 import { cn } from "@/lib/utils"
 
@@ -18,7 +21,13 @@ export const headerLabels = {
   set: ["Value", ""],
 } as const
 
-export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
+export const ListDisplay = ({
+  dataKey,
+  type,
+}: {
+  dataKey: string
+  type: ListDataType
+}) => {
   const { selectedListItem } = useDatabrowserStore()
   const query = useFetchListItems({ dataKey, type })
 
@@ -26,7 +35,11 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <DisplayHeader dataKey={dataKey} type={type} hideBadges={selectedListItem !== undefined} />
+      <DisplayHeader
+        dataKey={dataKey}
+        type={type}
+        hideBadges={selectedListItem !== undefined}
+      />
       {selectedListItem && <ListEditDisplay dataKey={dataKey} type={type} />}
       <div className={cn("min-h-0 flex-grow", selectedListItem && "hidden")}>
         <InfiniteScroll query={query}>
@@ -34,8 +47,12 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
             {type !== "set" && (
               <thead>
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium opacity-40">{keyHeader}</th>
-                  <th className="px-3 py-2 text-left font-medium opacity-40">{valueHeader}</th>
+                  <th className="px-3 py-2 text-left font-medium opacity-40">
+                    {keyHeader}
+                  </th>
+                  <th className="px-3 py-2 text-left font-medium opacity-40">
+                    {valueHeader}
+                  </th>
                 </tr>
               </thead>
             )}
@@ -59,7 +76,10 @@ export const ListItems = ({
   >
 }) => {
   const { setSelectedListItem } = useDatabrowserStore()
-  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
+  const keys = useMemo(
+    () => query.data?.pages.flatMap((page) => page.keys) ?? [],
+    [query.data]
+  )
 
   return (
     <>
@@ -72,7 +92,9 @@ export const ListItems = ({
           className="cursor-pointer border-b hover:bg-zinc-100"
         >
           <td className="max-w-0 truncate px-3 py-2">{key}</td>
-          {value !== undefined && <td className="max-w-0 truncate px-3 py-2">{value}</td>}
+          {value !== undefined && (
+            <td className="max-w-0 truncate px-3 py-2">{value}</td>
+          )}
         </tr>
       ))}
     </>
