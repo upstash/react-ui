@@ -4,10 +4,6 @@
     <h2 align="center">Databrowser for Upstash Redis</h2>
 </p>
 
-<p align="center">
-    <a href="https://upstash-react-cli.vercel.app/">Explore the demo application</a>
-</p>
-
 ---
 
 ## Introduction
