@@ -18,7 +18,7 @@
     "@typescript-eslint/parser": "8.4.0",
     "eslint": "9.10.0",
     "eslint-plugin-unicorn": "55.0.0",
-    "husky": "^8.0.1",
+    "husky": "^9.1.6",
     "lint-staged": "^13.0.3",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.5",
