@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "lint": "turbo run lint",
-    "dev": "turbo run dev --parallel",
-    "test": "turbo run test",
+    "lint": "turbo run lint --filter='./packages/*'",
+    "dev": "turbo run dev --filter='example/nextjs13'",
     "fmt": "prettier --write ./packages",
     "prepare": "husky",
     "bump-versions": "pnpm changeset version && pnpm install"
