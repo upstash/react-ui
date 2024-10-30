@@ -1,10 +1,12 @@
-import "@upstash/react-cli/dist/index.css";
-import { Inter } from "next/font/google";
-import "./global.css";
+import "@upstash/react-cli/dist/index.css"
+
+import { Inter } from "next/font/google"
+
+import "./global.css"
 
 const inter = Inter({
   subsets: ["latin"],
-});
+})
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -51,5 +53,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
       </body>
     </html>
-  );
+  )
 }
