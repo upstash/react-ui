@@ -21,6 +21,12 @@
     "dev": "vite",
     "lint": "tsc && eslint"
   },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
+  },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
