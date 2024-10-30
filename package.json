@@ -8,7 +8,7 @@
     "dev": "turbo run dev --parallel",
     "test": "turbo run test",
     "fmt": "prettier --write ./packages",
-    "prepare": "husky install",
+    "prepare": "husky",
     "bump-versions": "pnpm changeset version && pnpm install"
   },
   "devDependencies": {
@@ -26,7 +26,8 @@
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
-      "prettier --write"
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "engines": {
