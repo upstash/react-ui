@@ -6,10 +6,7 @@ export const LoadingSkeleton = () => (
     {Array.from({ length: DEFAULT_SKELETON_COUNT })
       .fill(0)
       .map((_, idx) => (
-        <div
-          className="flex h-[40px] items-center rounded-md bg-zinc-100 pl-4 pr-8"
-          key={idx}
-        >
+        <div className="flex h-[40px] items-center rounded-md bg-zinc-100 pl-4 pr-8" key={idx}>
           <Skeleton className="mr-2 h-[20px] w-[20px] rounded" />
           <Skeleton className="h-[20px] w-full rounded" />
         </div>

@@ -6,13 +6,7 @@ export const LIST_DISPLAY_PAGE_SIZE = 50
 
 export const FETCH_LIST_ITEMS_QUERY_KEY = "use-fetch-list-items"
 
-export const useFetchListItems = ({
-  dataKey,
-  type,
-}: {
-  dataKey: string
-  type: ListDataType
-}) => {
+export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
   const { redis } = useDatabrowser()
 
   const setQuery = useInfiniteQuery({
@@ -75,11 +69,7 @@ export const useFetchListItems = ({
     initialPageParam: 0,
     queryFn: async ({ pageParam }) => {
       const lastIndex = Number(pageParam)
-      const values = await redis.lrange(
-        dataKey,
-        lastIndex,
-        lastIndex + LIST_DISPLAY_PAGE_SIZE
-      )
+      const values = await redis.lrange(dataKey, lastIndex, lastIndex + LIST_DISPLAY_PAGE_SIZE)
 
       return {
         cursor: lastIndex + LIST_DISPLAY_PAGE_SIZE,
@@ -105,8 +95,7 @@ export const useFetchListItems = ({
         LIST_DISPLAY_PAGE_SIZE
       )) as unknown as [string, string[]][]
 
-      const lastMessageId =
-        messages.length > 0 ? messages.at(-1)?.[0] : undefined
+      const lastMessageId = messages.length > 0 ? messages.at(-1)?.[0] : undefined
 
       return {
         cursor: lastMessageId,

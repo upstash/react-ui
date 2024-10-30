@@ -26,8 +26,7 @@ export const useEditListItem = () => {
       isNew?: boolean
     }) => {
       const pipe = redis.pipeline()
-      const shouldDelete =
-        !isNew && (newKey === undefined || newKey !== itemKey)
+      const shouldDelete = !isNew && (newKey === undefined || newKey !== itemKey)
 
       switch (type) {
         case "set": {

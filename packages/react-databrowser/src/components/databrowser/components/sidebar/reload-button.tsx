@@ -29,9 +29,7 @@ export const ReloadButton = ({
         onClick={handleClick}
         disabled={isLoading || isLoadingProp}
       >
-        <ReloadIcon
-          className={isLoading || isLoadingProp ? "animate-spin" : ""}
-        />
+        <ReloadIcon className={isLoading || isLoadingProp ? "animate-spin" : ""} />
       </Button>
     </div>
   )

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useController, type UseFormReturn } from "react-hook-form"
 
-import { type ContentType, ContentTypeSelect } from "./content-type-select"
+import { ContentTypeSelect, type ContentType } from "./content-type-select"
 import { CustomEditor } from "./custom-editor"
 
 export const useField = ({
@@ -48,11 +48,7 @@ export const useField = ({
 
   return {
     selector: (
-      <ContentTypeSelect
-        value={contentType}
-        onChange={handleTypeChange}
-        data={field.value}
-      />
+      <ContentTypeSelect value={contentType} onChange={handleTypeChange} data={field.value} />
     ),
     editor: (
       <>

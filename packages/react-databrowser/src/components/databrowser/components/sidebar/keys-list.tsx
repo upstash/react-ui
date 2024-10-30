@@ -3,9 +3,9 @@ import { useDatabrowserStore } from "@/store"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { RedisTypeTag } from "@/components/databrowser/components/type-tag"
+import type { RedisKey } from "@/components/databrowser/hooks"
 
 import { useKeys } from "../../hooks/use-keys"
-import type { RedisKey } from "@/components/databrowser/hooks"
 
 export const KeysList = () => {
   const { keys } = useKeys()

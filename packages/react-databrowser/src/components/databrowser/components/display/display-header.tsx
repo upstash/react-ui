@@ -89,11 +89,7 @@ const LengthBadge = ({
 
   return (
     <Badge label="Length:">
-      {isLoading ? (
-        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
-      ) : (
-        length
-      )}
+      {isLoading ? <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" /> : length}
     </Badge>
   )
 }
@@ -124,18 +120,15 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
   // Tick the ttl query every second
   useEffect(() => {
     const interval = setInterval(() => {
-      queryClient.setQueryData(
-        [FETCH_TTL_QUERY_KEY, dataKey],
-        (ttl?: number) => {
-          if (ttl === undefined || ttl === TTL_INFINITE) return ttl
+      queryClient.setQueryData([FETCH_TTL_QUERY_KEY, dataKey], (ttl?: number) => {
+        if (ttl === undefined || ttl === TTL_INFINITE) return ttl
 
-          if (ttl <= 1) {
-            deleteKeyCache(dataKey)
-            return TTL_NOT_FOUND
-          }
-          return ttl - 1
+        if (ttl <= 1) {
+          deleteKeyCache(dataKey)
+          return TTL_NOT_FOUND
         }
-      )
+        return ttl - 1
+      })
     }, 1000)
 
     return () => clearInterval(interval)
@@ -157,13 +150,7 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
   )
 }
 
-const Badge = ({
-  children,
-  label,
-}: {
-  children: React.ReactNode
-  label: string
-}) => (
+const Badge = ({ children, label }: { children: React.ReactNode; label: string }) => (
   <div className="flex h-6 items-center rounded-md bg-white px-2 text-xs text-zinc-700">
     <span className="mr-[3px] text-zinc-500">{label}</span>
     {children}

@@ -11,9 +11,7 @@ export const useSetTTL = () => {
 
   const updateTTL = useMutation({
     mutationFn: async ({ dataKey, ttl }: { dataKey: string; ttl?: number }) => {
-      await (ttl === undefined
-        ? redis.persist(dataKey)
-        : redis.expire(dataKey, ttl))
+      await (ttl === undefined ? redis.persist(dataKey) : redis.expire(dataKey, ttl))
     },
     onSuccess: (_, { dataKey }) => {
       queryClient.invalidateQueries({

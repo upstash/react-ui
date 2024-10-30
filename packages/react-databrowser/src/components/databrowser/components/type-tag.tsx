@@ -31,13 +31,7 @@ const iconsMap = {
   stream: <IconList size={16} />,
 } as const
 
-export function RedisTypeTag({
-  type,
-  isIcon,
-}: {
-  type: DataType
-  isIcon?: boolean
-}) {
+export function RedisTypeTag({ type, isIcon }: { type: DataType; isIcon?: boolean }) {
   return (
     <div
       className={cn(

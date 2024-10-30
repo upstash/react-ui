@@ -1,12 +1,4 @@
-export const DATA_TYPES = [
-  "string",
-  "list",
-  "hash",
-  "set",
-  "zset",
-  "json",
-  "stream",
-] as const
+export const DATA_TYPES = ["string", "list", "hash", "set", "zset", "json", "stream"] as const
 export const DATA_TYPE_NAMES = {
   string: "String",
   list: "List",
@@ -19,13 +11,7 @@ export const DATA_TYPE_NAMES = {
 
 export type DataType = (typeof DATA_TYPES)[number]
 
-export const LIST_DATA_TYPES = [
-  "set",
-  "zset",
-  "list",
-  "hash",
-  "stream",
-] as const
+export const LIST_DATA_TYPES = ["set", "zset", "list", "hash", "stream"] as const
 export const SIMPLE_DATA_TYPES = ["string", "json"] as const
 
 export type SimpleDataType = (typeof SIMPLE_DATA_TYPES)[number]

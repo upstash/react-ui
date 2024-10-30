@@ -31,14 +31,13 @@ export function DataTypeSelector() {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {[
-            [ALL_TYPES_KEY, "All Types"],
-            ...Object.entries(DATA_TYPE_NAMES),
-          ].map(([key, value]) => (
-            <SelectItem value={key} key={key}>
-              {value}
-            </SelectItem>
-          ))}
+          {[[ALL_TYPES_KEY, "All Types"], ...Object.entries(DATA_TYPE_NAMES)].map(
+            ([key, value]) => (
+              <SelectItem value={key} key={key}>
+                {value}
+              </SelectItem>
+            )
+          )}
         </SelectGroup>
       </SelectContent>
     </Select>

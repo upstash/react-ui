@@ -20,9 +20,5 @@ export const DisplayDbSize = () => {
       </div>
     )
   }
-  return (
-    <div className="text-sm font-normal text-[#00000066]">
-      {formatNumber(keyCount)} Keys
-    </div>
-  )
+  return <div className="text-sm font-normal text-[#00000066]">{formatNumber(keyCount)} Keys</div>
 }

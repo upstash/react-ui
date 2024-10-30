@@ -1,5 +1,5 @@
 import { useCallback, useRef } from "react"
-import { type SearchFilter, useDatabrowser } from "@/store"
+import { useDatabrowser, type SearchFilter } from "@/store"
 import { DATA_TYPES, type DataType } from "@/types"
 import type { Redis } from "@upstash/redis"
 
@@ -48,10 +48,9 @@ function slicePage(keys: RedisKey[], page: number) {
 
 class PaginationCache {
   // Cursor is 0 initially, then it is set to -1 when we reach the end
-  cache: Record<string, { cursor: string; keys: string[] }> =
-    Object.fromEntries(
-      DATA_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
-    )
+  cache: Record<string, { cursor: string; keys: string[] }> = Object.fromEntries(
+    DATA_TYPES.map((type) => [type, { cursor: "0", keys: [] }])
+  )
   targetCount = 0
   isFetching = false
 
@@ -94,10 +93,7 @@ class PaginationCache {
   }
 
   private getLength() {
-    return Object.values(this.cache).reduce(
-      (acc, curr) => acc + curr.keys.length,
-      0
-    )
+    return Object.values(this.cache).reduce((acc, curr) => acc + curr.keys.length, 0)
   }
 
   private getKeys() {
@@ -162,8 +158,6 @@ class PaginationCache {
       throw new Error("types is not an array")
     }
 
-    return types.every(
-      (type) => this.cache[type] && this.cache[type].cursor === "-1"
-    )
+    return types.every((type) => this.cache[type] && this.cache[type].cursor === "-1")
   }
 }
