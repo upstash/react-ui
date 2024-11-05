@@ -1,14 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton"
 
-const DEFAULT_SKELETON_COUNT = 10
+const DEFAULT_SKELETON_COUNT = 6
+
 export const LoadingSkeleton = () => (
-  <div className="flex flex-col pr-1">
+  <div className="grid">
     {Array.from({ length: DEFAULT_SKELETON_COUNT })
       .fill(0)
       .map((_, idx) => (
-        <div className="flex h-[40px] items-center rounded-md bg-zinc-100 pl-4 pr-8" key={idx}>
-          <Skeleton className="mr-2 h-[20px] w-[20px] rounded" />
-          <Skeleton className="h-[20px] w-full rounded" />
+        <div className="flex h-10 items-center gap-3 px-3" key={idx}>
+          <Skeleton className="size-5 shrink-0 rounded" />
+          <Skeleton className="h-4 grow rounded" />
         </div>
       ))}
   </div>

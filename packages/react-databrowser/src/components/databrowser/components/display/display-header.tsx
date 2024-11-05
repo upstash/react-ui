@@ -13,7 +13,7 @@ import { FETCH_TTL_QUERY_KEY, useFetchTTL } from "../../hooks"
 import { useDeleteKeyCache } from "../../hooks/use-delete-key-cache"
 import { useFetchKeyLength } from "../../hooks/use-fetch-key-length"
 import { useFetchKeySize } from "../../hooks/use-fetch-key-size"
-import { RedisTypeTag } from "../type-tag"
+import { TypeTag } from "../type-tag"
 import { KeyActions } from "./key-actions"
 import { TTLPopover } from "./ttl-popover"
 
@@ -62,7 +62,7 @@ export const DisplayHeader = ({
       </div>
       {!hideBadges && (
         <div className="flex flex-wrap gap-1">
-          <RedisTypeTag type={type} isIcon={false} />
+          <TypeTag variant={type} type="badge" />
           <SizeBadge dataKey={dataKey} />
           <LengthBadge dataKey={dataKey} type={type} content={content} />
           {length && <Badge label="Length:">{size}</Badge>}
