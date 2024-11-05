@@ -8,6 +8,7 @@ export const DataDisplay = () => {
   const { selectedKey } = useDatabrowserStore()
   const type = useKeyType(selectedKey)
 
+  // TODO: add a empty state
   return (
     <div className="h-full rounded-xl border p-1">
       {!selectedKey || !type ? (

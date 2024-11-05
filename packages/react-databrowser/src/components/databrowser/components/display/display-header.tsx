@@ -39,29 +39,28 @@ export const DisplayHeader = ({
 
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
-      <div className="flex items-center justify-between gap-1">
-        <h2 className="my-2 mb-4 flex-grow truncate">
+      <div className="flex min-h-10 items-center justify-between gap-4">
+        <h2 className="grow truncate">
           {dataKey.trim() === "" ? (
-            <>
-              {`"${dataKey}"`}
-              <span className="ml-3 text-sm text-zinc-500">(empty key)</span>
-            </>
+            <span className="ml-1 text-sm text-zinc-500">(Empty Key)</span>
           ) : (
-            dataKey
+            <span className="font-semibold">{dataKey}</span>
           )}
         </h2>
-        {type !== "string" && type !== "json" && (
-          <Button
-            onClick={handleAddItem}
-            className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm"
-          >
-            <IconPlus className="text-zinc-400" size={20} />
-          </Button>
-        )}
-        <KeyActions dataKey={dataKey} content={content} />
+
+        <div className="flex items-center gap-1">
+          {type !== "string" && type !== "json" && (
+            <Button onClick={handleAddItem} size="icon-sm">
+              <IconPlus className="size-5 text-zinc-500" />
+            </Button>
+          )}
+
+          <KeyActions dataKey={dataKey} content={content} />
+        </div>
       </div>
+
       {!hideBadges && (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex h-10 flex-wrap items-center gap-1">
           <TypeTag variant={type} type="badge" />
           <SizeBadge dataKey={dataKey} />
           <LengthBadge dataKey={dataKey} type={type} content={content} />
@@ -151,8 +150,8 @@ const TTLBadge = ({ dataKey }: { dataKey: string }) => {
 }
 
 const Badge = ({ children, label }: { children: React.ReactNode; label: string }) => (
-  <div className="flex h-6 items-center rounded-md bg-white px-2 text-xs text-zinc-700">
-    <span className="mr-[3px] text-zinc-500">{label}</span>
-    {children}
+  <div className="flex h-6 items-center gap-0.5 rounded-md bg-white px-2 text-xs text-zinc-700">
+    <span className="text-zinc-500">{label}</span>
+    <span className="font-medium">{children}</span>
   </div>
 )

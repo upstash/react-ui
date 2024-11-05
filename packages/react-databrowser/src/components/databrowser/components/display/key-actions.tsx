@@ -16,8 +16,8 @@ export function KeyActions({ dataKey, content }: { dataKey: string; content?: st
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="h-6 w-6 rounded-md border border-zinc-300 p-0 shadow-sm">
-          <IconDotsVertical className="text-zinc-400" size={20} />
+        <Button size="icon-sm">
+          <IconDotsVertical className="size-5 text-zinc-500" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="" align="end">

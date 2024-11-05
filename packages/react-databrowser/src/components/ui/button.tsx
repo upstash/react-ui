@@ -10,13 +10,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-[#FFFFFF] text-black hover:bg-[#FFFFFF]/70 dark:bg-black dark:text-[#FFFFFF] dark:hover:bg-black/10",
+          "bg-white text-black border shadow-sm border-zinc-300 hover:bg-[#FFFFFF]/70 dark:bg-black" +
+          " dark:text-[#FFFFFF]" +
+          " dark:hover:bg-black/10",
         destructive:
           "bg-red-500 text-zinc-50 hover:bg-red-500/90 dark:bg-red-900 dark:text-zinc-50 dark:hover:bg-red-900/90",
         outline:
           "border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-neutral-50",
         primary:
-          "bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-500 dark:text-white dark:hover:bg-emerald-600",
+          "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 dark:bg-emerald-500 dark:text-white" +
+          " dark:hover:bg-emerald-600",
         secondary:
           "bg-neutral-100 text-neutral-900 hover:bg-neutral-100/80 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-800/80",
         ghost: "hover:bg-[#0000000A] dark:hover:bg-neutral-800 dark:hover:text-neutral-50",
