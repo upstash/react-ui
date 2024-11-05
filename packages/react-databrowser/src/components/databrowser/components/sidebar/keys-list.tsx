@@ -30,16 +30,16 @@ const KeyItem = ({ data }: { data: RedisKey }) => {
       key={dataKey}
       variant={isKeySelected ? "default" : "ghost"}
       className={cn(
-        "relative flex h-10 w-full items-center justify-start gap-3 px-3 py-0 ",
+        "relative flex h-10 w-full items-center justify-start gap-2 px-3 py-0 ",
         "border border-transparent text-left",
         isKeySelected && "shadow-sm",
-        isKeySelected && dataType === "string" && "border-sky-500 !bg-sky-50",
-        isKeySelected && dataType === "list" && "border-orange-500 !bg-orange-50",
-        isKeySelected && dataType === "hash" && "border-amber-500 !bg-amber-50",
-        isKeySelected && dataType === "set" && "border-indigo-500 !bg-indigo-50",
-        isKeySelected && dataType === "zset" && "border-pink-500  !bg-pink-50",
-        isKeySelected && dataType === "json" && "border-purple-500 !bg-purple-50",
-        isKeySelected && dataType === "stream" && "border-orange-500 !bg-orange-50"
+        isKeySelected && dataType === "string" && "border-sky-400 !bg-sky-50",
+        isKeySelected && dataType === "list" && "border-orange-400 !bg-orange-50",
+        isKeySelected && dataType === "hash" && "border-amber-400 !bg-amber-50",
+        isKeySelected && dataType === "set" && "border-indigo-400 !bg-indigo-50",
+        isKeySelected && dataType === "zset" && "border-pink-400  !bg-pink-50",
+        isKeySelected && dataType === "json" && "border-purple-400 !bg-purple-50",
+        isKeySelected && dataType === "stream" && "border-orange-400 !bg-orange-50"
       )}
       onClick={() => setSelectedKey(dataKey)}
     >

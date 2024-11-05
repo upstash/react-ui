@@ -25,13 +25,13 @@ const iconsMap = {
 const tagVariants = cva("inline-flex shrink-0 items-center rounded-md justify-center", {
   variants: {
     variant: {
-      string: "bg-sky-200 text-sky-800",
-      list: "bg-orange-200 text-orange-800",
-      hash: "bg-amber-200 text-amber-800",
-      set: "bg-indigo-200 text-indigo-800",
-      zset: "bg-pink-200 text-pink-800",
-      json: "bg-purple-200 text-purple-800",
-      stream: "bg-orange-200 text-orange-800",
+      string: "bg-sky-100 text-sky-800",
+      list: "bg-orange-100 text-orange-800",
+      hash: "bg-amber-100 text-amber-800",
+      set: "bg-indigo-100 text-indigo-800",
+      zset: "bg-pink-100 text-pink-800",
+      json: "bg-purple-100 text-purple-800",
+      stream: "bg-orange-100 text-orange-800",
     },
     type: {
       icon: "size-5",
