@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import type { SimpleDataType } from "@/types"
 import { useForm } from "react-hook-form"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -17,6 +16,7 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
   return (
     <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
       <DisplayHeader dataKey={dataKey} type={type} content={data ?? undefined} />
+
       {data === undefined ? (
         <div className="flex h-full items-center justify-center">
           <Spinner isLoadingText={""} isLoading={true} />
@@ -63,25 +63,17 @@ const EditorDisplayForm = ({
   return (
     <>
       <div className="grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
-      <div className="flex flex-shrink-0 justify-between px-3 pb-2 pt-1">
+
+      <div className="flex shrink-0 items-center justify-between gap-2 px-3 pb-2 pt-1">
         {type === "json" ? <div /> : selector}
 
-        <div className="flex gap-1">
-          {form.formState.isDirty && (
-            <Button
-              onClick={handleCancel}
-              className="h-6 rounded-md border bg-white px-3 font-normal text-zinc-700 hover:bg-zinc-100"
-            >
-              Cancel
-            </Button>
-          )}
+        <div className="flex gap-2">
+          {form.formState.isDirty && <Button onClick={handleCancel}>Cancel</Button>}
           <Button
             onClick={form.handleSubmit(async ({ value }) => {
               await setKey(value)
             })}
-            className={cn(
-              "h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
-            )}
+            variant="primary"
             disabled={!form.formState.isValid || !form.formState.isDirty}
           >
             <Spinner isLoading={isSettingKey} isLoadingText={"Saving"}>

@@ -67,6 +67,7 @@ const ListEditForm = ({
       <form onSubmit={onSubmit} className="flex flex-col gap-2">
         <div className="flex grow flex-col gap-2">
           {type !== "list" && <FormItem name="key" label={keyLabel} />}
+
           {type === "zset" ? (
             <NumberFormItem name="value" label={valueLabel} />
           ) : (
@@ -74,20 +75,18 @@ const ListEditForm = ({
           )}
         </div>
 
-        <div className="flex justify-end gap-1">
+        <div className="flex justify-end gap-2">
           <Button
-            type="button"
             onClick={() => {
               setSelectedListItem(undefined)
             }}
-            className="h-6 rounded-md border bg-white px-3 font-normal text-zinc-700 hover:bg-zinc-100"
           >
             Cancel
           </Button>
           <SimpleTooltip content={type === "stream" ? "Streams are not mutable" : undefined}>
             <Button
+              variant="primary"
               type="submit"
-              className="h-6 rounded-md bg-emerald-500 px-3 font-normal text-white hover:bg-emerald-600 disabled:opacity-50"
               disabled={!form.formState.isValid || !form.formState.isDirty || type === "stream"}
             >
               <Spinner isLoading={isPending} isLoadingText={"Saving"}>

@@ -27,7 +27,7 @@ export const ContentTypeSelect = ({
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="h-6 w-auto border-none bg-transparent pl-0 pr-7 text-xs text-zinc-500">
+      <SelectTrigger className="h-6 w-auto border-none bg-transparent pl-0 pr-6 text-xs text-zinc-500">
         <SelectValue placeholder="Expires" />
       </SelectTrigger>
       <SelectContent>

@@ -124,7 +124,7 @@ export function AddKeyModal() {
             >
               Cancel
             </Button>
-            <Button variant={"primary"} type="submit">
+            <Button variant="primary" type="submit">
               <Spinner isLoading={isPending} isLoadingText={"Creating"}>
                 Create
               </Spinner>

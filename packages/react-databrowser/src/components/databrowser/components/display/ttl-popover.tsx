@@ -135,10 +135,10 @@ export function TTLPopover({
               Persist
             </Button>
             <div className="flex gap-2">
-              <Button size={"sm"} variant={"outline"} onClick={() => setOpen(false)} type="button">
+              <Button variant="outline" onClick={() => setOpen(false)} type="button">
                 Cancel
               </Button>
-              <Button size={"sm"} variant={"primary"} type="submit">
+              <Button variant="primary" type="submit">
                 <Spinner isLoading={isPending} isLoadingText="Saving">
                   Save
                 </Spinner>

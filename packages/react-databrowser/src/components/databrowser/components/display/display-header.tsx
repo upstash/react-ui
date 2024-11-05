@@ -20,7 +20,7 @@ import { TTLPopover } from "./ttl-popover"
 export const DisplayHeader = ({
   dataKey,
   type,
-  hideBadges,
+  // hideBadges,
   content,
 }: {
   content?: string
@@ -59,15 +59,15 @@ export const DisplayHeader = ({
         </div>
       </div>
 
-      {!hideBadges && (
-        <div className="flex h-10 flex-wrap items-center gap-1">
-          <TypeTag variant={type} type="badge" />
-          <SizeBadge dataKey={dataKey} />
-          <LengthBadge dataKey={dataKey} type={type} content={content} />
-          {length && <Badge label="Length:">{size}</Badge>}
-          <TTLBadge dataKey={dataKey} />
-        </div>
-      )}
+      {/*{!hideBadges && (*/}
+      <div className="flex h-10 flex-wrap items-center gap-1">
+        <TypeTag variant={type} type="badge" />
+        <SizeBadge dataKey={dataKey} />
+        <LengthBadge dataKey={dataKey} type={type} content={content} />
+        {length && <Badge label="Length:">{size}</Badge>}
+        <TTLBadge dataKey={dataKey} />
+      </div>
+      {/*)}*/}
     </div>
   )
 }
