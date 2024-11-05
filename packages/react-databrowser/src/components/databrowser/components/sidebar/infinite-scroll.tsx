@@ -21,7 +21,11 @@ export const InfiniteScroll = ({
   }
 
   return (
-    <ScrollArea className="block h-full w-full transition-all" onScroll={handleScroll}>
+    <ScrollArea
+      type="always"
+      className="block h-full w-full transition-all"
+      onScroll={handleScroll}
+    >
       {children}
 
       {/* scroll trigger */}
