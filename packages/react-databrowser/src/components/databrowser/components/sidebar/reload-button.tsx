@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ReloadIcon } from "@radix-ui/react-icons"
 
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 export const ReloadButton = ({
@@ -29,7 +30,7 @@ export const ReloadButton = ({
         onClick={handleClick}
         disabled={isLoading || isLoadingProp}
       >
-        <ReloadIcon className={isLoading || isLoadingProp ? "animate-spin" : ""} />
+        <ReloadIcon className={cn("size-4", isLoading || isLoadingProp ? "animate-spin" : "")} />
       </Button>
     </div>
   )

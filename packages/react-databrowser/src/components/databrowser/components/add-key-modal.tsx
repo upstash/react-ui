@@ -64,7 +64,7 @@ export function AddKeyModal() {
     >
       <DialogTrigger asChild>
         <Button variant="primary" size="icon-sm">
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon className="size-4" />
         </Button>
       </DialogTrigger>
 

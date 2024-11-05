@@ -40,7 +40,7 @@ export const DisplayHeader = ({
   return (
     <div className="rounded-lg bg-zinc-100 px-3 py-2">
       <div className="flex min-h-10 items-center justify-between gap-4">
-        <h2 className="grow truncate">
+        <h2 className="grow truncate text-base">
           {dataKey.trim() === "" ? (
             <span className="ml-1 text-zinc-500">(Empty Key)</span>
           ) : (
@@ -51,7 +51,7 @@ export const DisplayHeader = ({
         <div className="flex items-center gap-1">
           {type !== "string" && type !== "json" && (
             <Button onClick={handleAddItem} size="icon-sm">
-              <IconPlus className="size-5 text-zinc-500" />
+              <IconPlus className="size-4 text-zinc-500" />
             </Button>
           )}
 

@@ -30,7 +30,7 @@ export function CopyButton({
   return (
     <Button size={sizeVariant} variant={variant} onClick={handleCopy} className={className}>
       {copied ? (
-        <CheckIcon />
+        <CheckIcon className="size-4" />
       ) : (
         <svg
           width={svgSize?.w ?? 15}

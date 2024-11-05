@@ -7,7 +7,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -76,11 +75,13 @@ export function TTLPopover({
       <PopoverTrigger asChild>
         <button>{children}</button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px]">
+
+      <PopoverContent className="w-[300px]" align="end">
         <form className="space-y-4" onSubmit={onSubmit}>
           <h4 className="font-medium leading-none">Expiration</h4>
+
           <div>
-            <div className="flex">
+            <div className="flex items-center">
               <Controller
                 rules={{
                   required: "Please enter an expiration time",
@@ -89,37 +90,40 @@ export function TTLPopover({
                 control={control}
                 name="value"
                 render={({ field }) => (
-                  <Input min="-1" {...field} className="h-8 grow rounded-r-none" />
+                  <Input min="-1" {...field} className="grow rounded-r-none" />
                 )}
               />
+
               <Controller
                 control={control}
                 name="type"
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger className="h-8 rounded-l-none border-l-0 pl-2 pr-8">
+                    <SelectTrigger className="w-auto rounded-l-none border-l-0 pr-8">
                       <SelectValue />
                     </SelectTrigger>
+
                     <SelectContent>
-                      <SelectGroup>
-                        {timeUnits.map((unit) => (
-                          <SelectItem key={unit.label} value={unit.label}>
-                            {unit.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
+                      {timeUnits.map((unit) => (
+                        <SelectItem key={unit.label} value={unit.label}>
+                          {unit.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
               />
             </div>
+
             {formState.errors.value && (
-              <div className="my-1 text-xs text-red-500">{formState.errors.value.message}</div>
+              <p className="mt-2 text-xs text-red-500">{formState.errors.value.message}</p>
             )}
+
+            <p className="mt-2 text-xs text-zinc-500">
+              TTL sets a timer to automatically delete keys after a defined period.
+            </p>
           </div>
-          <div className="text-xs text-zinc-500">
-            TTL sets a timer to automatically delete keys after a defined period.
-          </div>
+
           <div className="flex justify-between">
             <Button
               disabled={ttl === PERSISTED_KEY}
