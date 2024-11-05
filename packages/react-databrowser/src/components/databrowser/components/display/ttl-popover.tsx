@@ -126,11 +126,10 @@ export function TTLPopover({
 
           <div className="flex justify-between">
             <Button
-              disabled={ttl === PERSISTED_KEY}
-              size={"sm"}
-              variant={"outline"}
-              onClick={handlePersist}
               type="button"
+              variant="outline"
+              disabled={ttl === PERSISTED_KEY}
+              onClick={handlePersist}
             >
               Persist
             </Button>

@@ -70,10 +70,10 @@ const EditorDisplayForm = ({
         <div className="flex gap-2">
           {form.formState.isDirty && <Button onClick={handleCancel}>Cancel</Button>}
           <Button
+            variant="primary"
             onClick={form.handleSubmit(async ({ value }) => {
               await setKey(value)
             })}
-            variant="primary"
             disabled={!form.formState.isValid || !form.formState.isDirty}
           >
             <Spinner isLoading={isSettingKey} isLoadingText={"Saving"}>

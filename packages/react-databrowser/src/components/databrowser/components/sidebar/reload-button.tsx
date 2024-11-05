@@ -25,8 +25,7 @@ export const ReloadButton = ({
     <div>
       <Button
         variant="outline"
-        size="icon"
-        className="h-8 w-8 rounded-md border border-[#D9D9D9]"
+        size="icon-sm"
         onClick={handleClick}
         disabled={isLoading || isLoadingProp}
       >

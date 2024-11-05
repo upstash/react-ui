@@ -116,11 +116,10 @@ export function AddKeyModal() {
           <div className="mt-6 flex justify-end gap-2">
             <Button
               type="button"
+              variant="outline"
               onClick={() => {
                 setOpen(false)
               }}
-              variant={"outline"}
-              className="font-normal"
             >
               Cancel
             </Button>
