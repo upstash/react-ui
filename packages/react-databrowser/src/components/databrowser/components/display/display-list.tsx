@@ -30,21 +30,23 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
 
       {selectedListItem && <ListEditDisplay dataKey={dataKey} type={type} />}
 
-      <div className={cn("min-h-0 flex-grow", selectedListItem && "hidden")}>
+      <div className={cn("min-h-0 grow", selectedListItem && "hidden")}>
         <InfiniteScroll query={query}>
-          <table className="w-full flex-grow text-sm text-zinc-700">
-            {/*{type !== "set" && (*/}
-            {/*  <thead>*/}
-            {/*    <tr>*/}
-            {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{keyHeader}</th>*/}
-            {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{valueHeader}</th>*/}
-            {/*    </tr>*/}
-            {/*  </thead>*/}
-            {/*)}*/}
-            <tbody>
-              <ListItems query={query} />
-            </tbody>
-          </table>
+          <div className="pr-3">
+            <table className="w-full ">
+              {/*{type !== "set" && (*/}
+              {/*  <thead>*/}
+              {/*    <tr>*/}
+              {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{keyHeader}</th>*/}
+              {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{valueHeader}</th>*/}
+              {/*    </tr>*/}
+              {/*  </thead>*/}
+              {/*)}*/}
+              <tbody>
+                <ListItems query={query} />
+              </tbody>
+            </table>
+          </div>
         </InfiniteScroll>
       </div>
     </div>

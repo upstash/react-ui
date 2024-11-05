@@ -101,9 +101,7 @@ export function AddKeyModal() {
               }}
               control={control}
               name="key"
-              render={({ field }) => (
-                <Input placeholder="mykey" {...field} className="h-8 flex-grow" />
-              )}
+              render={({ field }) => <Input placeholder="mykey" {...field} className="h-8 grow" />}
             />
           </div>
 

@@ -15,10 +15,10 @@ export const DisplayDbSize = () => {
 
   if (keyCount === undefined) {
     return (
-      <div className="flex items-center justify-center gap-1 text-sm font-normal text-[#00000066]">
+      <div className="flex items-center justify-center gap-1">
         <Skeleton className="h-5 w-10 rounded" />
       </div>
     )
   }
-  return <div className="text-sm font-normal text-[#00000066]">{formatNumber(keyCount)} Keys</div>
+  return <div className="">{formatNumber(keyCount)} Keys</div>
 }

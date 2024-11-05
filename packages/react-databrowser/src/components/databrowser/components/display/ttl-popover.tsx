@@ -89,7 +89,7 @@ export function TTLPopover({
                 control={control}
                 name="value"
                 render={({ field }) => (
-                  <Input min="-1" {...field} className="h-8 flex-grow rounded-r-none" />
+                  <Input min="-1" {...field} className="h-8 grow rounded-r-none" />
                 )}
               />
               <Controller

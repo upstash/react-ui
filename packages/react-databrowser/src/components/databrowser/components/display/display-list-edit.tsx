@@ -65,7 +65,7 @@ const ListEditForm = ({
   return (
     <FormProvider {...form}>
       <form onSubmit={onSubmit} className="flex flex-col gap-2">
-        <div className="flex flex-grow flex-col gap-2">
+        <div className="flex grow flex-col gap-2">
           {type !== "list" && <FormItem name="key" label={keyLabel} />}
           {type === "zset" ? (
             <NumberFormItem name="value" label={valueLabel} />

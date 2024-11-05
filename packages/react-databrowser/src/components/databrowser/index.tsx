@@ -22,7 +22,11 @@ export const Databrowser = ({ token, url }: DatabrowserProps) => {
       <TooltipProvider>
         <DatabrowserProvider databrowser={credentials}>
           <KeysProvider>
-            <PanelGroup autoSaveId="persistence" direction="horizontal" className="gap-0.5">
+            <PanelGroup
+              autoSaveId="persistence"
+              direction="horizontal"
+              className="h-full w-full gap-0.5 text-sm antialiased"
+            >
               <Panel defaultSize={30} minSize={30}>
                 <Sidebar />
               </Panel>
