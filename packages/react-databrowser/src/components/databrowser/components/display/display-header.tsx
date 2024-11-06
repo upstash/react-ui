@@ -60,7 +60,7 @@ export const DisplayHeader = ({
       </div>
 
       {/*{!hideBadges && (*/}
-      <div className="flex h-10 flex-wrap items-center gap-1">
+      <div className="flex h-10 flex-wrap items-center gap-1.5">
         <TypeTag variant={type} type="badge" />
         <SizeBadge dataKey={dataKey} />
         <LengthBadge dataKey={dataKey} type={type} content={content} />

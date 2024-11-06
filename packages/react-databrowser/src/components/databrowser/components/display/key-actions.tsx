@@ -13,6 +13,7 @@ import { useDeleteKey } from "../../hooks"
 
 export function KeyActions({ dataKey, content }: { dataKey: string; content?: string }) {
   const { mutateAsync: deleteKey } = useDeleteKey()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -20,6 +21,7 @@ export function KeyActions({ dataKey, content }: { dataKey: string; content?: st
           <IconDotsVertical className="size-4 text-zinc-500" />
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent className="" align="end">
         {content && (
           <DropdownMenuItem

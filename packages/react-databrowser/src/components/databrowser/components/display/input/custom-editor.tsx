@@ -28,7 +28,7 @@ export const CustomEditor = ({
 
   return (
     <div
-      className={cn(maxDynamicHeight === undefined && "h-full")}
+      className={cn(maxDynamicHeight === undefined && "h-full p-2")}
       style={{
         height: maxDynamicHeight,
       }}
@@ -58,10 +58,11 @@ export const CustomEditor = ({
           minimap: {
             enabled: false,
           },
+          folding: false,
+          glyphMargin: false,
           lineNumbers: "off",
           parameterHints: { enabled: false },
-          glyphMargin: false,
-          lineDecorationsWidth: 5,
+          lineDecorationsWidth: 0,
           automaticLayout: true,
           scrollBeyondLastLine: false,
           renderLineHighlight: "none",

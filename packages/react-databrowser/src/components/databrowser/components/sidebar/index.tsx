@@ -35,9 +35,7 @@ export function Sidebar() {
           <Input
             type="text"
             placeholder="Search"
-            className={
-              "rounded-l-none border-zinc-300 px-2 font-normal placeholder-zinc-300 focus-visible:ring-0"
-            }
+            className={"rounded-l-none border-zinc-300 font-normal"}
             onChange={(e) => setSearchKey(e.target.value)}
             value={search.key}
           />

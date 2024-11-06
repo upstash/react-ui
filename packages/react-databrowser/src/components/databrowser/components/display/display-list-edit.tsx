@@ -135,7 +135,8 @@ const FormItem = ({ name, label }: { name: string; label: string; isNumber?: boo
         <span className="text-zinc-300">/</span>
         {selector}
       </div>
-      <div className="overflow-hidden rounded-md border border-zinc-300 bg-white py-1 shadow-sm">
+
+      <div className="overflow-hidden rounded-md border border-zinc-300 bg-white p-2 shadow-sm">
         {editor}
       </div>
     </div>

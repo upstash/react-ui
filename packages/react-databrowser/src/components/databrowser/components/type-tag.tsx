@@ -13,25 +13,25 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const iconsMap = {
-  string: <IconQuote size={16} stroke={1.5} />,
-  set: <IconLayersIntersect size={16} stroke={1.5} />,
-  hash: <IconHash size={16} stroke={1.5} />,
-  json: <IconCodeDots size={16} stroke={1.5} />,
-  zset: <IconArrowsSort size={16} stroke={1.5} />,
-  list: <IconList size={16} stroke={1.5} />,
-  stream: <IconList size={16} stroke={1.5} />,
+  string: <IconQuote size={15} stroke={1.3} />,
+  set: <IconLayersIntersect size={15} stroke={1.3} />,
+  hash: <IconHash size={15} stroke={1.3} />,
+  json: <IconCodeDots size={15} stroke={1.3} />,
+  zset: <IconArrowsSort size={15} stroke={1.3} />,
+  list: <IconList size={15} stroke={1.3} />,
+  stream: <IconList size={15} stroke={1.3} />,
 } as const
 
 const tagVariants = cva("inline-flex shrink-0 items-center rounded-md justify-center", {
   variants: {
     variant: {
-      string: "bg-sky-100 text-sky-800",
-      list: "bg-orange-100 text-orange-800",
-      hash: "bg-amber-100 text-amber-800",
-      set: "bg-indigo-100 text-indigo-800",
-      zset: "bg-pink-100 text-pink-800",
-      json: "bg-purple-100 text-purple-800",
-      stream: "bg-orange-100 text-orange-800",
+      string: "bg-sky-200 text-sky-800",
+      list: "bg-orange-200 text-orange-800",
+      hash: "bg-amber-200 text-amber-800",
+      set: "bg-indigo-200 text-indigo-800",
+      zset: "bg-pink-200 text-pink-800",
+      json: "bg-purple-200 text-purple-800",
+      stream: "bg-orange-200 text-orange-800",
     },
     type: {
       icon: "size-5",

@@ -31,7 +31,7 @@ const KeyItem = ({ data }: { data: RedisKey }) => {
       variant={isKeySelected ? "default" : "ghost"}
       className={cn(
         "relative flex h-10 w-full items-center justify-start gap-2 px-3 py-0 ",
-        "border border-transparent text-left",
+        "select-none border border-transparent text-left",
         isKeySelected && "shadow-sm",
         isKeySelected && dataType === "string" && "border-sky-400 !bg-sky-50 text-sky-900",
         isKeySelected && dataType === "list" && "border-orange-400 !bg-orange-50 text-orange-900",
