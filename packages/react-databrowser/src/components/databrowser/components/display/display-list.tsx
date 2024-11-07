@@ -73,15 +73,29 @@ export const ListItems = ({
     <>
       {keys.map(({ key, value }, _i) => (
         <tr
-          key={key}
+          key={dataKey + type + key}
           onClick={() => {
             setSelectedListItem({ key, value })
           }}
           className="h-10 border-b border-b-zinc-100 "
         >
-          <td className="max-w-0 cursor-pointer  truncate px-3 py-2 hover:bg-zinc-50">{key}</td>
+          <td
+            className={cn(
+              "cursor-pointer truncate px-3 py-2 hover:bg-zinc-50",
+              type === "list" || type === "stream" ? "w-10 text-center" : "max-w-0"
+            )}
+          >
+            {key}
+          </td>
           {value !== undefined && (
-            <td className="max-w-0 cursor-pointer truncate px-3 py-2 hover:bg-zinc-50">{value}</td>
+            <td
+              className={cn(
+                "max-w-0 cursor-pointer truncate px-3 py-2 hover:bg-zinc-50",
+                type === "zset" ? "w-10 text-center" : "max-w-0"
+              )}
+            >
+              {value}
+            </td>
           )}
           {type !== "stream" && (
             <td width={20}>
