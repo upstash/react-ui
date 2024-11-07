@@ -26,12 +26,12 @@ const tagVariants = cva("inline-flex shrink-0 items-center rounded-md justify-ce
   variants: {
     variant: {
       string: "bg-sky-200 text-sky-800",
-      list: "bg-orange-200 text-orange-800",
       hash: "bg-amber-200 text-amber-800",
       set: "bg-indigo-200 text-indigo-800",
       zset: "bg-pink-200 text-pink-800",
       json: "bg-purple-200 text-purple-800",
-      stream: "bg-orange-200 text-orange-800",
+      list: "bg-orange-200 text-orange-800",
+      stream: "bg-green-200 text-green-800",
     },
     type: {
       icon: "size-5",
