@@ -71,9 +71,9 @@ export const ListItems = ({
 
   return (
     <>
-      {keys.map(({ key, value }, _i) => (
+      {keys.map(({ key, value }, i) => (
         <tr
-          key={dataKey + type + key}
+          key={`${dataKey}-${key}-${i}`}
           onClick={() => {
             setSelectedListItem({ key, value })
           }}

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-negated-condition */
 import { useDatabrowserStore } from "@/store"
 
 import { useKeyType } from "../../hooks/use-keys"
@@ -8,11 +9,14 @@ export const DataDisplay = () => {
   const { selectedKey } = useDatabrowserStore()
   const type = useKeyType(selectedKey)
 
-  // TODO: add a empty state
   return (
     <div className="h-full rounded-xl border p-1">
-      {!selectedKey || !type ? (
+      {!selectedKey ? (
         <div />
+      ) : !type ? (
+        <div className="flex h-full items-center justify-center">
+          <span className="text-gray-500">Loading...</span>
+        </div>
       ) : (
         <>
           {type === "string" || type === "json" ? (
