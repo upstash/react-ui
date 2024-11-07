@@ -31,7 +31,7 @@ export const CustomEditor = ({
 
   return (
     <div
-      className={cn("relative", maxDynamicHeight === undefined && "h-full p-2")}
+      className={cn("group/editor relative", maxDynamicHeight === undefined && "h-full p-2")}
       style={{
         height: maxDynamicHeight,
       }}
@@ -75,9 +75,10 @@ export const CustomEditor = ({
         }}
       />
       {showCopyButton && (
-        <div className="absolute right-0 top-0">
-          <CopyButton value={value} />
-        </div>
+        <CopyButton
+          value={value}
+          className="absolute right-0 top-0 hidden group-hover/editor:flex"
+        />
       )}
     </div>
   )
