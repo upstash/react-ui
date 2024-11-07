@@ -77,28 +77,23 @@ export const ListItems = ({
           onClick={() => {
             setSelectedListItem({ key, value })
           }}
-          className="h-10 border-b border-b-zinc-100 "
+          className="h-10 border-b border-b-zinc-100 hover:bg-zinc-50"
         >
           <td
             className={cn(
-              "cursor-pointer truncate px-3 py-2 hover:bg-zinc-50",
-              type === "list" || type === "stream" ? "w-10 text-center" : "max-w-0"
+              "cursor-pointer truncate px-3",
+              type === "list" || type === "stream" ? "w-24" : ""
             )}
           >
             {key}
           </td>
           {value !== undefined && (
-            <td
-              className={cn(
-                "max-w-0 cursor-pointer truncate px-3 py-2 hover:bg-zinc-50",
-                type === "zset" ? "w-10 text-center" : "max-w-0"
-              )}
-            >
+            <td className={cn("cursor-pointer truncate px-3", type === "zset" ? "w-24" : "")}>
               {value}
             </td>
           )}
           {type !== "stream" && (
-            <td width={20}>
+            <td width={20} className="px-3">
               <DeleteAlertDialog
                 onDeleteConfirm={(e) => {
                   e.stopPropagation()
@@ -111,8 +106,8 @@ export const ListItems = ({
                   })
                 }}
               >
-                <Button onClick={(e) => e.stopPropagation()}>
-                  <IconTrash size={16} />
+                <Button size="icon-sm" variant="secondary" onClick={(e) => e.stopPropagation()}>
+                  <IconTrash className="size-4 text-zinc-500" />
                 </Button>
               </DeleteAlertDialog>
             </td>
