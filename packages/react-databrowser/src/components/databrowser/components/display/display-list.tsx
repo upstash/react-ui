@@ -22,11 +22,9 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
   const { selectedListItem } = useDatabrowserStore()
   const query = useFetchListItems({ dataKey, type })
 
-  // const [keyHeader, valueHeader] = headerLabels[type]
-
   return (
     <div className="flex h-full flex-col gap-2">
-      <DisplayHeader dataKey={dataKey} type={type} hideBadges={selectedListItem !== undefined} />
+      <DisplayHeader dataKey={dataKey} type={type} />
 
       {selectedListItem && <ListEditDisplay dataKey={dataKey} type={type} />}
 
@@ -34,14 +32,6 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
         <InfiniteScroll query={query}>
           <div className="pr-3">
             <table className="w-full ">
-              {/*{type !== "set" && (*/}
-              {/*  <thead>*/}
-              {/*    <tr>*/}
-              {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{keyHeader}</th>*/}
-              {/*      <th className="px-3 py-2 text-left font-medium opacity-40">{valueHeader}</th>*/}
-              {/*    </tr>*/}
-              {/*  </thead>*/}
-              {/*)}*/}
               <tbody>
                 <ListItems query={query} />
               </tbody>
