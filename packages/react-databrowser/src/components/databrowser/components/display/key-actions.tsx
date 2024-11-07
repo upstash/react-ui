@@ -10,6 +10,7 @@ import {
 import { toast } from "@/components/ui/use-toast"
 
 import { useDeleteKey } from "../../hooks"
+import { DeleteAlertDialog } from "./delete-alert-dialog"
 
 export function KeyActions({ dataKey, content }: { dataKey: string; content?: string }) {
   const { mutateAsync: deleteKey } = useDeleteKey()
@@ -35,13 +36,9 @@ export function KeyActions({ dataKey, content }: { dataKey: string; content?: st
             Copy content
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem
-          onClick={async () => {
-            await deleteKey(dataKey)
-          }}
-        >
-          Delete
-        </DropdownMenuItem>
+        <DeleteAlertDialog onDeleteConfirm={async () => await deleteKey(dataKey)}>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>Delete key</DropdownMenuItem>
+        </DeleteAlertDialog>
       </DropdownMenuContent>
     </DropdownMenu>
   )
