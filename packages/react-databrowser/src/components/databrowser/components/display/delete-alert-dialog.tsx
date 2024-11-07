@@ -19,6 +19,7 @@ export function DeleteAlertDialog({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Irreversible Action!</AlertDialogTitle>
