@@ -14,18 +14,21 @@ export const EditorDisplay = ({ dataKey, type }: { dataKey: string; type: Simple
   const { data } = useFetchSimpleKey(dataKey, type)
 
   return (
-    <div className="flex h-full w-full flex-col gap-2 overflow-y-scroll">
+    <div className="flex h-full w-full flex-col gap-2">
       <DisplayHeader dataKey={dataKey} type={type} content={data ?? undefined} />
 
-      {data === undefined ? (
-        <div className="flex h-full items-center justify-center">
+      <div
+        className="flex h-full grow flex-col gap-2
+      rounded-md bg-zinc-100 p-3"
+      >
+        {data === undefined ? (
           <Spinner isLoadingText={""} isLoading={true} />
-        </div>
-      ) : data === null ? (
-        <></>
-      ) : (
-        <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
-      )}
+        ) : data === null ? (
+          <></>
+        ) : (
+          <EditorDisplayForm key={dataKey} dataKey={dataKey} type={type} data={data} />
+        )}
+      </div>
     </div>
   )
 }
@@ -62,13 +65,18 @@ const EditorDisplayForm = ({
 
   return (
     <>
-      <div className="grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
+      <div className="flex grow flex-col gap-1">
+        <div className="flex shrink-0 items-center gap-2">
+          {type === "json" ? <div /> : selector}
+        </div>
 
-      <div className="flex shrink-0 items-center justify-between gap-2 px-3 pb-2 pt-1">
-        {type === "json" ? <div /> : selector}
+        <div className="grow rounded-md border border-zinc-300 bg-white p-1">{editor}</div>
+      </div>
 
-        <div className="flex gap-2">
+      <div className="flex shrink-0 items-center gap-2">
+        <div className="ml-auto flex gap-2">
           {form.formState.isDirty && <Button onClick={handleCancel}>Cancel</Button>}
+
           <Button
             variant="primary"
             onClick={form.handleSubmit(async ({ value }) => {

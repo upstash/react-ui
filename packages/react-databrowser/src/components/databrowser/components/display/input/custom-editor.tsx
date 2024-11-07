@@ -50,9 +50,12 @@ export const CustomEditor = ({
           overviewRulerLanes: 0,
           formatOnPaste: true,
           formatOnType: true,
-          renderWhitespace: "all",
+          renderWhitespace: "none",
           smoothScrolling: true,
           autoIndent: "full",
+          guides: {
+            indentation: false,
+          },
           fontSize: 13,
           cursorBlinking: "smooth",
           minimap: {
