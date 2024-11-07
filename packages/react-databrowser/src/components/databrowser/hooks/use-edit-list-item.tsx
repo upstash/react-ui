@@ -21,8 +21,12 @@ export const useEditListItem = () => {
       type: ListDataType
       dataKey: string
       itemKey: string
+
+      // If newKey is undefined, the item will be deleted
       newKey?: string
       newValue?: string
+
+      // Only used for list data type, uses lpush if true
       isNew?: boolean
     }) => {
       const pipe = redis.pipeline()
@@ -40,7 +44,7 @@ export const useEditListItem = () => {
           break
         }
         case "zset": {
-          if (Number.isNaN(Number(newValue))) {
+          if (Number.isNaN(Number(newValue)) && newKey !== undefined) {
             throw new TypeError("Value must be a number for zset data type")
           }
 
@@ -65,6 +69,11 @@ export const useEditListItem = () => {
         case "list": {
           if (isNew) {
             pipe.lpush(dataKey, newValue)
+          } else if (newKey === undefined) {
+            // NOTE: This is how medis does, surprisingly there are no alternatives to this
+            const uniqueKey = `__DELETED_${Date.now()}-${Math.random().toString(36).slice(7)}`
+            pipe.lset(dataKey, Number(itemKey), uniqueKey)
+            pipe.lrem(dataKey, 0, uniqueKey)
           } else {
             if (Number.isNaN(Number(itemKey)))
               throw new TypeError("Index must be a number for list data type")
@@ -75,7 +84,7 @@ export const useEditListItem = () => {
           break
         }
         default: {
-          throw new Error("Editing stream items is not supported")
+          throw new Error(`Unsupported data type for editing: ${type}`)
         }
       }
 
