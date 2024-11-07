@@ -126,6 +126,7 @@ const FormItem = ({ name, label }: { name: string; label: string; isNumber?: boo
     name,
     form,
     isEditorDynamic: true,
+    showCopyButton: true,
   })
 
   return (

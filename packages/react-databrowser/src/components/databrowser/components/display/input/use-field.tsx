@@ -8,10 +8,12 @@ export const useField = ({
   name,
   form,
   isEditorDynamic = false,
+  showCopyButton,
 }: {
   name: string
   form: UseFormReturn<any>
   isEditorDynamic?: boolean
+  showCopyButton?: boolean
 }) => {
   const { field, fieldState } = useController<Record<string, string>>({
     name,
@@ -57,6 +59,7 @@ export const useField = ({
           value={field.value}
           onChange={field.onChange}
           maxDynamicHeight={isEditorDynamic ? 100 : undefined}
+          showCopyButton={showCopyButton}
         />
       </>
     ),
