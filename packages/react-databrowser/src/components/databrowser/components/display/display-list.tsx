@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 
 import { useEditListItem } from "../../hooks"
 import { useFetchListItems } from "../../hooks/use-fetch-list-items"
+import { ItemContextMenu } from "../item-context-menu"
 import { InfiniteScroll } from "../sidebar/infinite-scroll"
 import { DeleteAlertDialog } from "./delete-alert-dialog"
 import { DisplayHeader } from "./display-header"
@@ -71,48 +72,55 @@ export const ListItems = ({
 
   return (
     <>
-      {keys.map(({ key, value }, _i) => (
-        <tr
-          key={dataKey + type + key}
-          onClick={() => {
-            setSelectedListItem({ key, value })
-          }}
-          className="h-10 border-b border-b-zinc-100 hover:bg-zinc-50"
+      {keys.map(({ key, value }, i) => (
+        <ItemContextMenu
+          key={`${dataKey}-${key}-${i}`}
+          dataKey={dataKey}
+          type={type}
+          itemKey={key}
+          itemValue={value}
         >
-          <td
-            className={cn(
-              "cursor-pointer truncate px-3",
-              type === "list" || type === "stream" ? "w-24" : ""
-            )}
+          <tr
+            onClick={() => {
+              setSelectedListItem({ key, value })
+            }}
+            className="h-10 border-b border-b-zinc-100 hover:bg-zinc-50"
           >
-            {key}
-          </td>
-          {value !== undefined && (
-            <td className={cn("cursor-pointer truncate px-3", type === "zset" ? "w-24" : "")}>
-              {value}
+            <td
+              className={cn(
+                "cursor-pointer truncate px-3",
+                type === "list" || type === "stream" ? "w-24" : ""
+              )}
+            >
+              {key}
             </td>
-          )}
-          {type !== "stream" && (
-            <td width={20} className="px-3">
-              <DeleteAlertDialog
-                onDeleteConfirm={(e) => {
-                  e.stopPropagation()
-                  editItem({
-                    type,
-                    dataKey,
-                    itemKey: key,
-                    // For deletion
-                    newKey: undefined,
-                  })
-                }}
-              >
-                <Button size="icon-sm" variant="secondary" onClick={(e) => e.stopPropagation()}>
-                  <IconTrash className="size-4 text-zinc-500" />
-                </Button>
-              </DeleteAlertDialog>
-            </td>
-          )}
-        </tr>
+            {value !== undefined && (
+              <td className={cn("cursor-pointer truncate px-3", type === "zset" ? "w-24" : "")}>
+                {value}
+              </td>
+            )}
+            {type !== "stream" && (
+              <td width={20} className="px-3">
+                <DeleteAlertDialog
+                  onDeleteConfirm={(e) => {
+                    e.stopPropagation()
+                    editItem({
+                      type,
+                      dataKey,
+                      itemKey: key,
+                      // For deletion
+                      newKey: undefined,
+                    })
+                  }}
+                >
+                  <Button size="icon-sm" variant="secondary" onClick={(e) => e.stopPropagation()}>
+                    <IconTrash className="size-4 text-zinc-500" />
+                  </Button>
+                </DeleteAlertDialog>
+              </td>
+            )}
+          </tr>
+        </ItemContextMenu>
       ))}
     </>
   )

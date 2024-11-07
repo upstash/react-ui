@@ -1,19 +1,15 @@
-import { useDatabrowserStore } from "@/store"
-
-import { Input } from "@/components/ui/input"
-
 import { useKeys } from "../../hooks/use-keys"
 import { AddKeyModal } from "../add-key-modal"
 import { DisplayDbSize } from "./db-size"
 import { Empty } from "./empty"
 import { InfiniteScroll } from "./infinite-scroll"
 import { KeysList } from "./keys-list"
+import { SearchInput } from "./search-input"
 import { LoadingSkeleton } from "./skeleton-buttons"
 import { DataTypeSelector } from "./type-selector"
 
 export function Sidebar() {
   const { keys, query } = useKeys()
-  const { setSearchKey, search } = useDatabrowserStore()
 
   return (
     <div className="flex h-full flex-col gap-2 rounded-xl border p-1">
@@ -32,13 +28,7 @@ export function Sidebar() {
           <DataTypeSelector />
 
           {/* Search */}
-          <Input
-            type="text"
-            placeholder="Search"
-            className={"rounded-l-none border-zinc-300 font-normal"}
-            onChange={(e) => setSearchKey(e.target.value)}
-            value={search.key}
-          />
+          <SearchInput />
         </div>
       </div>
 

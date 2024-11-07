@@ -1,6 +1,10 @@
 import { createContext, useCallback, useContext, useMemo, type PropsWithChildren } from "react"
 import { useDatabrowserStore } from "@/store"
+import type { DataType } from "@/types"
+import type { InfiniteData } from "@tanstack/react-query"
 import { useInfiniteQuery, type UseInfiniteQueryResult } from "@tanstack/react-query"
+
+import { queryClient } from "@/lib/clients"
 
 import { useFetchKeys, type RedisKey } from "./use-fetch-keys"
 
@@ -9,11 +13,17 @@ const KeysContext = createContext<
       keys: RedisKey[]
       query: UseInfiniteQueryResult
       refetch: () => void
+      addArtificalKey: (key: string, type: DataType) => void
     }
   | undefined
 >(undefined)
 
 export const FETCH_KEYS_QUERY_KEY = "use-fetch-keys"
+
+type InfData = InfiniteData<{
+  keys: RedisKey[]
+  hasNextPage: boolean
+}>
 
 export const KeysProvider = ({ children }: PropsWithChildren) => {
   const { search: searchState } = useDatabrowserStore()
@@ -45,7 +55,28 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
     query.refetch()
   }, [query, resetCache])
 
-  const keys = useMemo(() => query.data?.pages.flatMap((page) => page.keys) ?? [], [query.data])
+  const addArtificalKey = useCallback(
+    (key: string, type: DataType) => {
+      queryClient.setQueryData<InfData>([FETCH_KEYS_QUERY_KEY, search], (data) => {
+        if (!data) throw new Error("Data is undefined")
+        return {
+          ...data,
+          pages: data.pages.map((page, i) =>
+            i === 0 ? { ...page, keys: [[key, type], ...page.keys] } : page
+          ),
+        }
+      })
+    },
+    [query, search]
+  )
+
+  const keys = useMemo(() => {
+    const keys = query.data?.pages.flatMap((page) => page.keys) ?? []
+
+    const keysSet = new Set(keys.map(([key, _]) => key))
+
+    return keys.filter(([key, _]) => keysSet.has(key))
+  }, [query.data])
 
   return (
     <KeysContext.Provider
@@ -53,6 +84,7 @@ export const KeysProvider = ({ children }: PropsWithChildren) => {
         keys,
         query,
         refetch,
+        addArtificalKey,
       }}
     >
       {children}

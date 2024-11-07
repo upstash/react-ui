@@ -1,4 +1,4 @@
-import type { MouseEventHandler, PropsWithChildren } from "react"
+import type { MouseEventHandler } from "react"
 
 import {
   AlertDialog,
@@ -15,10 +15,17 @@ import {
 export function DeleteAlertDialog({
   children,
   onDeleteConfirm,
-}: PropsWithChildren<{ onDeleteConfirm: MouseEventHandler }>) {
+  open,
+  onOpenChange,
+}: {
+  children?: React.ReactNode
+  onDeleteConfirm: MouseEventHandler
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+}) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
 
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -2,17 +2,20 @@ import { useEffect, useRef } from "react"
 import { Editor, useMonaco } from "@monaco-editor/react"
 
 import { cn } from "@/lib/utils"
+import { CopyButton } from "@/components/databrowser/copy-button"
 
 export const CustomEditor = ({
   language,
   value,
   onChange,
   maxDynamicHeight,
+  showCopyButton,
 }: {
   language: string
   value: string
   onChange: (value: string) => void
   maxDynamicHeight?: number
+  showCopyButton?: boolean
 }) => {
   const monaco = useMonaco()
   const editorRef = useRef()
@@ -28,7 +31,7 @@ export const CustomEditor = ({
 
   return (
     <div
-      className={cn(maxDynamicHeight === undefined && "h-full p-2")}
+      className={cn("relative", maxDynamicHeight === undefined && "h-full p-2")}
       style={{
         height: maxDynamicHeight,
       }}
@@ -71,6 +74,11 @@ export const CustomEditor = ({
           renderLineHighlight: "none",
         }}
       />
+      {showCopyButton && (
+        <div className="absolute right-0 top-0">
+          <CopyButton value={value} />
+        </div>
+      )}
     </div>
   )
 }
