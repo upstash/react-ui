@@ -29,6 +29,7 @@ const KeyItem = ({ data }: { data: RedisKey }) => {
   return (
     <SidebarContextMenu dataKey={dataKey} key={dataKey}>
       <Button
+        data-key={dataKey}
         variant={isKeySelected ? "default" : "ghost"}
         className={cn(
           "relative flex h-10 w-full items-center justify-start gap-2 px-3 py-0 ",

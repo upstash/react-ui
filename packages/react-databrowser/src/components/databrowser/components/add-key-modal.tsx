@@ -26,12 +26,9 @@ import { toast } from "@/components/ui/use-toast"
 import { TypeTag } from "@/components/databrowser/components/type-tag"
 import { useAddKey } from "@/components/databrowser/hooks/use-add-key"
 
-import { useKeys } from "../hooks"
-
 export function AddKeyModal() {
   const { setSelectedKey } = useDatabrowserStore()
   const [open, setOpen] = useState(false)
-  const { addArtificalKey } = useKeys()
 
   const { mutateAsync: addKey, isPending } = useAddKey()
   const { control, handleSubmit, formState, reset } = useForm<{
@@ -48,8 +45,14 @@ export function AddKeyModal() {
     try {
       await addKey({ key, type })
       setSelectedKey(key)
-      addArtificalKey(key, type)
       setOpen(false)
+      setTimeout(() => {
+        window.document.querySelector(`[data-key="${key}"]`)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        })
+      }, 100)
     } catch (error) {
       toast({
         description: error instanceof Error ? error.message : "An error occurred",
