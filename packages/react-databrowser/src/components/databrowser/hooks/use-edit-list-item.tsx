@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
 
-import { FETCH_LIST_ITEMS_QUERY_KEY } from "./use-fetch-list-items"
+import { FETCH_LIST_ITEMS_QUERY_KEY, transformArray } from "./use-fetch-list-items"
 
 export const useEditListItem = () => {
   const { redis } = useDatabrowser()
@@ -80,6 +80,16 @@ export const useEditListItem = () => {
 
             pipe.lset(dataKey, Number(itemKey), newValue)
           }
+
+          break
+        }
+        case "stream": {
+          if (!isNew || !newKey) throw new Error("Stream data type is not mutable")
+          const opts = transformArray(newValue?.split("\n") ?? []).map(
+            ({ key, value }) => [key, value] as const
+          )
+
+          pipe.xadd(dataKey, newKey, Object.fromEntries(opts))
 
           break
         }

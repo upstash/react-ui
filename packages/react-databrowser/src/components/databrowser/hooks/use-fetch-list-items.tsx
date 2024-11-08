@@ -121,7 +121,7 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
   return map[type]
 }
 
-function transformArray(inputArray: (string | number)[]) {
+export function transformArray(inputArray: (string | number)[]) {
   if (inputArray.length % 2 !== 0) {
     throw new Error("The input array length must be even.")
   }
