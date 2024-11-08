@@ -83,11 +83,15 @@ const ListEditForm = ({
           >
             Cancel
           </Button>
-          <SimpleTooltip content={type === "stream" ? "Streams are not mutable" : undefined}>
+          <SimpleTooltip
+            content={type === "stream" && !isNew ? "Streams are not mutable" : undefined}
+          >
             <Button
               variant="primary"
               type="submit"
-              disabled={!form.formState.isValid || !form.formState.isDirty || type === "stream"}
+              disabled={
+                !form.formState.isValid || !form.formState.isDirty || (type === "stream" && !isNew)
+              }
             >
               <Spinner isLoading={isPending} isLoadingText={"Saving"}>
                 Save
