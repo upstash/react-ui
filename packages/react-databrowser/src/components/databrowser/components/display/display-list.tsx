@@ -31,7 +31,9 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
     <div className="flex h-full flex-col gap-2">
       <DisplayHeader dataKey={dataKey} type={type} />
 
-      {selectedListItem && <ListEditDisplay dataKey={dataKey} type={type} />}
+      {selectedListItem && (
+        <ListEditDisplay dataKey={dataKey} type={type} item={selectedListItem} />
+      )}
 
       <div className={cn("min-h-0 grow", selectedListItem && "hidden")}>
         <InfiniteScroll query={query}>
