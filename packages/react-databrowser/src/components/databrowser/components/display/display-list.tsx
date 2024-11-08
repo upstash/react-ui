@@ -36,7 +36,7 @@ export const ListDisplay = ({ dataKey, type }: { dataKey: string; type: ListData
       <div className={cn("min-h-0 grow", selectedListItem && "hidden")}>
         <InfiniteScroll query={query}>
           <div className="pr-3">
-            <table className="w-full ">
+            <table className="w-full">
               <tbody>
                 <ListItems dataKey={dataKey} type={type} query={query} />
               </tbody>

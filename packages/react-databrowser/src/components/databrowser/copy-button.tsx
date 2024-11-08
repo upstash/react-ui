@@ -2,27 +2,19 @@ import { useState } from "react"
 import { IconCheck, IconCopy } from "@tabler/icons-react"
 
 import { cn } from "@/lib/utils"
+import type { ButtonProps } from "@/components/ui/button";
 import { Button } from "@/components/ui/button"
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  sizeVariant?: "icon-sm" | "icon-xs"
+interface Props extends ButtonProps {
   svgSize?: { w: number; h: number }
-  variant?: "outline" | "default" | "ghost"
   value: string
 }
 
-export function CopyButton({
-  value,
-  sizeVariant = "icon-sm",
-  variant = "outline",
-  className,
-}: Props) {
+export function CopyButton({ value, ...props }: Props) {
   const [copied, setCopied] = useState(false)
 
   return (
     <Button
-      size={sizeVariant}
-      variant={variant}
       onClick={(e) => {
         setCopied(true)
         handleCopyClick(value)
@@ -33,9 +25,16 @@ export function CopyButton({
         e.stopPropagation()
         e.preventDefault()
       }}
-      className={cn("text-zinc-500", className)}
+      className={cn("", props.className)}
+      variant="secondary"
+      size="icon-sm"
+      {...props}
     >
-      {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+      {copied ? (
+        <IconCheck className="size-4 text-green-500" />
+      ) : (
+        <IconCopy className="size-4 text-zinc-500" />
+      )}
     </Button>
   )
 }

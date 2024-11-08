@@ -36,14 +36,12 @@ const KeyItem = ({ data }: { data: RedisKey }) => {
           "select-none border border-transparent text-left",
           isKeySelected && "shadow-sm",
           isKeySelected && dataType === "string" && "border-sky-400 !bg-sky-50 text-sky-900",
-          isKeySelected && dataType === "list" && "border-orange-400 !bg-orange-50 text-orange-900",
           isKeySelected && dataType === "hash" && "border-amber-400 !bg-amber-50 text-amber-900",
           isKeySelected && dataType === "set" && "border-indigo-400 !bg-indigo-50 text-indigo-900",
           isKeySelected && dataType === "zset" && "border-pink-400  !bg-pink-50 text-pink-900",
           isKeySelected && dataType === "json" && "border-purple-400 !bg-purple-50 text-purple-900",
-          isKeySelected &&
-            dataType === "stream" &&
-            "border-orange-400 !bg-orange-50 text-orange-900"
+          isKeySelected && dataType === "list" && "border-orange-400 !bg-orange-50 text-orange-900",
+          isKeySelected && dataType === "stream" && "border-green-400 !bg-green-50 text-green-900"
         )}
         onClick={() => setSelectedKey(dataKey)}
       >

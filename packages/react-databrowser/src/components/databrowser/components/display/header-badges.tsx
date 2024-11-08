@@ -29,7 +29,7 @@ export const LengthBadge = ({
 
   return (
     <Badge label="Length:">
-      {isLoading ? <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" /> : length}
+      {isLoading ? <Skeleton className="ml-1 h-3 w-10 rounded-md opacity-50" /> : length}
     </Badge>
   )
 }
@@ -44,7 +44,7 @@ export const SizeBadge = ({ dataKey }: { dataKey: string }) => {
           unitSeparator: " ",
         })
       ) : (
-        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
+        <Skeleton className="ml-1 h-3 w-10 rounded-md opacity-50" />
       )}
     </Badge>
   )
@@ -77,7 +77,7 @@ export const TTLBadge = ({ dataKey }: { dataKey: string }) => {
   return (
     <Badge label="TTL:">
       {ttl === undefined ? (
-        <Skeleton className="ml-1 h-3 w-[60px] rounded-md opacity-50" />
+        <Skeleton className="ml-1 h-3 w-10 rounded-md opacity-50" />
       ) : (
         <TTLPopover dataKey={dataKey} ttl={ttl}>
           <div className="flex gap-[2px]">
