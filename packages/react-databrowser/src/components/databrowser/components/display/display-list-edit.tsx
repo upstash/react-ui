@@ -1,3 +1,4 @@
+import type { SelectedItem } from "@/store"
 import { useDatabrowserStore } from "@/store"
 import type { ListDataType } from "@/types"
 import { Controller, FormProvider, useForm, useFormContext } from "react-hook-form"
@@ -10,21 +11,18 @@ import { useEditListItem } from "../../hooks/use-edit-list-item"
 import { headerLabels } from "./display-list"
 import { useField } from "./input/use-field"
 
-export const ListEditDisplay = ({ dataKey, type }: { dataKey: string; type: ListDataType }) => {
-  const { selectedListItem } = useDatabrowserStore()
-
-  if (!selectedListItem) {
-    return <></>
-  }
-
+export const ListEditDisplay = ({
+  dataKey,
+  type,
+  item,
+}: {
+  dataKey: string
+  type: ListDataType
+  item: SelectedItem
+}) => {
   return (
     <div className="grow rounded-md bg-zinc-100 p-3">
-      <ListEditForm
-        key={selectedListItem.key}
-        item={selectedListItem}
-        type={type}
-        dataKey={dataKey}
-      />
+      <ListEditForm key={item.key} item={item} type={type} dataKey={dataKey} />
     </div>
   )
 }
@@ -36,7 +34,7 @@ const ListEditForm = ({
 }: {
   type: ListDataType
   dataKey: string
-  item: { key: string; value?: string; isNew?: boolean }
+  item: SelectedItem
 }) => {
   const form = useForm({
     defaultValues: {

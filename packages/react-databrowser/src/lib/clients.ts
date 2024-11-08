@@ -1,10 +1,10 @@
-import type { DatabrowserProps } from "@/store"
+import type { RedisCredentials } from "@/store"
 import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query"
 import { Redis } from "@upstash/redis"
 
 import { toast } from "@/components/ui/use-toast"
 
-export const redisClient = (databrowser?: DatabrowserProps) => {
+export const redisClient = (databrowser?: RedisCredentials) => {
   const token = databrowser?.token || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN
   const url = databrowser?.url || process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL
 

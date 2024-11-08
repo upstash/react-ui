@@ -1,4 +1,5 @@
 import { useDatabrowserStore } from "@/store"
+import type { DataType } from "@/types"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,16 @@ export const KeysList = () => {
   )
 }
 
+const keyStyles = {
+  string: "border-sky-400 !bg-sky-50 text-sky-900",
+  hash: "border-amber-400 !bg-amber-50 text-amber-900",
+  set: "border-indigo-400 !bg-indigo-50 text-indigo-900",
+  zset: "border-pink-400  !bg-pink-50 text-pink-900",
+  json: "border-purple-400 !bg-purple-50 text-purple-900",
+  list: "border-orange-400 !bg-orange-50 text-orange-900",
+  stream: "border-green-400 !bg-green-50 text-green-900",
+} as Record<DataType, string>
+
 const KeyItem = ({ data }: { data: RedisKey }) => {
   const { selectedKey, setSelectedKey } = useDatabrowserStore()
 
@@ -35,13 +46,7 @@ const KeyItem = ({ data }: { data: RedisKey }) => {
           "relative flex h-10 w-full items-center justify-start gap-2 px-3 py-0 ",
           "select-none border border-transparent text-left",
           isKeySelected && "shadow-sm",
-          isKeySelected && dataType === "string" && "border-sky-400 !bg-sky-50 text-sky-900",
-          isKeySelected && dataType === "hash" && "border-amber-400 !bg-amber-50 text-amber-900",
-          isKeySelected && dataType === "set" && "border-indigo-400 !bg-indigo-50 text-indigo-900",
-          isKeySelected && dataType === "zset" && "border-pink-400  !bg-pink-50 text-pink-900",
-          isKeySelected && dataType === "json" && "border-purple-400 !bg-purple-50 text-purple-900",
-          isKeySelected && dataType === "list" && "border-orange-400 !bg-orange-50 text-orange-900",
-          isKeySelected && dataType === "stream" && "border-green-400 !bg-green-50 text-green-900"
+          keyStyles[dataType]
         )}
         onClick={() => setSelectedKey(dataKey)}
       >

@@ -77,7 +77,7 @@ export const useKeys = () => {
 export const useKeyType = (key?: string) => {
   const { keys } = useKeys()
 
-  const type = useMemo(() => keys.find(([k, _]) => k === key), [keys, key])
+  const keyTuple = useMemo(() => keys.find(([k, _]) => k === key), [keys, key])
 
-  return type?.[1]
+  return keyTuple?.[1]
 }

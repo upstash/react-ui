@@ -5,7 +5,7 @@ import { create, useStore } from "zustand"
 import { redisClient } from "./lib/clients"
 import type { DataType } from "./types"
 
-export type DatabrowserProps = {
+export type RedisCredentials = {
   url?: string
   token?: string
 }
@@ -18,21 +18,21 @@ type DatabrowserContextProps = {
 const DatabrowserContext = createContext<DatabrowserContextProps | undefined>(undefined)
 
 interface DatabrowserProviderProps {
-  databrowser: DatabrowserProps
+  redisCredentials: RedisCredentials
 }
 
 export const DatabrowserProvider = ({
   children,
-  databrowser,
+  redisCredentials,
 }: PropsWithChildren<DatabrowserProviderProps>) => {
-  const redisInstances = useMemo(() => redisClient(databrowser), [databrowser])
+  const redisInstance = useMemo(() => redisClient(redisCredentials), [redisCredentials])
 
   const [store] = useState(() => {
     return createDatabrowserStore()
   })
 
   return (
-    <DatabrowserContext.Provider value={{ redis: redisInstances, store }}>
+    <DatabrowserContext.Provider value={{ redis: redisInstance, store }}>
       {children}
     </DatabrowserContext.Provider>
   )
@@ -57,15 +57,17 @@ export type SearchFilter = {
   type: DataType | undefined
 }
 
+export type SelectedItem = {
+  key: string
+  value?: string
+  isNew?: boolean
+}
+
 type DatabrowserStore = {
   selectedKey: string | undefined
   setSelectedKey: (key: string | undefined) => void
 
-  selectedListItem?: {
-    key: string
-    value?: string
-    isNew?: boolean
-  }
+  selectedListItem?: SelectedItem
   setSelectedListItem: (item?: { key: string; value?: string; isNew?: boolean }) => void
 
   search: SearchFilter

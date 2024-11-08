@@ -1,7 +1,7 @@
 import "@/globals.css"
 
 import { useMemo } from "react"
-import { DatabrowserProvider, type DatabrowserProps } from "@/store"
+import { DatabrowserProvider, type RedisCredentials } from "@/store"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
 import { IconDotsVertical } from "@tabler/icons-react"
 import { QueryClientProvider } from "@tanstack/react-query"
@@ -14,13 +14,13 @@ import { DataDisplay } from "./components/display"
 import { Sidebar } from "./components/sidebar"
 import { KeysProvider } from "./hooks/use-keys"
 
-export const Databrowser = ({ token, url }: DatabrowserProps) => {
+export const Databrowser = ({ token, url }: RedisCredentials) => {
   const credentials = useMemo(() => ({ token, url }), [token, url])
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <DatabrowserProvider databrowser={credentials}>
+        <DatabrowserProvider redisCredentials={credentials}>
           <KeysProvider>
             <PanelGroup
               autoSaveId="persistence"
