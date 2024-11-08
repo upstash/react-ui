@@ -1,9 +1,10 @@
 import { useDatabrowser } from "@/store"
 import type { DataType } from "@/types"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, type InfiniteData } from "@tanstack/react-query"
 
 import { queryClient } from "@/lib/clients"
 
+import { type RedisKey } from "./use-fetch-keys"
 import { FETCH_KEYS_QUERY_KEY } from "./use-keys"
 
 export const useAddKey = () => {
@@ -49,10 +50,27 @@ export const useAddKey = () => {
         }
       }
     },
-    onSuccess: () =>
-      queryClient.invalidateQueries({
-        queryKey: [FETCH_KEYS_QUERY_KEY],
-      }),
+    onSuccess: (_, { key, type }) => {
+      queryClient.setQueriesData<
+        InfiniteData<{
+          keys: RedisKey[]
+          hasNextPage: boolean
+        }>
+      >(
+        {
+          queryKey: [FETCH_KEYS_QUERY_KEY],
+        },
+        (data) => {
+          if (!data) throw new Error("Data is undefined")
+          return {
+            ...data,
+            pages: data.pages.map((page, i) =>
+              i === 0 ? { ...page, keys: [[key, type] as RedisKey, ...page.keys] } : page
+            ),
+          }
+        }
+      )
+    },
   })
   return mutation
 }
