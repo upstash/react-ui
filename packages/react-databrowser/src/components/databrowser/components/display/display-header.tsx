@@ -23,7 +23,7 @@ export const DisplayHeader = ({
   const { setSelectedListItem } = useDatabrowserStore()
 
   const handleAddItem = () => {
-    setSelectedListItem({ key: "", value: "", isNew: true })
+    setSelectedListItem({ key: type === "stream" ? "*" : "", value: "", isNew: true })
   }
 
   return (
