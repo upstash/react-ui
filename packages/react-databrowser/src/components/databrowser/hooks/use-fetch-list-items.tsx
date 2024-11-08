@@ -30,15 +30,16 @@ export const useFetchListItems = ({ dataKey, type }: { dataKey: string; type: Li
   const zsetQuery = useInfiniteQuery({
     enabled: type === "zset",
     queryKey: [FETCH_LIST_ITEMS_QUERY_KEY, dataKey, "zset"],
-    initialPageParam: "0",
-    queryFn: async ({ pageParam: cursor }) => {
-      const res = await redis.zscan(dataKey, cursor, {
-        count: LIST_DISPLAY_PAGE_SIZE,
+    initialPageParam: 0,
+    queryFn: async ({ pageParam: lastIndex }) => {
+      const res = await redis.zrange(dataKey, lastIndex, lastIndex + LIST_DISPLAY_PAGE_SIZE - 1, {
+        withScores: true,
+        rev: true,
       })
 
       return {
-        cursor: res[0],
-        keys: transformArray(res[1]),
+        cursor: lastIndex + LIST_DISPLAY_PAGE_SIZE,
+        keys: transformArray(res as any),
       }
     },
 
