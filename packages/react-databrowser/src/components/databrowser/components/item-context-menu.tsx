@@ -71,7 +71,9 @@ export const ItemContextMenu = ({
             </ContextMenuItem>
           )}
           <ContextMenuSeparator />
-          <ContextMenuItem onClick={() => setAlertOpen(true)}>Delete item</ContextMenuItem>
+          <ContextMenuItem disabled={type === "stream"} onClick={() => setAlertOpen(true)}>
+            Delete item
+          </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
     </>
