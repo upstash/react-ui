@@ -29,8 +29,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }}
       >
         <RedisCli
-          token={process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN!}
-          url={process.env.NEXT_PUBLIC_UPSTASH_REDIS_REST_URL!}
+          token={process.env.UPSTASH_REDIS_REST_TOKEN!}
+          url={process.env.UPSTASH_REDIS_REST_URL!}
         />
       </div>
     </main>
