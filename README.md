@@ -1,60 +1,37 @@
-<div align="center">
-    <h1 align="center">React UI</h1>
-    <h5>Various react components from our console</h5>
-</div>
+# RedisBrowser for Upstash Redis
 
-<div align="center">
-  <a href="https://console.upstash.com">console.upstash.com</a>
-</div>
-<br/>
+`@upstash/react-redis-browser` is a React component that provides a CLI interface to interact with Upstash Redis.
 
-> [!NOTE]  
-> **This project is in the Experimental Stage.**
->
-> We declare this project experimental to set clear expectations for your usage. There could be known or unknown bugs, the API could evolve, or the project could be discontinued if it does not find community adoption. While we cannot provide professional support for experimental projects, we’d be happy to hear from you if you see value in this project!
+<img src="public%2Fredis-cli.png" width="640px" />
 
-## Components
+### Install
 
-- [Redis CLI](https://github.com/upstash/react-ui/blob/main/packages/react-cli/README.md)
-- [Redis Databrowser](https://github.com/upstash/react-ui/blob/main/packages/react-databrowser/README.md)
-
-<br/>
-
-## Development
-
-This monorepo is managed by turborepo and uses `pnpm` for dependency management.
-
-#### Install dependencies
+Install the component via npm:
 
 ```bash
-pnpm install
+$ npm install @upstash/react-redis-cli
 ```
 
-#### Build
+### Usage
 
-```bash
-pnpm build
+Here's a basic example of how to use the component:
+
+```tsx
+import { RedisCli } from "@upstash/react-redis-cli";
+import "@upstash/react-redis-cli/dist/index.css";
+
+export default function Page() {
+  return (
+    <main style={mainStyle}>
+      <RedisCli url={UPSTASH_REDIS_REST_URL} token={UPSTASH_REDIS_REST_TOKEN} />
+    </main>
+  );
+}
+
+const mainStyle = {
+  width: "100vw",
+  maxWidth: "900px",
+  height: "500px",
+  margin: "0 auto",
+};
 ```
-
-#### Run Test
-
-Set the `NEXT_PUBLIC_UPSTASH_REDIS_REST_URL` and `NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN` environment
-variables by creating a `.env` file under `examples/nextjs13`.
-
-```bash
-cd examples/nextjs
-npx playwright install
-pnpm test
-```
-
-## Release
-
-1. Run `pnpm changeset`
-   This will prompt you to select which packages have changed. It will also create a changeset file in the `.changeset` directory.
-2. Run `pnpm changeset version`
-   This will bump the versions of the packages previously specified with pnpm changeset (and any dependents of those) and update the changelog files.
-3. Run `pnpm install`
-   This will update the lockfile and rebuild packages.
-4. Commit the changes
-5. Run `pnpm publish -r`
-   This command will publish all packages that have bumped versions not yet present in the registry.

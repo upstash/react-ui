@@ -1,0 +1,196 @@
+.upstash-cli {
+  font-family: monospace;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  color: #f8f8f8;
+
+  background-color: #000;
+
+  padding: 1rem;
+}
+
+.upstash-cli-viewport {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  word-break: break-all;
+}
+
+.upstash-cli-loading {
+  animation-name: pulse;
+  animation-duration: 5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.upstash-cli-stdin {
+  width: 100%;
+  font-family: monospace;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  caret-color: #00e9a3;
+  overflow-x: scroll;
+  scroll-margin: 1rem;
+  padding: 0;
+  margin: 0;
+
+  /* border: 1px dashed white;   */
+}
+
+.upstash-cli-stdin:focus::placeholder {
+  color: transparent;
+}
+
+.upstash-cli-stdin:focus {
+  outline: none;
+}
+
+.upstash-cli-scrollbar {
+  display: flex;
+  user-select: none;
+
+  touch-action: none;
+
+  padding: 0.5rem;
+
+  background-color: black;
+
+  transition-property: background-color;
+
+  transition-duration: 150ms;
+
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upstash-cli-scrollbar:hover {
+  background-color: black;
+}
+
+.upstash-cli-scrollbar[data-orientation="vertical"] {
+  width: 0.625rem;
+}
+
+.upstash-cli-scrollbar[data-orientation="horizontal"] {
+  flex-direction: column;
+
+  height: 0.625rem;
+}
+
+.upstash-cli-scrollbar-thumb {
+  display: flex;
+  flex: 1;
+
+  background-color: #4b5563;
+
+  border-radius: 10px;
+
+  position: relative;
+}
+
+.upstash-cli-scrollbar-thumb::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+
+  height: 100%;
+
+  min-width: 44px;
+
+  min-height: 44px;
+}
+
+.upstash-cli-line {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  margin-right: 2rem;
+  /* width: 100%; */
+  /* min-height: 1rem; */
+  /* border: 1px dashed red;   */
+}
+
+.upstash-cli-line-prefix {
+  /* position: absolute; */
+  width: 1rem;
+  height: 100%;
+  /* border: 1px dashed yellow;   */
+}
+
+.upstash-cli-line-content {
+  width: 100%;
+  /* padding-right: 1rem; */
+  margin-right: 1rem;
+  /* border: 1px dashed green;  */
+}
+
+.upstash-cli-result {
+  white-space: pre-wrap;
+  word-break: break-word;
+  width: 100%;
+  font-family: monospace;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+.upstash-cli-help-command {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid;
+}
+
+.upstash-cli-code {
+  background-color: transparent;
+  color: #a0aec0;
+  background: none;
+  border: none;
+  padding: 0;
+  outline: inherit;
+  cursor: pointer;
+}
+
+.upstash-cli-link {
+  color: #00e9a3;
+}
+
+.upstash-cli-link:hover {
+  text-decoration: underline;
+}
