@@ -178,6 +178,7 @@
 }
 
 .upstash-cli-code {
+  font-family: monospace;
   background-color: transparent;
   color: #a0aec0;
   background: none;
