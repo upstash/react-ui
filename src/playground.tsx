@@ -5,7 +5,7 @@ import { RedisCli } from "./redis-cli"
 
 import "./cli.css"
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.querySelector("#root")!).render(
   <React.StrictMode>
     <main
       style={{

@@ -150,12 +150,12 @@ export const RedisCli: React.FC<CliProps> = (props) => {
       addCommand({
         command,
         result: json.error ?? json.result,
-        error: !!json.error,
+        error: Boolean(json.error),
         time: Date.now(),
       })
-    } catch (e) {
-      console.error(e)
-      addCommand({ command, error: true, result: (e as Error).message, time: Date.now() })
+    } catch (error) {
+      console.error(error)
+      addCommand({ command, error: true, result: (error as Error).message, time: Date.now() })
     }
   }
 
@@ -204,8 +204,8 @@ export const RedisCli: React.FC<CliProps> = (props) => {
       // await new Promise((r) => setTimeout(r, 1000));
 
       await runRedisCommand(command)
-    } catch (e) {
-      const err = e as Error
+    } catch (error) {
+      const err = error as Error
       console.error(err.message)
     } finally {
       setHistoryIndex(null)
@@ -239,8 +239,8 @@ export const RedisCli: React.FC<CliProps> = (props) => {
             await runRedisCommand(command)
           }
         }
-      } catch (e) {
-        console.error(e)
+      } catch (error) {
+        console.error(error)
       }
     }
 
@@ -356,9 +356,8 @@ function splitArgs(input: string): string[] {
   let tokenBuffer = []
   const ret = []
 
-  const arr = input.split("")
-  for (let i = 0; i < arr.length; ++i) {
-    const element = arr[i]
+  const arr = [...input]
+  for (const element of arr) {
     const matches = element.match(separator)
     if (element === "'" && !doubleQuoteOpen) {
       singleQuoteOpen = !singleQuoteOpen
@@ -408,7 +407,7 @@ const Result: React.FC<{ result: CommandResult }> = ({ result }) => {
       >
         <span>{result.command}</span>
       </Line>
-      {typeof result.result !== "undefined" ? (
+      {result.result === undefined ? null : (
         <Line>
           <div
             className="upstash-cli-result"
@@ -419,27 +418,31 @@ const Result: React.FC<{ result: CommandResult }> = ({ result }) => {
             {formatResult(result.result)}
           </div>
         </Line>
-      ) : null}
+      )}
     </>
   )
 }
 
 function formatResult(result: CommandResult["result"]): string | ReactNode {
   switch (typeof result) {
-    case "undefined":
+    case "undefined": {
       return ""
+    }
     case "boolean":
-    case "number":
+    case "number": {
       return result.toString()
-    case "object":
+    }
+    case "object": {
       if (result === null) {
         return "nil"
       }
       if (Array.isArray(result)) {
-        return result.map(formatResult).join(", ")
+        return result.map((e) => formatResult(e)).join(", ")
       }
       return result
-    default:
+    }
+    default: {
       return result
+    }
   }
 }
