@@ -39,7 +39,7 @@ pnpm build
 #### Run Test
 
 Set the `NEXT_PUBLIC_UPSTASH_REDIS_REST_URL` and `NEXT_PUBLIC_UPSTASH_REDIS_REST_TOKEN` environment
-variables by creating a `.env` file under `examples/nextjs13`.
+variables by creating a `.env` file under `examples/nextjs`.
 
 ```bash
 cd examples/nextjs

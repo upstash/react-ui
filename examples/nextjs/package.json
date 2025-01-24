@@ -1,5 +1,5 @@
 {
-  "name": "nextjs13",
+  "name": "nextjs",
   "version": "0.3.22",
   "private": true,
   "scripts": {
@@ -14,9 +14,9 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",
-    "@upstash/react-cli": "workspace:*",
-    "@upstash/react-databrowser": "workspace:*",
-    "next": "13.3.0",
+    "@upstash/react-cli": "*",
+    "@upstash/react-databrowser": "*",
+    "next": "14.2.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
