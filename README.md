@@ -1,3 +1,9 @@
+> [!WARNING]  
+> **This project is archieved.**
+>
+> Two projects in this repository are available and being developed under [upstash/react-redis-browser](https://github.com/upstash/react-redis-browser/) and [upstash/react-redis-cli](https://github.com/upstash/react-redis-cli/) repositories.
+
+
 <div align="center">
     <h1 align="center">React UI</h1>
     <h5>Various react components from our console</h5>
